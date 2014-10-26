@@ -8,7 +8,7 @@ NAVBAR = [ 'Home|index.html',
                  'ktsuss|https://github.com/nomius/ktsuss',
                  'dmemory|https://github.com/nomius/dmemory',
                  'nqqueue|https://github.com/nomius/nqqueue',
-                 'mtools|https://github.com/nomius/mtools',
+                 'mttools|https://github.com/nomius/mttools',
                  'Kwort|http://www.kworg.org' ] ],
            'Links|links.html' ]
 
