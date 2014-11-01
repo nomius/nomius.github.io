@@ -1,4 +1,4 @@
-NAVBAR = [ 'Home|index.html',
+NAVBAR = [ 'Home|blog',
            'About|about.html',
            'Articles|articles.html',
            [ 'Projects',
@@ -12,6 +12,7 @@ NAVBAR = [ 'Home|index.html',
                  'Kwort|http://www.kworg.org' ] ],
            'Links|links.html' ]
 
-TITLE = 'David\'s Website'
-MENU_TITLE = TITLE
+TITLE = "David's Website"
+POSTS_PER_PAGE = 10
+INDEX_AS_BLOG = True
 

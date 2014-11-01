@@ -6,13 +6,13 @@
         <title>David's Website</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link href="css/cover.css" rel="stylesheet">
+        <link href="css/vim.css" rel="stylesheet">
     </head>
 
     <body>
         <div class="site-wrapper">
             <div class="site-wrapper-inner">
                 <div class="cover-container">
-
                     <div class="masthead clearfix">
                         <div class="inner">
                             <h3 class="masthead-brand">David's Website</h3>
@@ -38,16 +38,358 @@
                         </div>
                     </div>
 
-
                     <div class="inner cover">
-                        <br>
-                        <p>If you wanna talk, come by irc.n0where.net (ssl even better) : #Cyberpunk.</p>
-<p><a href="http://n0where.net/" class="btn btn-lg btn-default">CyberPunk</a>  </p>
-                    </div>
+						<div class="left cover">
+							<br><br><br>
+	                        <p><h3>Updates for everybody!</h3><h8>Posted on: 2014-11-01 16:28:23</h8><p>I'm a disaster to write a blog, sorry for the delay.
+There have been lot of news in the past few months. Let's enumerate one by one:
+I created a small project called mttools, and this is basically a set of tools to write good technical documentation, with formated code inside and some pretty nice features. The nice thing about this tools is that it forced me to learn Unix flex :-)
+You can check out this project at: http://code.google.com/p/mttools</p>
 
+<p>As some of you might have noted, Kwort 3.2 got released, this is a pretty clean and nice release that got some really nice features and improvements. If you like Kwort &gt; 3, please, step by www.kwort.org, read the announcement and try it.
+There's also some nice new features and bug fixes in kpkg, that were deployed with Kwort 3.2, if you're not using Kwort but you're using kpkg, you should step by http://code.google.com/p/kpkg
+One of the cool stuff that came up with Kwort 3.2 are the ports; we are now supporting the crux ports, that you can bring to your system by:</p>
+
+<pre><code>  kpkg install httpup rsync fakeroot rsync ports
+</code></pre>
+
+<p>I'll blog a little on the CRUX ports latter on.</p>
+
+<p>Also there's a new release of ktsuss, just baked. This release has some bug fixes in the su backend and guess what... There's a sudo backend now too!
+You should get the release at http://code.google.com/p/ktsuss.
+NOTE: 1.4 code has critical bugs and is completely unmaintained, so please update to the latest release. I also removed all extra repositories like the one at berlios, github, etc, so there's now only one at google code avoiding confussions.</p>
+
+<p>The last few months I worked a little on LimShSQL and there's a full new re-write with a pretty shinny curses interface in limshsql-rewrite-1.0 branch, I think I should merge it soon and package a release. Check it out here: http://code.google.com/p/limshsql</p>
+
+<hr width="40%">
+<h3>Goodbye lout... Hello troff!</h3><h8>Posted on: 2014-11-01 16:26:29</h8><p>Five years ago I went to a dissertation on LaTeX given by Guido Macci, I left that dissertation telling myself "Yes, that's the way to go" and I liked formatting systems, by then I only knew LaTeX, but after seeing that in Slackware it was like 100mb in packages I said like "Ooook, wait a second... Is it that big?", it turned out it really was, and not only big, but a real mess under the hood, so I was kinda disappointed and desisted on the idea of using LaTex. Those who know me knows that I'm pretty minimalist, and having a formatting system of 100mb that was a mess was pretty much out of the table, but I still though it was the way to go.</p>
+
+<p>So I spoke to a friend (Emiliano Gavilan) who always liked that stuff and told my "problem" with LaTeX... So Emiliano recommended me to take a look at lout.</p>
+
+<p>That was in the beginning of 2006, so it's been like 5 years now with lout. Nowadays lout is kinda unmaintained, it has some bugs, the output generated is not as professional as LaTeX, and (I bet this is because I'm too lazy to learn them) there are some things that I never wasn't able to do.</p>
+
+<p>So last week I gave a chance to troff, and I keep myself reading the whole weekend, and I really liked, it's stable, small, well tested (almost 40 years :-D), and it is on every Unix out there (this is a BIG plus). I had some troubles inserting with code, but after digging I found vgrind (which I heard is unmaintained so we'll have to check in the future how it goes) which does
+the job pretty good.</p>
+
+<p>There are tons of books out there written with troff some pretty well known like "Advanced Programming in the UNIX Environment", "The C programming Language" or "The Design and Implementation of the 4.4BSD Operating System", there's a big list <a href="http://troff.org/pubs.html">here</a></p>
+
+<p>If you're interested in learning troff, you can read this book: <a href="http://groff.ffii.org/groff/contrib/documentation/utp/utp-1.0.pdf">Dale Dougherty &amp; Tim O'Reilly - Unix Text Processing</a>.</p>
+
+<p>I hope this turns out good.</p>
+
+<p>Cheers.</p>
+
+<hr width="40%">
+<h3>Something that I was waiting for...</h3><h8>Posted on: 2014-11-01 16:24:46</h8><p>I want to share something with you guys...
+Last week (sorry for the delay) I got an email from Jorgen Thomsen telling me that gnu-pop3d was released:</p>
+
+<blockquote>
+  <p>Hello
+  I just released GNU -pop3d 0.9.13 which is a more stable release than 0.9.12
+  http://jth.net/virtual.html
+  In a short time I will release 0.9.14 which will implement IPv6 support.</p>
+</blockquote>
+
+<p>So great, a new gnu-pop3d is available, so I saw the changelog and I saw this:</p>
+
+<blockquote>
+  <p>Bugfix: certain login methods did not work (David B. Cortarello)</p>
+</blockquote>
+
+<p>Pretty happy about the merging of my patch into mainstream. Thanks Jorgen!</p>
+
+<p>Cheers!</p>
+
+<hr width="40%">
+<h3>GNU pop3d fix</h3><h8>Posted on: 2014-11-01 16:23:38</h8><p>Wooooo, kinda a lot without saying something here! Well, I took some sabbatical months of blogging ;-) </p>
+
+<p>Recently I've been working on a mail server, and those who know me, knows that I'm pretty minimalistic. So I started with exim and gnu-pop3d (no imap for this) with stunnel to provide ssl support.
+I use Unix users for authentication, but gnu-pop3d had a (pretty small) bug which made it reject any authentication whether it is right or wrong.
+So I wrote a patch to provide a fix and sent it to Jorgen Thomsen. He answered me on Wednesday telling me that the patch was accepted.</p>
+
+<p>Anyways, I leave the patch here: <a href="https://sites.google.com/site/dcortarello/gnu-pop3d-0.9.12-fix_passwd_login.patch">gnu-pop3d-0.9.12-fix<em>passwd</em>login.patch</a></p>
+
+<p>Cheers!</p>
+
+<hr width="40%">
+<h3>Hidding messages in ICMP packets</h3><h8>Posted on: 2014-11-01 16:18:56</h8><p>Hello everybody. A new month, a new article (I wish I could do this so periodically).</p>
+
+<p>Today I'm going to show you something that I've been playing with. As you probably know (if you don't, I'm just telling you now :-)), the ICMP packets provides an arbitrary data space right after the ICMP header. Normally, no one use it, since ICMP is a control protocol that has all its usage right inside of it, leaving this data space useless.</p>
+
+<p>A few days ago, I saw someone connected on Cinetix and he was just connected, but not on the IRC server and I didn't know who he or she was. So an idea started to flow around my head "What about if I could send messages with ICMP packets".</p>
+
+<p>So actually this is what I did... I wrote a tool to put a message in the data space and send it using the ICMP type 7 which is unassigned (for example, ping is the type 8). The problem is that the kernel just drop type 7 (as we all assume) and the data space is also dropped in any icmp packet. So I wrote a kernel patch that print the message in the output of dmesg or
+/var/log/message if you have set KERN_NOTICE to be displayed (I think klogd -c 6 does).</p>
+
+<p>With this, you can send to a friend a message of the kind "Hey. This is David, I'm online on irc (jabber or whatever), jump in!" and it will be displayed in the system logs as a kernel notice.</p>
+
+<p>Please, take note that this is not a chat system, but an "emergency system", so don't start using it as an everyday conversation protocol. This also isn't a patch that should be in the kernel mainstream, since ICMP packets of type 7 is unassigned, and NOT a communication protocol.</p>
+
+<h5>What about security?</h5>
+
+<p>Well, you might start asking yourself this "What if someone from the outside starts flooding my logs with dumb messages?". Right, well, the answer to this is netfilter; use iptables to drop these kind of package. Something like this:</p>
+
+<pre><code>iptables -A INPUT -p icmp --icmp-type 7 -j DROP
+</code></pre>
+
+<p>As you might know or guess, you can also block only one IP address or accept from a certain network like this:</p>
+
+<pre><code>iptables -A INPUT -p icmp --icmp-type 7 \! -s 10.0.0.1/24 -j DROP
+</code></pre>
+
+<p>Use more complex rules creating policies like "if someone exceed the number of 5 ICMP type 7 packets in a minute, drop any packet from the IP address".</p>
+
+<h5>Enough with the talking... How do I use it?</h5>
+
+<p>Great, right to the point. So the steps:</p>
+
+<ol>
+<li>First of all, patch and compile your kernel.</li>
+</ol>
+
+<pre><code>cd linux-2.6.31 &amp;&amp; patch -p1 &lt; patch_icmp_type_7_messages.diff
+</code></pre>
+
+<p>And compile and install your new kernel using the way you normally do (make config/menuconfig, etc...)</p>
+
+<ol>
+<li>Then compile the icmp_send.c program:</li>
+</ol>
+
+<pre><code>gcc icmp_send.c -o icmp_send
+</code></pre>
+
+<ol>
+<li>Send a test message:</li>
+</ol>
+
+<pre><code>./icmp_send 127.0.0.1 "Hello world"
+</code></pre>
+
+<ol>
+<li>Check out the dmesg output:</li>
+</ol>
+
+<pre><code>./dmesg | grep "ICMP 7 Message"
+</code></pre>
+
+<p>Get it!
+Anyways, this is a really nice thing to play with and I hope people find it useful. You can get the kernel patch and the ICMP message program from the links below.</p>
+
+<p><a href="https://sites.google.com/site/dcortarello/patch_icmp_type_7_messages.diff">patch_icmp_type_7_messages.diff</a></p>
+
+<p><a href="https://sites.google.com/site/dcortarello/icmp_send.c">icmp_send.c</a></p>
+
+<p>Have fun.</p>
+
+<hr width="40%">
+<h3>Using the ZTE MF 110 with 3g Movistar (Argentina on Linux</h3><h8>Posted on: 2014-11-01 16:12:14</h8><p>Hello all,
+Today I'm going to explain how to do something really simple. As some of you might already know, I got this year a EEE PC netbook (1000HA). I have to admit that this baby is going great, I'm running the latest Kwort on it and it's really resource saving if you know how to set it up correctly.
+If I add this netbook a 3g connection, I can say that I'm online everywhere almost all of the time. Well, this is what happened... As most of you already know, I've been working for Accenture for over a year now and they provided me (and some of my co-workers) a 3g modem with internet connection, which is pretty nice.
+So, on january 1st after all the people who came my home to celebrate the new year left I sitted on the computer to figure out how to make it work.
+This is a ZTE MF 110, and I found some people who made it work (kinda) or those who plugged it in at ubuntu and said that it works OoTB. Well, this is true kind of, but I hate when you don't really know how things works. Also, I found some people who made it parcially work with wvdial, which is a nice tool also.
+So, my quest was to make it work with plain pppd. And this isn't really hard to do if you know a little how to play with the AT commands.</p>
+
+<p>Ok, let's put the hands in the mud, first of all, I'm one of those people who likes to have a latest kernel tuned for my device, so this implies that yeah, I compile my own kernel with almost every release... In this case we are compiling 2.6.32.2.
+So, for this you'll need the usb mass storage system in order to be able to switch from it to the modem mode.</p>
+
+<pre><code>Device Drivers -&gt; USB Support -&gt; (Select your usb version, ehci, uhci or ohci) USB Mass Storage support
+</code></pre>
+
+<p>Now, this GSM modem (as several others) needs the serial support... Well, actually, this is a serial GSM modem that you want to jack into the USB bus. So you need:</p>
+
+<pre><code>Device Drivers -&gt; USB Support -&gt; USB Serial Converter support
+</code></pre>
+
+<p>This will create the usbserial module. And now, you need the GSM modem support. So for this, you have to select:</p>
+
+<pre><code>Device Drivers -&gt; USB Support -&gt; USB Serial Converter support -&gt; USB driver for GSM and CDMA modems
+</code></pre>
+
+<p>I would recommend you to compile them as modules (M) instead of built in, as this isn't a feature that you will be running all the time, so you can unload modules and free some memory (not too much, but everything counts nowadays).</p>
+
+<p>I'm assumming that you already have the PPP support, if not, it's in the device drivers and Network Devices. But if you're reading this, you might already know.</p>
+
+<p>Now, everything is ready for us to set it up.</p>
+
+<p>We need <a href="http://www.draisberghof.de/usb_modeswitch/">usb<em>modeswitch</a>, this tool will allow us to switch from the "ZeroCD" mode to the modem mode in order to allow us to call our provider. Basically we need this config (/etc/usb</em>modeswitch.conf):</p>
+
+<pre><code>DefaultVendor=0x19d2
+DefaultProduct=0x2000
+
+TargetVendor=0x19d2
+TargetProduct=0x0031
+
+MessageEndpoint=0x1
+MessageContent="55534243b8fe6681000000000000061b000000020000000000000000000000"
+</code></pre>
+
+<p>This config file will make the usb<em>modeswtich to swtich the device 0x2000, of the vendor 0x19d2, to 0x0031 sending the message pointed by MessageContent. If the usb</em>storage module is loaded and you run:</p>
+
+<pre><code>usb_modeswtich -c /etc/usb_modeswitch.conf
+</code></pre>
+
+<p>And then you run lsusb you'll see the product id changed from 2000 to 0031.</p>
+
+<p>If you got here, now it comes to nice part.
+In order for us to not use wvdial, we need a call script (also called chat script). I'm going to show you you the script I wrote (/etc/ppp/peers/chats/movistar):</p>
+
+<pre><code>ABORT BUSY ABORT 'NO CARRIER'
+ABORT VOICE ABORT 'NO DIALTONE'
+ABORT 'NO DIAL TONE' ABORT 'NO ANSWER'
+ABORT DELAYED
+'' ATZ
+OK ATQ0\sV1\sE1\sS0=0\s&amp;C1\s&amp;D2\s+FCLASS=0
+OK AT+CGDCONT=1,"IP","internet"
+OK-AT-OK ATX3DT*99#
+CONNECT \d\c
+</code></pre>
+
+<p>This basically it reads like this: abort in any of the conditions above (no carrier, no dialtone, etc...), then reset the modem waiting for nothing, initialize the modem, find out the CID for an APN GPRS, dial and connect. There's information about Hayes AT commands all over the web, so if you're interested you can google it yourself. :-)</p>
+
+<p>Well, now we have to set up our user and password:</p>
+
+<pre><code>echo -e "internet\t*\tinternet" &gt;&gt; /etc/ppp/chap-secrets
+</code></pre>
+
+<p>And finally, the ppp configuration itself (/etc/ppp/peers/movistar):</p>
+
+<pre><code>lock
+hide-password
+noauth
+connect "/usr/sbin/chat -v -f /etc/ppp/peers/chats/movistar"
+/dev/ttyUSB2
+460800
+defaultroute
+noipdefault
+user "internet"
+mtu 1492
+ipparam movistar
+</code></pre>
+
+<p>Most of this options are self explanatory, but the importants one are the connect line and the "/dev/ttyUSB2" one. The first one tells pppd to use the chat program to connect the other point and the chat script that will be used (/etc/ppp/peers/chats/movistar, that we created before), if, for example, you set up a pptp connection you'll see this line pointing to the pptp client
+program. The second one tells pppd the modem device, maybe you have to play a little bit with this one trying /dev/ttyUSB2 or /dev/ttyUSB3 (if you don't wan't to try you can use minicom to find out, good luck with that :-P).</p>
+
+<p>Well, now everything is ready to connect, you just need to run:</p>
+
+<pre><code>pppd call movistar
+</code></pre>
+
+<p>From now one, if you restart your laptop/netbook or normal PC, all you have to do is:</p>
+
+<pre><code>usb_modeswitch
+sleep 1  # Let the device sync with the switch
+pppd call movistar
+</code></pre>
+
+<hr width="40%">
+<h3>The kpkg issues</h3><h8>Posted on: 2014-11-01 16:06:59</h8><p>Hello everybody... Today I'm going to speak about kpkg.
+Well, I wrote 4 package managers before I started kpkg, there was kwt-get, kum, kget and another one I can't remember.
+With every package manager I wrote things where from a very simple start, allowing to install, search and remove packages to a more complex usage allowing several mirrors, dependencies resolution out of the box, and finally the idea of third party packages (this last idea appeared in kpkg), package series, etc.
+Let's analyze those 4 functionalities:
+1.- More than one mirror was something asked, but once I implemented, there wasn't more than 3 or 4 mirrors out there.
+2.- Dependencies resolution is a huge deal, the real thing is that under the hood it sucks, and I see why big distributions with lots of developers has package managers supporting this feature, as they have several developers who everyone takes 10 or 20 packages, build them and fill the databases with the dependency tree. The fact is that this feature is bad implemented in any
+distribution, it shouldn't be something that the developer has to fill (the database with its dependencies), it should be something auto generated at build time, I don't know, a file listing its dependencies generated by configure (when using autotools) or something similar. I could spend like an hour talking about this feature since I made 3 different implementations of its
+resolution algorithm.
+3.- Well, third party packages (also known as tpp). This actually wasn't a feature it was a way to deal with an inconsistency in kpkg, the fact that packages were registered in mirror databases, if one was repeated, it has to be a "third party package", so kpkg (without any environment variable altering its normal course) treated it as a non identified package (or a package
+provided by a third party developer not included in any mirror). Of course someone could deal with this using environment variables (MIRROR, STANDALONE and SERIE). So installing a package from the console without having it in a mirror and keeping the database clean without tpp was a huge deal. With tpp, kpkg tried to do, with the same tool, what debian does with a separated
+tool (dpkg).
+4.- Series was kinda one of those features that supposed to help but didn't, in fact, it complicated things. If you start looking at a package system you think "Great, series, this is a way to pre-hash every package", well, it kinda did that job, but complicated all other things, actually this feature was one of those that pushed the "third party packages" "feature".</p>
+
+<p>Despite with dependency resolution (now, a few years back it was supported), kpkg support all this features. By this time you might be asking "Why god why this package manager is so complex and twisted"... Well, the fact is that even I hate kpkg nowadays.
+Also, as most of you might know, kpkg is written in bash, with leave us a lot of issue. Why? Well, kpkg makes use of several console tools included in packages like coreutils (ls, rm, mktemp, md5sum, etc), findutils (find), sed, awk, grep, wget, tar, lzma, etc... Can you imagine what could happen if you try to update for example the coreutils? Well, to understand this question
+and being able to answer it, you need to know some of the kpkg internals, but summarizing what kpkg does is "Download the new package, remove the old package, install the new package", and almost every package managers do this (there's also some other algorithms to deal with this but you need to save more data of every file included in the package). Now, if you upgrade to a new
+version of, for example, the coreutils, what kpkg do is: "Download the new coreutils, remove the old coreutils, install the new coreutils", if you remove coreutils kpkg starts failing pathetically leaving your system out of use (sorry, toilet cleaning :-P) and we all have to pull the shades down and go home.
+In fact this happened some weeks ago and a user came to me with insults, ranting and all the bad things you can imagine. Well, he was right about my mistake, but I'm human and I can make tons of those (and thank god we all still making mistakes, it's a proof that we still humans) and the fact is that no one is paying me for developing Kwort and all its tools, so take it easy.
+Anyways, this leave us to the fact that we can't upgrade some (several) packages and with them, of course, the libc.</p>
+
+<p>So, I'm dealing with all this problems re-writing kpkg in what we can call "kpkg new generation" (LOL, it even sounds cool eh? :-P). How I dealed with all this problems? Well, some of those original "features" were dropped, "dependencies resolution" was out of the table way before starting, "series" support was removed as with the new database it isn't needed anymore, and third
+party packages was also dropped since the new approach is more consistent. What about the fact that you can't upgrade several packages? Well, kpkg is now written in C and static compiled (so everything can be upgraded :-)).</p>
+
+<p>The new kpkg use <a href="http://www.sqlite.org/">sqlite3</a> as database backend, <a href="http://code.google.com/p/libarchive/">libarchive</a> for package decompressing (giving us support for tgz, tbz2, tar, lzma, xz, zip, etc) and <a href="http://curl.haxx.se/">libcurl</a> for package retrieving which leave us support for tons of protocols. And every piece of the code is very well documented with doxygen which will help everyone who wants to read the source code. </p>
+
+<p>So far, the new implementation of kpkg (in C) has support for almost the same options (search, install, remove, provides, update and download) the actual kpkg has, and only the upgrade support is the only one missing (I hope I have time to code it this week). So I will try to upload the source to <a href="http://www.github.org/">github</a> as soon as I can, so everyone can start to find bugs in it and improve it.</p>
+
+<p>See you soon guys, and if I don't before Christmas, Merry Christmas :-)</p>
+
+<p>Cheers!</p>
+
+<hr width="40%">
+<h3>New Kpkg hosting</h3><h8>Posted on: 2014-11-01 16:07:58</h8><p>Well, the C version of kpkg is now hosted at: http://code.google.com/p/kpkg. It would be cool if people start checking it out.</p>
+
+<p>Upgrade support is working partially, as only one package at the time can be upgrated, I will try to finish the whole upgrade support soon.</p>
+
+<p>If any people want to use kpkg in their personal distributions (I don't think ubuntu/suse/etc... users will want to run kpkg on their systems, but who knows), it would be nice to know.</p>
+
+<p>Also patches to add more functionality, fixes or any kind of power, are always welcome.</p>
+
+<p>Oh, and btw, the sqlite databases structures (for mirrors and personal systems) are included in datastructs.h. If you have any questions, please ask here or mail me. :-)</p>
+
+<p>Cheers!</p>
+
+<hr width="40%">
+<h3>Vim bug using ctags</h3><h8>Posted on: 2014-11-01 16:51:03</h8><p>Well, lot of people know that I'm a vim fan and that I use it everyday, to me is like the killer app that everyone should know how to use in Unix.
+Even at work, I'm a programmer (doing C on Unix now), and some of my fellows were using Eclipse and after I show them Vim, they was like "woooo, I can use this editor as an IDE and still can use my machine for do something else while programming" (I was like, blame the one who introduced you to Eclipse :-P).</p>
+
+<p>Anyways, I like using tags, allows me to browse the code really fast (for those using Eclipse, I think is like if you press F3 over a function name). But I found this weird behavior using ctags+vim. See the above code:</p>
+
+<div class="codehilite"><pre><code>  <span class="mi">1</span> <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
+  <span class="mi">2</span>
+  <span class="mi">3</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+  <span class="mi">4</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">);</span>
+  <span class="mi">5</span>
+  <span class="mi">6</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+  <span class="mi">7</span> <span class="p">{</span>
+  <span class="mi">8</span>     <span class="n">asd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="sc">&#39;s&#39;</span><span class="p">);</span>
+  <span class="mi">9</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="mi">10</span> <span class="p">}</span>
+ <span class="mi">11</span>
+ <span class="mi">12</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+ <span class="mi">13</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">)</span>
+ <span class="mi">14</span> <span class="p">{</span>
+ <span class="mi">15</span>     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+ <span class="mi">16</span> <span class="p">}</span>
+</code></pre></div>
+
+<p>When I press ctrl+] over asd in line 8, it takes you to the 3rd line instead to the 12th...
+There's a "workaround" to this behavior, using --excmd=number while running ctags put the line numbers in the tags file (without this option ctags puts just an 'f' identifier to tell the editor that it is on that file). But it is just a visualization workaround, because you can't put any new line (or remove) in those files or your tags file will screw the tags file.</p>
+
+<p>Does anyone knows a solution to this issue?</p>
+
+<p>Thanks.</p>
+
+<hr width="40%">
+<h3>Kwort 3... The big change</h3><h8>Posted on: 2014-11-01 16:03:18</h8><p>Hello everybody. This is just a flashlight of what Kwort 3 will be.
+Kwort 3 brings a whole new era of Kwort Linux, Kwort public might change now, I'm not focusing anymore in inexperienced users, but on intermediate-advanced users and up.</p>
+
+<p>Why is that?
+Well, kinda I'm forced to do that. Kwort's most important problem was always the kernel, not because Linux is bad, but because some drivers are.
+For example, wireless drivers tend to suck... I mean, WTH is that closed source microcode needed for most drivers? That's just plain wrong. I'm not talking here about making it free software, but open source would help everybody to make better drivers. Also there are tons of wireless cards out there unsupported (or half supported) because companies not releasing specifications, we are not even talking about open source anything here. COME ON!
+I'm not going to take this to the free software vs. open source vs. closed software, people who know me, knows that I hate those topics and I leave those to politicians and software philosophers.</p>
+
+<p>Despite of that, some other things are not easy (as it should be) to support, and inexperienced users tend to not know what they want (first they want a desktop, then they want to be able to configure a web server with a GUI (that I'm not going to write) for some php scripting , then they want to create a RAID or LVM). Kwort was always meant to be for the desktop, and the desktop only, not a web server not a redundant file server, etc.
+And the funny part is: If you don't provide packages for what they want, they get pissed off and I've also got insults because of this. People, what is going on here? It's not like you're paying me (and if you would, that doesn't even give you the right to insult me), you can ask for something. I develop Kwort in my free time.
+So, advanced users tend to know a lot more, from the work that takes to do something like Kwort, to how to check logs and write or hack some script to do what they want (for example a network configuration script).</p>
+
+<p>So... Kwort 3 is now based on CRUX which will make it more advanced. I'm not changing it to CRUX because I want it to be hard and for truly advanced users, but because Slackware has become a really multi-purpose distribution, and strip out all the "unneeded" stuff for Kwort would take me a lot of time.
+Also the init system has changed and the way it is configured too. Don't worry about all this, it is already well documented in the new website (this new one is really cool, with tons of information as it always should be but never was). There's no more wizards tools like knm (Kwort network manager) and kum (Kwort user manager), but a console and the chosen editor. Despite of that kum and knm will still be maintained and developed (kind of).</p>
+
+<p>Anyways, Kwort 3 is almost ready be released. There's a beta release already that everyone can test (there are some testers already doing a great job that helped me a lot).</p>
+
+<p>Sorry for not having you all up to date related to Kwort, but I've been working a lot and in my free time I try to develop Kwort. For example, now, I'm in my lunch time, and I passed out lunch in order to write something for you about the new direction of this project.</p>
+
+<p>Cheers.</p>
+
+<hr width="40%">
+
+						</div>
+                    </div>
 
                     <div class="mastfoot">
                         <div class="inner">
+                        	<br>
+							<table style="width:100%"><tr><td><a href="index1.html">Previous posts</a></td><td align="right"></td></tr></table>
+                        	<br>
                     </div>
                 </div>
             </div>
@@ -60,4 +402,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     </body>
 </html>
-
