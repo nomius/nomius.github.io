@@ -52,6 +52,9 @@ def CreateBlog():
 
     post_counter = page_counter = 0
     parsed_content = ""
+
+    current_item = 0
+    total_items = len(fposts)
     for post in fposts:
 
         with open(post, "r") as pst:
@@ -61,10 +64,14 @@ def CreateBlog():
             parsed_content += FullParse(pst.read())
             parsed_content += '\n<hr width="40%">\n'
             post_counter += 1
+            current_item += 1
 
         # Change the page
         if post_counter == POSTS_PER_PAGE:
-            page_counter = WriteBlogPage(page_counter, txt_template, parsed_content, False)
+            if current_item + 1 == total_items:
+                page_counter = WriteBlogPage(page_counter, txt_template, parsed_content, True)
+            else:
+                page_counter = WriteBlogPage(page_counter, txt_template, parsed_content, False)
             post_counter = 0
             parsed_content = ""
 
