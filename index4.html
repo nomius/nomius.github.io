@@ -1,0 +1,194 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>David's Website</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link href="css/cover.css" rel="stylesheet">
+        <link href="css/vim.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                            <h3 class="masthead-brand">David's Website</h3>
+                            <ul class="nav masthead-nav">
+								<li class="active"><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="articles.html">Articles</a></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://github.com/nomius/misctools">misctools</a></li>
+<li><a href="https://github.com/nomius/ntunnel">ntunnel</a></li>
+<li><a href="https://github.com/nomius/kpkg">kpkg</a></li>
+<li><a href="https://github.com/nomius/ktsuss">ktsuss</a></li>
+<li><a href="https://github.com/nomius/dmemory">dmemory</a></li>
+<li><a href="https://github.com/nomius/nqqueue">nqqueue</a></li>
+<li><a href="https://github.com/nomius/mttools">mttools</a></li>
+<li><a href="http://www.kworg.org">Kwort</a></li>
+</ul></li>
+<li><a href="links.html">Links</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="inner cover">
+						<div class="left cover">
+							<br><br><br>
+	                        <p><h3>Has to be the Brazilian Air (GNU bc readline patch)</h3><h8>Posted on: 2014-11-01 11:42:54</h8><p>The same day I wrote the patch for Xdialog's extra button feature (when I was in Rio de Janeiro - Brazil) I found a little bug in the GNU bc using readline.
+The bug actually is very simple, there was a wrong prototype declaration of the extern function readline. The prompt argument, according to readline(3) from GNU, is a const char *, not a char *.
+So bc didn't even compile if you wanted to use readline (which actually is very good). I must think that eveyone uses bc without readline, so nobody saw that error.
+Anyways, I wrote the patch and send it to Phil Nelson (author of GNU bc), and he thank me for it.</p>
+
+<p>I don't know when bc is gonna be updated so I don't know either when the patch will be included. So, for now, you'll have to download it from here and apply it manually.</p>
+
+<p>(http://dcortarello.googlepages.com/bc-1.06-readline-const-char.patch)</p>
+
+<hr width="40%">
+<h3>Today zenity... Tomorrow who knows... Conquer the world maybe" ;)</h3><h8>Posted on: 2014-11-01 11:33:31</h8><p>I was trying to make some visual scripts for Kwort Linux. I tried Xdialog but wasn't very nice. So I give a look at zenity (which I already did 2 years ago).
+So the screenshots and its flexibility was amazing, there was just one thing... It needed gnome-canvas, which requiere half gnome's dependencies.
+Then I started to look into the code to see if there's a way to get rid of canvas package. After few minutes I realised that canvas was only needed in about dialog; this is not a post with criticism to the zenity developers, who I think they made an excelent job with it, but add a new dependency just to draw their's about dialog wasn't the smartest thing.
+I know they use it to fit the gnome's look &amp; feel, but use canvas just for an about dialog was kind of silly, with it you only get gnome users (which unfortunally is the gnome's development idea, but I know that you guys want to do the right thing in the right way :D).</p>
+
+<p>So today I wrote a patch to drop the libgnome-canvas package as dependency. Now Xfce users and everyone else not using gnome can install zenity without installing half gnome. :)</p>
+
+<p>Anyways, I leave you the patch:
+(http://dcortarello.googlepages.com/zenity-no-canvas.patch)</p>
+
+<hr width="40%">
+<h3>Patch for Xdialog (Yes! Made in Brasil)</h3><h8>Posted on: 2014-11-01 11:37:17</h8><p>Ok, ok, ok... I know I was in vacations, but the day wasn't very pretty, and I felt like taking a coding time. :D</p>
+
+<p>Some weeks ago I wrote a small plugin for Xfce to configure the network in Kwort Linux; I was going to use Zenity, but then I saw again Xdialog and surprise... GTK2 based interface!</p>
+
+<p>Well... Nowadays a program which keeps being maintained using gtk1 is something very weird. So I decided to use Xdialog. The problem was when I needed an extra button... Dialog provides that feature, but Xdialog didn't and I really needed it.</p>
+
+<p>So I mailed Thierry Godefroy asking him if he didn't had a patch which provides that feature... I guess he was very, very occupied, because he didn't even answered.</p>
+
+<p>When I saw the code the first time some weeks ago I said "This will be hard to understand to implement it by myself", and today when I started to look at the code it wasn't that hard. So some hours latter I understanded the code and started to write some things...</p>
+
+<p>So, this is what this command:</p>
+
+<div class="codehilite"><pre><code>Xdialog --stdout --extra-button --extra-label <span class="s2">&quot;Extra Button&quot;</span> --inputbox <span class="s2">&quot;Type your input. Hit Extra Button to get 3 as return value&quot;</span> 0 0
+</code></pre></div>
+
+<p>will show:</p>
+
+<p><img src="http://photos1.blogger.com/blogger2/288/3652/400/xdialog-button-extra-patch.png" alt="Xdialog extra button" /></p>
+
+<p>So... Here's the patch, I hope someone finds it useful like me:</p>
+
+<p>(http://dcortarello.googlepages.com/Xdialog-2.3.1-patch-extra-button.patch)</p>
+
+<hr width="40%">
+<h3>Something interesting</h3><h8>Posted on: 2014-11-01 11:33:13</h8><p>This is kind of "off topic" but I see this interesting:</p>
+
+<blockquote>
+  <p>Start with a cage containing five monkeys. Inside the cage, hang a banana over a set of stairs. Before long, a monkey will go to the stairs and climb toward the banana. As soon as he touches the stairs, spray the other monkeys with cold water.</p>
+  
+  <p>After a while, another monkey makes an attempt with the same result--the other monkeys are sprayed with cold water. Pretty soon, when any monkey tries to climb the stairs, the other monkeys will try to prevent it.</p>
+  
+  <p>Now, put away the cold water. Remove one monkey from the cage and replace him with a new one. The new monkey sees the banana and wants to climb the stairs. To the monkey's surprise, all the other monkeys attack him. After another attempt and attack, he knows that if he tries to climb the stairs, he'll be assaulted.</p>
+  
+  <p>Next, remove another of the original five monkeys and replace him with a new one. The new comer goes to the stairs and is attacked. The previous new comer takes part in the punishment with enthusiasm! Likewise, replace a third original monkey with a new one, then a fourth, then the fifth. Every time the newest monkey takes to the stairs, he is attacked.
+  Advertisement</p>
+  
+  <p>Most of the monkeys that are beating him have no idea why they weren't permitted to climb the stairs or why they're participating in the beating of the newest monkey.</p>
+  
+  <p>After replacing all the original monkeys, none of the remaining monkeys have ever been sprayed with cold water. Nevertheless, no monkey ever again approaches the stairs to try for the banana. Why not? Because as far as they know, that's the way it's always been done around here.</p>
+</blockquote>
+
+<hr width="40%">
+<h3>Here we go again with sqwebmail</h3><h8>Posted on: 2014-11-01 11:39:45</h8><p>I really hate when this happens. I released a sqwebmail vacations mode patch just two weeks ago... And guess what... Today browsing the net I found a new sqwebmail version.
+Fortunally no big changes in the code so I adapted the patch in a few minutes.
+I modify the this patch to make it compatible with both versions (5.1.2 and 5.1.3), I don't know if it works in older versions.</p>
+
+<p>Ok, here I leave you the patch:</p>
+
+<p>http://dcortarello.googlepages.com/sqwebmail-5.1.3-vacations-mode.patch</p>
+
+<hr width="40%">
+<h3>An easy to do samba scanner</h3><h8>Posted on: 2014-10-27 18:15:00</h8><p>I wrote this simple script to find public samba shared resources. Windows by default leave some "open resources" that normally you can access mounting it or with some samba tools. So, the thing is: How do I find public resources in a network? This is what I did:</p>
+
+<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">function </span>scan<span class="o">(){</span>
+   <span class="nv">SUBNET</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
+   <span class="nv">LAST</span><span class="o">=</span><span class="k">${</span><span class="nv">2</span><span class="k">}</span>
+   <span class="nv">PING</span><span class="o">=</span><span class="s2">&quot;$(which ping) -c 1 -W 1&quot;</span>
+   <span class="k">${</span><span class="nv">PING</span><span class="k">}</span> <span class="k">${</span><span class="nv">SUBNET</span><span class="k">}</span>.<span class="k">${</span><span class="nv">LAST</span><span class="k">}</span> &gt; /dev/null 2&gt;&amp;1
+   <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">       </span><span class="nv">SMBRESOURCES</span><span class="o">=</span><span class="k">$(</span>smbclient -N -L <span class="k">${</span><span class="nv">SUBNET</span><span class="k">}</span>.<span class="k">${</span><span class="nv">LAST</span><span class="k">}</span> 2&gt;/dev/null | grep Disk | grep -v <span class="se">\\</span><span class="nv">$)</span>
+       <span class="k">if</span> <span class="o">[</span> ! -z <span class="s2">&quot;${SMBRESOURCES}&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">           </span>tput setaf 2
+           <span class="nb">echo</span> -e <span class="s2">&quot;Public samba resources in ${SUBNET}.${LAST}:&quot;</span>
+           tput setaf 1
+           <span class="nb">echo</span> <span class="s2">&quot;${SMBRESOURCES}&quot;</span>
+           <span class="nb">echo</span> -e <span class="s2">&quot;------------------------------------------------------\n&quot;</span>
+           tput sgr0
+       <span class="k">else</span>
+<span class="k">           </span>tput setaf 3
+           <span class="nb">echo</span> <span class="s2">&quot;${SUBNET}.${LAST} is up, but doesn&#39;t have public resources&quot;</span>
+           <span class="nb">echo</span> -e <span class="s2">&quot;------------------------------------------------------\n&quot;</span>
+           tput sgr0
+       <span class="k">fi</span>
+<span class="k">   fi</span>
+<span class="o">}</span>
+
+<span class="k">if</span> <span class="o">[</span> -z <span class="k">${</span><span class="nv">2</span><span class="k">}</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">  for</span><span class="o">((</span><span class="nv">x</span><span class="o">=</span>1;x&lt;255;x++<span class="k">)</span><span class="o">)</span>; <span class="k">do</span>
+      <span class="k">${</span><span class="nv">0</span><span class="k">}</span> <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">x</span><span class="k">}</span> &amp;
+  <span class="k">done</span>
+<span class="k">else</span>
+<span class="k">  </span>scan <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">2</span><span class="k">}</span>
+<span class="k">fi</span>
+<span class="nb">wait</span>
+
+<span class="c">#EOF</span>
+</code></pre></div>
+
+<hr width="40%">
+<h3>Patch to provide features to sqwebmail</h3><h8>Posted on: 2014-11-01 11:33:26</h8><p>Recently I've been working with qmail+vpopmail+sqwebmail+courier-imap+...+a lot of things at work.
+Sqwebmail has a nice code style, but unfortunally it isn't docummented at all, so for all of us that don't belong to the project itself is very painful. In addition, the way they've done some things can really piss off someone. Not to mention that it's extremely un-extensible. So adding a new feature involves understanding and modifying the whole source code.
+Anyway, vacations mode is only implemented through qmailadmin, which is good, but users should use only one web interface, and that interface should be sqwebmail.</p>
+
+<p>So anyways, let's cut off the story and show you some code:</p>
+
+<p>(http://dcortarello.googlepages.com/sqwebmail-5.1.2-vacations-mode.patch)</p>
+
+<hr width="40%">
+<h3>My keyboard</h3><h8>Posted on: 2014-10-27 12:06:23</h8><p>Yesterday I got this new "old keyboard". Believe or not, this treasure was going to the trash, and my little brother save it because I told him I was looking for one. He came to me with it at 1:30 in the morning.
+I been looking for one of this since 5 years ago. This is a IBM Model M keyboard (latin american) model 1391506. Produced in 1988 is an old school keyboard for people who can appreciate the sound and tact of a real keyboard, this is one of the best (If I don't say the best) keyboard ever made. If IBM knows how to do something is keyboards.
+This is real shit, not for those kiddies with multimedia keyboards, this keyboards if for mans, so kids... Stay out, or I'll punch you with it (real, it weight is 2.5kg :D).</p>
+
+<p><img src="http://plope.com/Members/chrism/bucklingspring_mov.gif" alt="How this keyboards works? See this animation:" /></p>
+
+<p><img src="http://photos1.blogger.com/blogger/7783/3198/1600/DSC01133.0.jpg" alt="My Model-M keyboard" /></p>
+
+<hr width="40%">
+
+						</div>
+                    </div>
+
+                    <div class="mastfoot">
+                        <div class="inner">
+                        	<br>
+							<table style="width:100%"><tr><td></td><td align="right"><a href="index3.html">Next posts</a></td></tr></table>
+                        	<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

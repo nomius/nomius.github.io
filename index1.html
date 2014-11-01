@@ -1,0 +1,372 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>David's Website</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link href="css/cover.css" rel="stylesheet">
+        <link href="css/vim.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                            <h3 class="masthead-brand">David's Website</h3>
+                            <ul class="nav masthead-nav">
+								<li class="active"><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="articles.html">Articles</a></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://github.com/nomius/misctools">misctools</a></li>
+<li><a href="https://github.com/nomius/ntunnel">ntunnel</a></li>
+<li><a href="https://github.com/nomius/kpkg">kpkg</a></li>
+<li><a href="https://github.com/nomius/ktsuss">ktsuss</a></li>
+<li><a href="https://github.com/nomius/dmemory">dmemory</a></li>
+<li><a href="https://github.com/nomius/nqqueue">nqqueue</a></li>
+<li><a href="https://github.com/nomius/mttools">mttools</a></li>
+<li><a href="http://www.kworg.org">Kwort</a></li>
+</ul></li>
+<li><a href="links.html">Links</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="inner cover">
+						<div class="left cover">
+							<br><br><br>
+	                        <p><h3>Thunar and hard drive partitions</h3><h8>Posted on: 2014-11-01 15:56:00</h8><p>Hello everybody, It's been so long since my last post here.
+There's so much to talk about, but today I'm going to talk about Thunar. As some of you might know, thunar is the file manager used in Xfce, written by Benedikt Meurer, and nowadays maintained by Jannis Pohlmann.
+I really like thunar, but the fact that hard drive partitions are left to the distribution itself when hal can manage them and because of that the file manager also can, isn't really nice, as you can browse your partitions in newer versions of GTK's (with Gvfs) GtkFileChooser.
+An ugly workaround would be to mount them and add some gtk bookmarks, but you would like to set an emblem to differentiate them from normal bookmarks, and emblems are not part of the gtk library, so you wouldn't see emblems in a GtkFileChooser. Another issue would be that isn't dynamic, so if someone change partitions that would be a total mess.
+So IMHO the best solution to this is: Hard Drive partitions managed by hal (DeviceKit in the future) and let Thunar show them in the left pane. And this is what I actually did.</p>
+
+<p>So, as everybody loves screenshots and you probably want to see how this looks:</p>
+
+<p><img src="http://1.bp.blogspot.com/_7bn3_3YdSWU/SlohSHN0aCI/AAAAAAAAAPs/uRExbB-PPIk/s400/thunar_hd_partitions.png" alt="Thunar and partitions" /></p>
+
+<p>And finally, the patch: (http://dcortarello.googlepages.com/Thunar-1.0.0-hd-partitions.diff)</p>
+
+<p>Enjoy!</p>
+
+<hr width="40%">
+<h3>Kwort Linux 2.4.1 released</h3><h8>Posted on: 2014-11-01 15:55:51</h8><p>I'm happy to announce that Kwort 2.4.1 final is here!</p>
+
+<p>This version took a year to develop and provides a lot of changes from 2.4 release, including a new, more cleaned up than usual, base system, whole new tool chain, new configuration tools and lots of new things.</p>
+
+<p>Good things in this new version:</p>
+
+<ul>
+<li>Kwort's init system: From 2.4, the init system has evolved keeping its simplicity but providing some new features.</li>
+<li>Linux 2.6.28.7: A lot of hardware support was included since the kernel included in Kwort 2.4.</li>
+<li>Kpkg: The new version of kpkg include several new features as the adoption of multi-mirror support.</li>
+<li>Kwort User Manager: Re-written from scratch it Provides a simple way to create and remove users with a new interface.</li>
+<li>Kwort Network Manager: Also re-written from scratch, allows you to configure your network (wired and wireless), as manage your dns and hostname system. It also allows you to switch wireless drivers.</li>
+<li>Xfce: This new version brings a lot of changes under the hood making the desktop more extensible.</li>
+<li>Audacious: This is the default music player since Kwort 2.4.1 allowing you to play your music in a very simple way.</li>
+<li>Our new Google group (http://groups.google.com/group/kwort-linux): Ok, this has nothing to do with something included in the release, but it allows the developers behind Kwort to communicate between them and also with the users (who are what Kwort is all about).</li>
+</ul>
+
+<p>As in every old version now comes the things that I look forward to improving:</p>
+
+<ul>
+<li>Thunderbird: It's kind of sad, but thunderbird isn't yet full "xulrunnized", so starting firefox+thundebird brings two copies of xulrunner up to memory, which as we all know, is kinda in the chubby side.</li>
+<li>Audacious: Although audacious is pretty good doing its job, I think a jukebox is more needed these days, as people needs more information while playing their music. It is known that using gstreamer would take out some of the features audacious brings, but we have a full-featured media-handling components and using those frameworks would allow the Linux desktop to improve, communicate between applications and to remain simple.</li>
+</ul>
+
+<p>People who I would like to thank:
+Andreas Schipplock as always for making and maintaining the website, mirroring the Kwort iso image, and kind of playing a role of resources manager that allows me to develop easily Kwort.
+Sebastian Reisse for writing the kpkg manpage, and for taking a lot of his time testing every release candidate, if it wasn't for him, this release would come with several bugs.
+The Aircable people for their donations as they helped me to buy some hardware I was needing for develop Kwort.
+The mirror providers as usual, the people from PGHosting and Ricardo Brisighelli for the package mirror in the UNR.
+Finally, but not less important a very big THANKS to Patrick Volkerding for Slackware Linux, the system Kwort is based on.
+The Xfce developers (core and goodies) who made 4.6 a lot more simple to configure for distributions and provided help when needed.
+The people who develop every project Kwort includes. I hope I didn't forget anyone.</p>
+
+<p>As usual, if you need support, help, or you just feel like talking about Kwort (or anything else), or you just want to meet the people who is behind Kwort, you can join us on IRC or our Google group:</p>
+
+<p>IRC: irc://irc.oftc.net/Kwort</p>
+
+<p>Google Group: (http://groups.google.com/group/kwort-linux)</p>
+
+<hr width="40%">
+<h3>Lots of stuff going on</h3><h8>Posted on: 2014-11-01 14:50:03</h8><p>Well, it's been 3 months since my last post, and I've been doing a lot...</p>
+
+<p>Let's start with Kwort. Well we're just there from the release, lots of new improvements are being done around it, and something really interesting is the new network manager and the new user manager I wrote from scratch with a completely new design using gtkdialog.</p>
+
+<p>The new network manager allows you to configure your ethernet and wireless network, supporting static and dhcp, for wireless network, support for several encryption mode are available, from wep to wpa2:</p>
+
+<p><img src="http://lh3.ggpht.com/_7bn3_3YdSWU/SZCvNk3odHI/AAAAAAAAANM/6m-TJD-_8Cw/knm.png" alt="Network manager" /></p>
+
+<p>The user manager stills very simple but with a very simple and smooth interface:</p>
+
+<p><img src="http://lh5.ggpht.com/_7bn3_3YdSWU/SZCvNl6KKtI/AAAAAAAAANU/Q7Lh7X_hYTA/kum.png" alt="User manager" /></p>
+
+<p>So, as you can see we have almost everything, since looking at the screenshot the Xfce settings manager is in it, so Xfce is kinda there, so you might be questioning "What are you waiting for a release?" Well, Xfce 4.6 is in release candidate time, so when they release it final we'll see how's the Mozilla people going with Firefox 3.1, since it would be really cool to ship it
+with Kwort 2.4.1. I wouldn't matter to ship a beta 3 with 2.4.1, but we'll see, since beta 3 should be released already according to <a href="https://wiki.mozilla.org/Firefox3.1/Schedule">Mozilla's Firefox schedule</a>, and their delivery meeting is schedule to the end of the month (February 25th), which is just around the corner.</p>
+
+<p>Resuming, lots of improvements are going on and I'm trying to make it pretty cool and easy for the end user.</p>
+
+<p>That's just for Kwort, now... Some friends saw I was migrating to git, and yeah, I did, since in the past I used git with <a href="http://www.gitorious.org/">gitorious.org</a> which didn't convinced me, I came back to darcs. But now, I discovered <a href="https://www.github.com/">GitHub</a> which is really cool, fast and easy to use and with lots of guides around, so you can see and follow my work
+at: (http://github.com/nomius).
+I have to admit here that I was influenced at work by warlock, which is the author of the <a href="http://www.warlockshome.com.ar/">wbar</a>, to move from darcs to git, so I found a darcs2git python script and it was like charm.</p>
+
+<p>Also, I implemented lots of cool new features for kpkg, and I merged kpkg with the kwort network manager and user manager making a "big" project called <a href="http://github.com/nomius/kwtools/tree/master">kwtools</a>. Looking right now at the master tree page, you'll see this: "Implemented kpkg search /all with csv support" and you might be asking "What the hell is this guy making with kpkg implementing stuff like this?", well, I hope this feature is just enough, but basically, it is because a friend, x-ip, and I we are writing a graphical interface for kpkg, at the moment the interface is pretty rough but does show the idea, of course, icons and all that stuff is going to be implemented with also a more eye-candy interface, so you can see a preview of the application here:</p>
+
+<p><img src="http://lh5.ggpht.com/_7bn3_3YdSWU/SZCvNhGOhsI/AAAAAAAAANc/SV4rvaIufCg/galgo.png" alt="kpkg graphical" /></p>
+
+<p>As I said before and as you can see, the interface looks pretty rough, but give us some time and you'll see how cool it looks. I doubt we get in time to include this new tool in Kwort 2.4.1, we'll try, but I really doubt it since I'm just learning python, which is the language we use to write this, and x-ip is just learning wxPython with me, which is the framework we use for
+this.</p>
+
+<p>Please, if you have any ideas for Kwort or any of the tools/applications I write, please write me, it would be nice to hear (read) about you and your ideas, and also, I don't know... help maybe? :-)</p>
+
+<p>We'll, this post is already becoming large so I'm off to bed now. Have a nice week and see you around guys.</p>
+
+<hr width="40%">
+<h3>Updates!</h3><h8>Posted on: 2014-11-01 14:46:03</h8><p>Well, it's been a long time in the road since my last post here. This weblog isn't over, but I been doing a lot of things and didn't got the time to write something.</p>
+
+<p>Ok, things I've been doing:
+* I wrote a new network manager for Kwort 2.4.2 (I'm already working on a new Kwort version), screenshots are coming
+* I also wrote a new user manager for next Kwort also. Screenshots are ON the way. :-D
+* A friend of mine (Jp) is working on a new init system which is very cool, so Kwort will use it.
+* Bought a pretty cool (4 cores) new computer (Desktop). I would like to thank to the aircable.net people who helped me to buy my new computer with a donation. (A BIG THANKS TO YOU GUYS)
+* Working... :-)</p>
+
+<p>Anyways, I want here to point this link from my good old friend Andreas Schipplock, he made a small list of interesting links to read and/or hear.</p>
+
+<p><a href="http://blog.as.tl/2008/11/01/online-video-lectures/">Online video lectures</a></p>
+
+<p>Btw, I took a position at iProgrammers and I'm working at Accenture now as a Senior Programmer.</p>
+
+<hr width="40%">
+<h3>NQqueue 0.3b</h3><h8>Posted on: 2014-11-01 14:44:20</h8><p>I'm just releasing NQqueue 0.3 beta.
+This is just a bug fix release and it is beta because of the new spamassassin plugin; I wrote this one on sunday, but since I don't use spamassassin (I have servers running dspam), I can't test it.</p>
+
+<p>This is just a release asking for people to flood my inbox with feedback on the spamassassin plugin, the configuration parameters are the same used with the dspam plugin, so only "pass" parameter is allowed, or empty.</p>
+
+<p>So, get latest NQqueue release here: (http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.3b.tar.gz)</p>
+
+<hr width="40%">
+<h3>ktsuss 1.4 released</h3><h8>Posted on: 2014-11-01 12:20:03</h8><p>Well, the people of wicd asked me for some modifications in ktsuss so they could support it as they do with gksu.
+These modifications were made in the weekend; also bug fixes has been done, and as it looks very stable I'm writing a post release announce here. :-)</p>
+
+<p>Changelog can be found <a href="http://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14839">here</a>
+Also, you can follow ktsuss development in my darcs server <a href="http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi?r=ktsuss;a=summary">here</a>
+Latest ktsuss download link <a href="http://download.berlios.de/ktsuss/ktsuss-1.4.tar.gz">here</a></p>
+
+<p>Bugs and feature requests are always welcome :-)</p>
+
+<p>Cheers!</p>
+
+<hr width="40%">
+<h3>NQqueue 0.2</h3><h8>Posted on: 2014-11-01 12:31:53</h8><p>Well, I just tagged NQqueue as 0.2. Several changes has been done from 0.1. For those who doesn't know, NQqueue is a threaded queue for qmail with support for plugins. Full details of what nqqueue is can be found here: (http://nomius.blogspot.com/2008/06/nqqueue-what-is-that.html)</p>
+
+<p>Download the latest release version here: (http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.2.tar.gz)</p>
+
+<p>Changelog can be found here: (http://europa.fapyd.unr.edu.ar/darcs/NQqueue/Changelog)
+If you want to get nightly builds packages. Use this link: (http://europa.fapyd.unr.edu.ar/darcs/NQqueue/NQqueue.tar.gz)
+Darcs repository: (http://europa.fapyd.unr.edu.ar/darcs/NQqueue)</p>
+
+<p>NQqueue stills in development, it is stable enough, but there are some things that must be fixed before the next release.</p>
+
+<p>Plugins included:</p>
+
+<ol>
+<li><p>General plugins:</p>
+
+<ul>
+<li><p>black - Parameters:</p>
+
+<ul>
+<li>user@domain - email address to put in the blacklist.</li>
+</ul></li>
+<li><p>clamav - Parameters:</p>
+
+<ul>
+<li>"pass" - will make the email pass even if it contains a virus (used to send it to a quarantine).</li>
+<li>None parameter given will block a containing virus mail.</li>
+</ul></li>
+</ul></li>
+<li><p>User plugins:</p>
+
+<ul>
+<li><p>dspam - Parameters:</p>
+
+<ul>
+<li>"pass" - will make the email pass even if it considered spam (used to send it to a quarantine).</li>
+<li>None parameter given will block a spam considered email.</li>
+</ul></li>
+<li><p>quarantine - Parameters:</p>
+
+<ul>
+<li>"all" - will send to quarantine any email that was considered spam or that contains a virus.</li>
+<li>"dspam" will send to quarantine any email that was considered spam.</li>
+<li>"clamav" - will send to quarantine any email that contains a virus.</li>
+<li>"q=" - allow the administrator to set the quarantine type. Allowed types of quarantines are:</li>
+<li>general - will put the email in /var/qmail/nqqueue/quarantine.</li>
+<li>vquad(VHOME) - will put the email in your vpopmail home (ex: vquad(.Spam), will put your email in Maildir/.Spam/cur). [vpopmail support must be given in configure script]</li>
+</ul></li>
+</ul></li>
+</ol>
+
+<p>Example of common usage:
+This example shown here will block an incoming email from billgates@microsoft.com, put emails containing virus to general quarantine (in /var/qmail/nqqueue/quarantine/domain/user), and deliver spam considered emails in Maildir/.Spam/new (which is the personal user spam directory in his vpopmail home).</p>
+
+<ul>
+<li>/var/qmail/control/general.cfb</li>
+</ul>
+
+<pre><code>:clamav=pass;black=billgates@microsoft.com
+</code></pre>
+
+<ul>
+<li>/var/qmail/control/mydomain.com.cfb</li>
+</ul>
+
+<pre><code>dspam=pass;quarantine=clamav,q=general;quarantine=dspam,q=vquad(.Spam)
+</code></pre>
+
+<p>I hope people start using nqqueue, since it is fast, secure, flexible and very easy to use.</p>
+
+<hr width="40%">
+<h3>NQqueue? What is that?</h3><h8>Posted on: 2014-11-01 12:32:17</h8><p>As some people asked me the last few weeks what I've been doing I've decided to take some time to write this and explain what NQqueue (aka nqq) is all about.
+Well, some of you maybe listened (or read) me telling that queues for qmail are bloated. We don't have several choices, there is just plain qmail-queue which is unfeatured, qmail-scanner (aka give me my CPU back) which is the bloatest one, and simscan which is kind of featured, fast, but not extensible at all, both of the last ones are buggy when getting an email with several
+Rcpts (they only analyze one. Which is a big bug).
+So, because of all this, I've been using simscan, I actually extended it from those 2000 lines to 4000 adding features. But it became so big, that it is hard to maintain and to trace errors in it.
+This situation drove me nuts the last year so I decided "Why I don't just write my own qmail queue?". Well, NQqueue is the result of this self asked question.</p>
+
+<p>Let me show you and tell you some of the features of NQq:</p>
+
+<ul>
+<li>Modular - not like simscan with a big file with all the problem.</li>
+<li>Pluggable - this is what NQq is all about, it support the addition of plugins. There are some now in the darcs server.</li>
+<li>Threaded - this is quite a nice feature for mails with several Rcpts, nqqueue triggers a thread for every Rcpt to be analyzed.</li>
+<li>Fast - This is like simscan. But it improves it when analyzing more than one Rcpt because of the threads.</li>
+<li>Secure and reliable - I been working quite a lot on this, since simscan has several bugs, and I didn't want this on NQq.</li>
+</ul>
+
+<p>Plugins: Well, some of you might be asking "Dude, nice, but how do I write a plugin for NQq?". Well, first of all, I have to tell you that there are two types of plugins:
+1st. we have the general plugins. Those plugins are run to an email before to trigger all the threads for every rcpt. Why is this? Well, it would be dumb to call for example a clamav plugin for every user (in every thread). So for example we can write a plugin that should not care about the Rcpts and/or From, like clamav, since it depends on a general database.
+2nd. besides of general plugins, there are also per user plugins. These plugins are run in every thread. This is the example of a spam plugin, since it depends on a special per user database.</p>
+
+<p>So now I can show you a small general plugin to block a Sender:</p>
+
+<div class="codehilite"><pre><code><span class="cm">/* vim: set sw=4 sts=4 : */</span>
+
+<span class="cp">#include &lt;string.h&gt;</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;nqqueue.h&gt;</span>
+
+<span class="cp">#define PLUGIN_VERSION &quot;1.0&quot;</span>
+<span class="cp">#define PLUGIN_NAME &quot;black&quot;</span>
+<span class="cp">#define REJECTED_MESSAGE &quot;Message rejected because of black list&quot;</span>
+
+<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_name</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_NAME</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_version</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_VERSION</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* Parameters:</span>
+<span class="cm"> * params = a char pointer with parameters used to call the module (in this case, the email address to block).</span>
+<span class="cm"> * mail = It&#39;s a char pointer to the filename that contains the email.</span>
+<span class="cm"> * From = a char pointer with the From email address. (if it matchs the param, the mail would be blocked)</span>
+<span class="cm"> * Rcpt = an union that contains space for a char pointer (if user pluing) or a pointer to a PUStruct</span>
+<span class="cm"> *        struct (if general plugin).</span>
+<span class="cm"> * general = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
+<span class="cm"> *           already runned by general plugins</span>
+<span class="cm"> * peruser = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
+<span class="cm"> *           already runned by per user plugins</span>
+<span class="cm"> */</span>
+<span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="nf">plugin_init</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">mail</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">From</span><span class="p">,</span> <span class="k">const</span> <span class="k">union</span> <span class="n">Tos</span> <span class="n">Rcpt</span><span class="p">,</span> \
+                              <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">general</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">peruser</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="n">ret</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">ModReturn</span><span class="p">));</span>
+
+    <span class="n">ret</span><span class="o">-&gt;</span><span class="n">NewFile</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">From</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="n">REJECTED_MESSAGE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Looks easy don't you think? So, how do we make NQqueue to load our plugin? Simple: in /var/qmail/control/general.cfb put a line like this:</p>
+
+<pre><code>:black=billgates@microsoft.com
+</code></pre>
+
+<p>That will set the sender billgates@microsoft.com as a blocked server. In fact, this plugin acts just like a black list.
+Now your question might be: And how can I block more? Well, you can call the plugin several times, like this:</p>
+
+<pre><code>:black=billgates@microsoft.com;black=steveballmer@microsoft.com
+</code></pre>
+
+<p>Or you can modify the plugin_init function to allow more than one email (like black=billgates@microsoft.com,steveballmer@microsoft.com) and do some simple parsing with strtok.</p>
+
+<p>As you can see it is very easy to write plugins for NQqueue. I know it stills need a lot of documentation, since at it is now, it's very poor in this aspect. The only documentation in NQqueue so far is a configuration scheme in the NQqueue darcs in case you want to know how to configure it right (it's very easy).</p>
+
+<p>So, those are some of the features in NQqueue there are more of course, but those are enough to mention.
+NQqueue needs a lot of testing, so I'm counting with all of you to run tests. Also documentation is needed, and it will take some time to me to write it, so people wanting to write documentation are welcome. Also people writing plugins, I wrote some which are already in my darcs server (a dspam, clamav, blacklist and quarantine) modules.</p>
+
+<p>You can follow NQqueue's development in my darcs server at: (http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi)</p>
+
+<hr width="40%">
+<h3>Hanging up switches and bridges</h3><h8>Posted on: 2014-11-01 12:16:56</h8><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
+How this come? Well, very simple, switches and bridges has a small stack (10 bytes per host connected to it) where they save IP and MAC addresses to know where to send a package once the sender and the receiver are known. So, once the first package is sent, a new entry in the stack was made. So now you know the "theory" I'll leave you to think how could this help you to hang it
+(Let me give you a hint: OVERFLOW).</p>
+
+<p>Anyways, get the code you'll need to produce this overflow from here: (http://dcortarello.googlepages.com/pkinject)</p>
+
+<p>Keep in mind that you'll need the pktgen kernel module to run this.
+See also that I did this 3 years ago with bash, not even C code, so it shows how easy is to generate network packages to produce this effect, which isn't a big deal when it comes to reproduce it, but to create a security policy to avoid it.</p>
+
+<p>Have fun.</p>
+
+<hr width="40%">
+<h3>Nice picture</h3><h8>Posted on: 2014-11-01 12:13:21</h8><p>Well, not much to say these days...</p>
+
+<p><a href="http://4.bp.blogspot.com/_7bn3_3YdSWU/R8zGzB7Bw2I/AAAAAAAAAIc/8_urwRHbh6A/s400/Einstein.jpg">!Einstein</a></p>
+
+<p>Sometimes we have to find a reason to laugh, even a little bit... I found this picture very funny. :)</p>
+
+<hr width="40%">
+
+						</div>
+                    </div>
+
+                    <div class="mastfoot">
+                        <div class="inner">
+                        	<br>
+							<table style="width:100%"><tr><td><a href="index2.html">Previous posts</a></td><td align="right"><a href="index.html">Next posts</a></td></tr></table>
+                        	<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

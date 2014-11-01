@@ -1,0 +1,339 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>David's Website</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link href="css/cover.css" rel="stylesheet">
+        <link href="css/vim.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                            <h3 class="masthead-brand">David's Website</h3>
+                            <ul class="nav masthead-nav">
+								<li class="active"><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="articles.html">Articles</a></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://github.com/nomius/misctools">misctools</a></li>
+<li><a href="https://github.com/nomius/ntunnel">ntunnel</a></li>
+<li><a href="https://github.com/nomius/kpkg">kpkg</a></li>
+<li><a href="https://github.com/nomius/ktsuss">ktsuss</a></li>
+<li><a href="https://github.com/nomius/dmemory">dmemory</a></li>
+<li><a href="https://github.com/nomius/nqqueue">nqqueue</a></li>
+<li><a href="https://github.com/nomius/mttools">mttools</a></li>
+<li><a href="http://www.kworg.org">Kwort</a></li>
+</ul></li>
+<li><a href="links.html">Links</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="inner cover">
+						<div class="left cover">
+							<br><br><br>
+	                        <p><h3>Kwort 2.4 released</h3><h8>Posted on: 2014-11-01 12:15:14</h8><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
+
+<p>The core system is based on Slackware and provides a rock solid system, and it's also a great place to start making a full featured and usable desktop environment using Xfce.
+This version includes several changes from 2.2 from a new toolchain to a completely new base system. The inclusion of hal provides a great way to communicate the hardware with the desktop making the system a lot more user friendly.</p>
+
+<p>Good things in this new version:
+* Hal: As I said before provides a lot of new features giving the desktop some kind of control of the hardware.
+* New init system: Kwort 2.4 includes a new init system written mostly from scratch. Also it puts all the work together with the new service command.
+* Linux 2.6.24.3: The latest stable version of the linux kernel.
+* Kpkg: The new version of kpkg was re-written from scratch.
+* Kwort User Manager: Provides a simple way to create and remove users with default Kwort templates.
+* Xfce: This new version integrate great with hal.
+* Ristretto: The image viewer of the Xfce project.
+* Mplayer: The most famous video player on Linux is now included in the iso.
+* Pidgin: The latest version of the best multiprotocol IM.
+* Mpd+Gmpc: This is the new combo to play media files in Kwort. Just put your media files in ~/Music, go to gmpc, give update and play.</p>
+
+<p>As in every old version now comes the things that I look forward to improving:
+* Better support for wireless devices: This is not part of Kwort itself, but the kernel, but finally affects Kwort users.
+* Amule: Once again amule is giving the hebbe-jeebes. There is no stable version of amule that works well enough with Kwort. The latest version is dated from middle of 2006 wich is very old and buggy with newer versions of wxGTK.</p>
+
+<p>Screenshots available here: http://kwort.org/?page=ScreenshotView</p>
+
+<p>People who I would like to thank:
+Andreas Schipplock for making and maintaining the website, mirroring the iso, working in Kwort core (he made most part of the job with Core) and bring lzma support to Kwort.
+Stijn Seger for working in some packages like openntpd and the pm support. And writing the Kwort user manager.
+I would like to give a special thanks to the users who ran tests specially to David Luskovec and Juan Martin Villanueva, if it wasn't for you guys, this iso would take even longer to come out.
+Manuel Naranjo for reporting bugs, submiting patches for the new init system, hosting the iso and run test all along Kwort core.
+Also, I would like to thank all the mirror providers: Ricardo Brisighelli for the development mirror in the UNR, Alberto Ferrer for the mirror in Emanon Linux and the AIRcable people for the mirror at aircable.net.
+Finally, but not less important a very big THANKS to Patrick Volkerding for Slackware Linux, the system kwort is based on. I hope I didn't forget anyone.</p>
+
+<p>As usual, if you need support, help, or you just feel like talking about Kwort (or anything else), or you just want to meet the people who is behind Kwort, you can join us on IRC: irc://irc.oftc.net/Kwort</p>
+
+<hr width="40%">
+<h3>ktsuss 1.3... Finally</h3><h8>Posted on: 2014-11-01 12:11:41</h8><p>Well, today I'm releasing the new ktsuss.
+It toke quite some time, not because it was too much work, but because I didn't the enough time to finish it.
+This new version includes the new authentication backend, and the new interface, which I have to say it's quite better than the old one. The main setuid program has a better comand line parser, not for the user, but if someone wants to understand it, is quite easy.</p>
+
+<p>I would like to thank Christian Dywan for putting so much work in the graphical interface, he made an excellent job with it. I would like to thank too to all the people who reported bugs to make this release the best one.</p>
+
+<p>Summary: https://developer.berlios.de/projects/ktsuss
+Changelog: <a href="https://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14175">here</a>
+Download link: <a href="http://prdownload.berlios.de/ktsuss/ktsuss-1.3.tar.gz">here</a></p>
+
+<hr width="40%">
+<h3>Why ktsuss use setuid</h3><h8>Posted on: 2014-11-01 12:12:25</h8><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
+
+<p>Using pam would requiere setuid too (since pam_unix2 doesn't have it's own wrapper), which doesn't bother me as long as I program in a secure way... What really does, is that not every distribution out there use pam, slackware is the most important it comes to my mind now.
+Using su, well, there might be a problem there, gksu does it in a very unportable way waiting for the string " Authentication failure" which is a very bad idea, look this example:</p>
+
+<pre><code>Fedora "su" command:
+-sh-3.1$ su
+Password:
+su: incorrect password
+-sh-3.1$
+Slackware (Kwort) "su" command:
+nomius@Neptune:~$ su
+Password:
+Sorry.
+nomius@Neptune:~$
+</code></pre>
+
+<p>As you can see in gksu, different versions of su would really break things up.
+None of above shown implementations gives " Authentication failure". I guess that message is given by pam with strerror(), so once again, it's not portable.</p>
+
+<p>The actual ktsuss code is very clean and simple (which is the whole idea behind ktsuss), I always gave security with the authentication backend, maybe a feature bug (like the PATH thing in 1.1), but not security issues.</p>
+
+<p>There might be a way using su better than what gksu does, something like doing "su -c exit" (pepping the password of course) getting the exit status with WEXITSTATUS(), waiting for 0 (password ok and then run su command with the same password) or 1 (wrong password). But would be kind of messy...
+I should see that like something in a long distant future... But I think it could be a way to avoid the paranoid.</p>
+
+<p>So since ktsuss have its own implementation of authentication backend, that's why it needs setuid.</p>
+
+<hr width="40%">
+<h3>MPD: What's missing?</h3><h8>Posted on: 2014-11-01 12:10:22</h8><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
+Well, I started working on gmpc to add support for tag editing when I stopped with the following issue: The fact that mpd doesn't support tag editing was the reason for gmpc to not support it (which makes sense), because mpd is run on a different machine so gmpc does not have access to these files.
+Some of you will tell me "Dude! Sonata supports tag editing even when mpd doesn't", and I know, but what sonata does is actually a very like a "half done work" with that, as you can only edit tags if mpd runs on the same machine sonata is running, which normally doesn't happen (that's the idea of a client-server structure).
+So, now, my approach to resolve the problem was completely different as I had to include a new command in the mpd protocol so I could add tag editing support.
+Well, I did include the command, I did gave support to tag edition and I even gave a command to check if the file can be edited or not. Finally, I gave support to libmpd and gmpc, so now, gmpc can "full edit" tags. :-)</p>
+
+<p>So here are the patches (descriptions on how to use the commads can be found in mpd's patch, and descriptions on how to use the new functions libraries can be found in libmpd's patch):
+MPD (stable version, by now 0.13.0): <a href="http://dcortarello.googlepages.com/mpd-0.13.0-tag_edit_support.patch">mpd-0.13.0-tag<em>edit</em>support.patch</a>
+LIBMPD (stable version, by now 0.15.0): <a href="http://dcortarello.googlepages.com/libmpd-0.15.0-tag_edit_support.patch">libmpd-0.15.0-tag<em>edit</em>support.patch</a>
+GMPC (stable version, by now 0.15.0): <a href="http://dcortarello.googlepages.com/gmpc-0.15.5.0-tag_edit_support.patch">gmpc-0.15.5.0-tag<em>edit</em>support.patch</a></p>
+
+<p>Now, the main problem wasn't the code itself, I mean, I had to spend some time investigating the code to finally hint the right keys. But the problem is now in what mpd developers want to do with this patch. Some developers like it (specially client's developers and users, like Qball Cow and Scott Horowitz), but others disagree. I really understand both sides (I have to admit I
+like more mine's, that's why I developed this patch).
+Some argues that the patch will add more code to maintain, but actually, the mpd's patch is not more than 300 lines (so that excuse looks more like a joke), others say that mpd is just a music player with a client-server architecture, and not a tag editing software, and I really understand this philosophy. But IMHO I think that if mpd wants to take care of the music this is
+like "a must have".</p>
+
+<p>Since this made very people a little uncomfortably, I see this like something good, not because of the internal fight/war, but because it helps to discuss the development. The fact that is being considered means the project is still alive and defining issues while the time is going on.
+People say that if this doesn't get in trunk tag editing is off the table. Well guys, if that happens, bad luck.</p>
+
+<p>Anyways, Kwort 2.4 will use mpd+libmpd+gmpc with tag editing support. :-)</p>
+
+<hr width="40%">
+<h3>The childs of my son are my enemies... What about their childs</h3><h8>Posted on: 2014-11-01 12:08:29</h8><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
+
+<p>I was trying to run a process, this process forks itself and ran some bash scripts. So far there's nothing bad on it, the problem is that those shell scripts create some childs, and it is more than sure that the parent (the main script) die before the childs, so I'll get some orphans process. And the main C program shouldn't die before all the childs die.</p>
+
+<p>So, let's take for example the code in the first post in this blog "Checking the network with bash". In this case a wait in the end would fix the problem, but let's just think that we can't modify this script:</p>
+
+<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">function </span>pinging<span class="o">(){</span>
+    <span class="nv">SUBNET</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
+    <span class="nv">LAST</span><span class="o">=</span><span class="k">${</span><span class="nv">2</span><span class="k">}</span>
+    <span class="nv">PING</span><span class="o">=</span><span class="s2">&quot;$(which ping) -c 1 -W 1&quot;</span>
+    <span class="k">${</span><span class="nv">PING</span><span class="k">}</span> <span class="k">${</span><span class="nv">SUBNET</span><span class="k">}</span>.<span class="k">${</span><span class="nv">LAST</span><span class="k">}</span> &gt; /dev/null 2&gt;&amp;1
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">        </span><span class="nb">echo</span> -e <span class="s2">&quot;${SUBNET}.${LAST} is up&quot;</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">if</span> <span class="o">[</span> -z <span class="k">${</span><span class="nv">2</span><span class="k">}</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">    for</span><span class="o">((</span><span class="nv">x</span><span class="o">=</span>1;x&lt;255;x++<span class="o">))</span>; <span class="k">do</span>
+        <span class="k">${</span><span class="nv">0</span><span class="k">}</span> <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">x</span><span class="k">}</span> &amp;
+    <span class="k">done</span>
+<span class="k">else</span>
+<span class="k">    </span>pinging <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">2</span><span class="k">}</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>So, this was the first attempt to control this mess but unfortunately didn't work as expected because this process was in another Process Group ID (avoid comments about controlling the return value of fork and such, since this is an example of something that didn't work):</p>
+
+<pre><code>int main(int argc, char *argv[]){
+    int status;
+    if(fork())
+        waitpid(-1*getpgrp(), &amp;status, 0);
+    else
+        execlp(argv[1], argv[1], argv+1, NULL);
+    return 0;
+}
+</code></pre>
+
+<p>So, basically, the idea was that the main C program shown above shouldn't die until all the childrens of the scripts die (that's why I was using using getpgrp(), which didn't work as expected for what I explained above).
+On Linux, running ps axfj, showed me that the small childrens (those one generated by the script) are in the same group, but I couldn't wait for them, as they are not my childrens, but then child of my child process children's.</p>
+
+<p>After dealing a little of time I came up whit this program that control all the childrens, grandchildrens and rest of the "family". The code is very simple to understand and explains on itself:</p>
+
+<pre><code>int main(int argc, char *argv[]){
+    int status;
+    pid_t pid;
+    if((pid=fork()) != 0) {
+        sleep(2);
+        waitpid(pid, &amp;status, 0);
+        while(killpg(pid, 0) != -1)
+            usleep(0.1);
+    }
+    else if(pid==0){
+        setpgid(getpid(), getpid());
+        execv(argv[1], argv+1);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>Thanks to Marcel, who actually helped me a lot with some concepts and ideas to find a workaround to this.</p>
+
+<hr width="40%">
+<h3>ktsuss 1.2 released</h3><h8>Posted on: 2014-11-01 14:32:13</h8><p>I just released ktsuss 1.2. There's not much to say about this new version. The most important changes were made to the GUI which now uses a native gtk dialog instead of a custom window. (Thanks to Christian Dywan for the patch).
+Ktsuss now allows running applications as any user instead of root only. The code was in the authentication backend, now it is used in the GUI.
+Added to the main launcher are options -v, --version, -h, and --help.You can read the full changelog and download the new version here: (http://developer.berlios.de/projects/ktsuss)</p>
+
+<p>Screenshot as usual:</p>
+
+<p><img src="http://4.bp.blogspot.com/_7bn3_3YdSWU/Rtsl1uboVhI/AAAAAAAAAFg/50f1opbNKBI/s400/ktsuss.png" alt="ktsuss 1.2" /></p>
+
+<p>Finishing... You guys know, report bugs and all that kind of stuff. ;)</p>
+
+<hr width="40%">
+<h3>Some flashlights of Kwort 2.4</h3><h8>Posted on: 2014-11-01 14:41:25</h8><p>Well, me and the rest of the team are working in Kwort 2.4 (2.2.2? I dunno, but I think 2.4 will be alright).</p>
+
+<p>Andreas Schipplock (aka Avaurus) is working on the core system and as far as I know he is making a remarkable work on it.
+One of the most important parts is the lzma compression for the packages, so the final iso will be smaller than the Kwort 2.2 one. He is now working on the installation system, so when he gets done I'll put Kwort desktop on it.</p>
+
+<p>Stijn Segers is working on the new interface for the users admin system (as my mockup looked very bad :-P), so once he finishes with it I will make a Xfce plugin of it and include it in the mcs settings manager.
+He will also take care of the kernel. So this time, getting kernel source to compile drivers won't be needed and as he told me we will include some drivers by default like those free ralink ones. But kernel work stopped until 2.6.23 come out, as that one will be the one for Kwort 2.4.</p>
+
+<p>And it's time to tell what I'm doing... Well, until Andreas and Stijn doesn't finish I'm still maintaining 2.2 serie including and upgrading packages (http://www.kwort.org/?page=MorePackages).
+But until that happens I'm checking projects and taking decisions for the desktop and in core (helping Andreas and Stijn). Today I did some user custom actions for kwort packages:</p>
+
+<p><img src="https://sites.google.com/site/dcortarello/kpkg_install.png" alt="Installing Kwort packages from the file manager" /></p>
+
+<p>For those paranoids (I know you guys are right about this), ktsuss will be included and all those sudo commands will be removed (sudo will still be included, but not used for anything else but xfsm-shutdown-helper). So this custom action showed above use ktsuss in case you ask.</p>
+
+<p>Oh, another interesting things are the fact that kwort is listed in www.xfce.org/download/distros as a Xfce distribution and Kwort being used in school (COBAEH - Cuautepec de Hinojosa - Hidalgo - Mexico) with old machines (Pentium MMX 200Mhz with 32MB ram).</p>
+
+<p>Well, that's all for now folks, I will keep bringing Kwort newsflash :)</p>
+
+<hr width="40%">
+<h3>The IT Crowd for download</h3><h8>Posted on: 2014-11-01 14:32:38</h8><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
+
+<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+
+wget http://stage6.divx.com/The-IT-Crowd---Spanish-Subtitled/videos/
+<span class="nv">i</span><span class="o">=</span>1
+<span class="k">for </span>x in <span class="k">$(</span>egrep -i <span class="s2">&quot;The-IT-Crowd---1x0*&quot;</span> index.html | awk -F <span class="s1">&#39;/&#39;</span> <span class="s1">&#39;{ print $4}&#39;</span> | sort -m -u<span class="k">)</span>; <span class="k">do</span>
+<span class="k">   </span>tput setaf 1
+   <span class="nb">echo</span> <span class="s2">&quot;Downloading chapter ${i} (Link: http://divx-226.vo.llnwd.net/stage6vid/${x}.divx)&quot;</span>
+   tput sgr0
+   wget http://divx-226.vo.llnwd.net/stage6vid/<span class="k">${</span><span class="nv">x</span><span class="k">}</span>.divx --output-file<span class="o">=</span><span class="s2">&quot;${i}.avi&quot;</span>
+   <span class="nv">i</span><span class="o">=</span><span class="k">$((</span>i+1<span class="k">))</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>I hope someone find it useful.</p>
+
+<p>EDIT: Unfortunately, this doesn't work anymore, since stage6 was closed.</p>
+
+<hr width="40%">
+<h3>Knowing the network speed at a given moment</h3><h8>Posted on: 2014-11-01 14:32:44</h8><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
+
+<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;${1}&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Give a network interface&quot;</span>
+   <span class="nb">exit </span>1
+<span class="k">fi</span>
+<span class="nv">DEV</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
+/sbin/ifconfig <span class="k">${</span><span class="nv">DEV</span><span class="k">}</span> &gt;/dev/null 2&gt;&amp;1
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne 0 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Please, do man 8 ifconfig to know what a network interface is&quot;</span>
+   <span class="nb">exit </span>1
+<span class="k">fi</span>
+<span class="nv">LINE_OLD</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
+sleep 1
+<span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
+<span class="k">while</span> <span class="o">[</span> <span class="s2">&quot;${LINE_OLD}&quot;</span> <span class="o">=</span> <span class="s2">&quot;${LINE_NEW}&quot;</span> <span class="o">]</span>; <span class="k">do</span>
+<span class="k">   </span>sleep 0.1
+   <span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
+<span class="k">done</span>
+<span class="nv">OLD_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+<span class="nv">OLD_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
+<span class="nv">NEW_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+<span class="nv">NEW_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
+<span class="nv">REST_DOWN</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_DOWN</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_DOWN</span><span class="k">}))</span>
+<span class="nv">REST_UP</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_UP</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_UP</span><span class="k">}))</span>
+<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
+<span class="k">else</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: ${REST_DOWN}b/s&quot;</span>
+<span class="k">fi</span>
+<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
+<span class="k">else</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: ${REST_UP}b/s&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>You can run it this way for example:</p>
+
+<div class="codehilite"><pre><code><span class="k">while </span><span class="nb">true</span>; <span class="k">do</span> ./netspeed eth0; <span class="k">done</span>
+</code></pre></div>
+
+<p>I don't think this is really reliable, but anyways, see you guys in the next few days to tell you something new :)</p>
+
+<hr width="40%">
+<h3>Here we go again with margins in openbox</h3><h8>Posted on: 2014-11-01 12:00:05</h8><p>I wrote a patch for openbox 3.3.1 at the very beginning of the year which was rejected by the openbox leader (to me the reasons wasn't right, but it is his project :-P).
+So a new release of openbox was released some weeks ago and yes, as you guess, that patch isn't compatible with the new version (3.4), so I re-wrote the patch to work.</p>
+
+<p>The configuration is made in the same way as before in the rc.xml:</p>
+
+<div class="codehilite"><pre><code><span class="nt">&lt;margin&gt;</span>
+  <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
+  <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
+  <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
+  <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
+<span class="nt">&lt;/margin&gt;</span>
+</code></pre></div>
+
+<p>So, here it is, patch supporting margins in openbox 3.4: (http://dcortarello.googlepages.com/openbox-3.4.0-margins.patch)</p>
+
+<p>Thanks to all the people asking me for this, as it inspiring.</p>
+
+<hr width="40%">
+
+						</div>
+                    </div>
+
+                    <div class="mastfoot">
+                        <div class="inner">
+                        	<br>
+							<table style="width:100%"><tr><td><a href="index3.html">Previous posts</a></td><td align="right"><a href="index1.html">Next posts</a></td></tr></table>
+                        	<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

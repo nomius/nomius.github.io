@@ -1,0 +1,210 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>David's Website</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link href="css/cover.css" rel="stylesheet">
+        <link href="css/vim.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="site-wrapper">
+            <div class="site-wrapper-inner">
+                <div class="cover-container">
+                    <div class="masthead clearfix">
+                        <div class="inner">
+                            <h3 class="masthead-brand">David's Website</h3>
+                            <ul class="nav masthead-nav">
+								<li class="active"><a href="index.html">Home</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="articles.html">Articles</a></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://github.com/nomius/misctools">misctools</a></li>
+<li><a href="https://github.com/nomius/ntunnel">ntunnel</a></li>
+<li><a href="https://github.com/nomius/kpkg">kpkg</a></li>
+<li><a href="https://github.com/nomius/ktsuss">ktsuss</a></li>
+<li><a href="https://github.com/nomius/dmemory">dmemory</a></li>
+<li><a href="https://github.com/nomius/nqqueue">nqqueue</a></li>
+<li><a href="https://github.com/nomius/mttools">mttools</a></li>
+<li><a href="http://www.kworg.org">Kwort</a></li>
+</ul></li>
+<li><a href="links.html">Links</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="inner cover">
+						<div class="left cover">
+							<br><br><br>
+	                        <p><h3>Firefox freshmeat.net search plugin</h3><h8>Posted on: 2014-11-01 11:58:43</h8><p>A long time since my last post, looks like that was from the caves times. :-P
+Anyways, I was boring in this almost winter afternoon, so I started to see what I could do in a short amount of time. So I wrote a small search plugin for Firefox, so I can search for projects in freshmeat.net, you can get it from here:</p>
+
+<p>(http://dcortarello.googlepages.com/freshmeat.xml)</p>
+
+<p>Cheers! :)</p>
+
+<hr width="40%">
+<h3>My new tool: ktsuss... A simple graphic su</h3><h8>Posted on: 2014-11-01 14:32:57</h8><p>I know I had to write something about the wake on lan software I was writing. I think it is done, but couldn't test it yet, so I don't wanna rush me and write about it and show it in case it doesn't work, so please stay tunned and wait a bit longer.</p>
+
+<p>So, today I will show and talk you about a new thing I was doing these days.
+I started working on a replacement for gksu. gksu is like a graphical su. I was trying to understand it and make it work well enough, but I don't know what was in the mind of the gksu's developers, because what they did was a really wrong approach, I don't know why they wrote first a library and then the application (maybe for plugins, I'm just paraphrasing) , but anyways,
+together they are more than 500k, which is extremely too much.
+So I wrote my version of gksu, which is called ktsuss (keep the su simple, stupid). My version is only the setuid wrapper (as GTK doesn't permit setuid programs) and program itself which is less than 3k.
+As I know you guys love screenshots, this is how the program looks like:</p>
+
+<p><img src="http://1.bp.blogspot.com/_7bn3_3YdSWU/RirMWAa4iZI/AAAAAAAAAE0/bjUfY8bq2Ek/s320/ktsuss.png" alt="ktsuss 1.0 screenshow" /></p>
+
+<p>Anyways, I would like to get feedback on this, so please, let me know if it fails or anything is or goes wrong on it.</p>
+
+<p>Get the program from here: http://dcortarello.googlepages.com/ktsuss-1.0.tar.gz</p>
+
+<hr width="40%">
+<h3>A month latter... Finally, patch for wavemon</h3><h8>Posted on: 2014-11-01 14:33:28</h8><p>It's been quite a while since my last post here...</p>
+
+<p>Some things happened like the release of Kwort 2.2 (not as great as I would like, but still good). New knm will be released in the next few days, this will be just a bug fix release (too many thanks to the people from tuxmachines, who thanks to them I saw some bugs).</p>
+
+<p>I've been developing on clip at work, which is an interesting and exciting thing, since this is my first time working on compilers (I started last year when I wrote some patches for compatibilities and bug fixes).</p>
+
+<p>Well, now on to businesses and the important stuff. As I said like a month ago I was working on a patch for wavemon, which is a software that I consider very good, with a nice and clean code. I would have released it before, but I was studying and working a lot, so I only have the weekends, and as I been working on Kwort I couldn't work on this before.</p>
+
+<p>So, as it says in the patch, the following bug fixes and features:
+* Fixed errors compilation in gcc 3.x due to default label missing.<F2>
+* Fixed some warnings due to the lvalue casts deprecated on gcc 3.x.
+* Changed ap list functions, so now it use the new iw api (this is the most important thing).
+The last change is the most important, as it made the code simpler, now it works with all cards because the new wireless tools extensions are up to date.</p>
+
+<p>Get the patch from here: (http://dcortarello.googlepages.com/wavemon-0.4.0b-comp-fix-new-ap.patch)</p>
+
+<p>And for those that don't know wavemon, you can get the source code from here: (http://www.janmorgenstern.de/wavemon-current.tar.gz)</p>
+
+<p>I hope you guys find it useful like I do. :)</p>
+
+<hr width="40%">
+<h3>Kwort Linux (to be released) and Kpkg (released)</h3><h8>Posted on: 2014-11-01 11:55:07</h8><p>Kpkg 2.4 was released some minutes ago, you can download it from here: (http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz)</p>
+
+<p>This version is a bug fix release, now PKG<em>GOOD and PKG</em>FAIL works with upgrade as it should and I fixed a weird issue due to a scope problem in bash functions.</p>
+
+<p>As usual, release notes and Changelog can be found <a href="https://developer.berlios.de/project/shownotes.php?group_id=7171&amp;release_id=12417">here</a></p>
+
+<p>That's about Kpkg. Now, let's go to the important business. Kwort 2.2 final version will be released in the next couple of hours as some bugs (I hope no more appear) were fixed. The most important upgrades of this final version are kpkg and dialog. Not important upgrades were aaa_base and freedesktop packages that were modified to avoid annoying messages during the install.</p>
+
+<hr width="40%">
+<h3>Kwort network manager 2.0 released</h3><h8>Posted on: 2014-11-01 14:33:41</h8><p>Has been like a lifetime since I wrote something here, sorry folks, I been studying and working a lot.</p>
+
+<p>I just released knm 2.0, I tried to do this for the last two weeks, but there was some problems with releases at berlios (unless that happened when I tried to release this new version of knm).
+No many improvements made, several bug fixes and some information dialogs.</p>
+
+<p>You can see the release notes with the changelog here: <a href="http://developer.berlios.de/project/shownotes.php?group_id=8115&amp;release_id=12311">Changelog and release notes</a></p>
+
+<p>And you can download this new release at here: <a href="http://prdownload.berlios.de/knm/knm-2.0.tar.gz">Download</a></p>
+
+<p>In other news, Kwort 2.2rc2 have been released, check Kwort site at my right or <a href="http://www.kwort.org/">here</a> (Thanks to Josep Subils Rigau who keep both the domains (.com and .org) registered). Please, if you're gonna download the iso, use Andreas's (aka avarus) mirror, as it is faster.</p>
+
+<p>Finally, I'm working in a patch for wavemon ((http://www.janmorgenstern.de/projects-software.html)), I already fixed any gcc incompatibilities but I'm still working trying to fix the ap list feature, because as it says in the source code it should be changed to the new 2.6 kernel api.</p>
+
+<p>That's all for today... Stay tuned. ;)</p>
+
+<hr width="40%">
+<h3>Kwort Linux new logo</h3><h8>Posted on: 2014-11-01 11:50:53</h8><p>Not really programming, unix and/or math, this is like <em>off-topic</em> for this weblog, but Kwort's related, so for transition, Unix related. :D</p>
+
+<p>I'm happy to announce that Kwort Linux has now a new logo.
+Some weeks ago, Julio Cesar Puigpinos wrote to a mailing list the idea of create a new logo for Kwort.
+Only one person sent me some sketches, and this was Fabricio Caiazza. He made two logos and sent those to me, the first one looked like a friendly ghost and the second one (a weird penguin) who was the one who won.
+I would have liked to have more logos from which to choose, not because Fabricio's logo isn't nice (it is actually great btw), but the fact of having more logos means that the community wants to help. I'm not making a judgment here, maybe the community doesn't like arts, but it would be nice to get some help sometimes...</p>
+
+<p>Anyways, no more talking, the logo:
+<a href="http://kwort.org/pub/skins/ssofb.co.uk_joomla_rhuk/kworty.png">!Kwort logo</a></p>
+
+<p>In other news, Andreas Schipplock is making a new site with several languages support (I'm not sure, but I think he finished the languages support code today) for those who instead of help come with criticism and complainings about this issue (you guys know who you are, and I only feel shame for you).</p>
+
+<hr width="40%">
+<h3>What would programmers do when they are bored?</h3><h8>Posted on: 2014-11-01 11:49:39</h8><p>Well, nothing much to do these days since I spent all my vacation doing other things.
+I actually started to code a C API for kpkg, which will be finished in an unknown future. :P
+As I have also fixed some bugs in kpg I released a new version "2.3" which is a bug fix release.</p>
+
+<p>See the release notes here: <a href="https://developer.berlios.de/project/shownotes.php?group_id=7171&amp;release_id=12012">Releas notes</a>
+And get the package here: <a href="https://developer.berlios.de/project/showfiles.php?group_id=7171&amp;release_id=12012">Download kpkg 2.3 at berlios.de</a></p>
+
+<p>To come back to the original question... Well, this is very tricky, since we should do things normal people normally do. In this case "no computer related things". But, ok, people know, programmers are very weird, so when we are boring we do the opposite, which in this case would be "computer related things". :P</p>
+
+<p>So... What have I done? I improved my "IDE", and it is quoted because it's actually vim only. So, how can someone improve vim? Simple! By just reading some of these books: (http://iccf-holland.org/click5.html)
+Or if you don't want to spend your money on that, you can actually learn vim with :help inside of vim.
+So, this is my new vimrc file, there's nothing very weird on it, only a set of templates, some options and options to compile simple projects and full autotools projects.</p>
+
+<p>I hope you enjoy it and of course, take whatever you need from it:</p>
+
+<p>I hope you enjoy it and of course, take whatever you need from it:
+(http://dcortarello.googlepages.com/vimrc)</p>
+
+<hr width="40%">
+<h3>Margins in Openbox</h3><h8>Posted on: 2014-11-01 11:46:50</h8><p>Last month I started using openbox to create an easy to use desktop for programmers. Everything was nice, but I wanted to use yabb with adesklets, and then ipager... Everything was nice when I launched those applications/applets, but when I maximize a window, it was over the applet.
+There are some applets where that is ok, like the weather applet, but that wasn't right for a panel (like yabb) or a pager like ipager (this last one should set struts).
+The solution was margins, Xfwm4 has it and other several wm (like metacity and sawfish) has it too. So I wrote a small patch to give to openbox margins.
+I was very happy with it, and gave it to other users to try it (thanks gregf in irc://irc.oftc.net/slackware who tested it for a while, and who stills using it), so I made the submition in openbox's bugzilla. But guess what... The patch was rejected, and the bugzilla entry closed and deleted.
+The answer of the developer was:
+It's up to the pager/panel to set properties called struts. Openbox properly
+respects those and doesn't maximize over them.</p>
+
+<p>Which is great... I mean... Follow standards, that's good... But applets does not set struts, and sometimes the users just wants margins.
+So anyways, the patch is here for everyone who wants to use it. Just has to apply it and set the margins in the configuration file like this:</p>
+
+<div class="codehilite"><pre><code><span class="nt">&lt;margin&gt;</span>
+    <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
+    <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
+    <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
+    <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
+<span class="nt">&lt;/margin&gt;</span>
+</code></pre></div>
+
+<p>So here's the patch: (http://dcortarello.googlepages.com/openbox-3.3.1-margins.patch)</p>
+
+<hr width="40%">
+<h3>TTYsnoop fixes</h3><h8>Posted on: 2014-11-01 11:44:32</h8><p>I started using ttysnoop (it's like a vnc for consoles) at work but there was so troubles while compiling, so this patch fixes errors, warnings and adds things to Makefile to make it more flexible and able to compile the program itself, read the comments in the patch for a more detailed information.
+And please, if someone finds Carl Declerck's email (another than carl[@]miskatonic[.]inbe[.]net), send this patch to him or drop a comment here reporting me his real mail, since I couldn't send him the patch because his email address doesn't exists anymore. </p>
+
+<p>If you want to start using it you'll probably want to apply this patch.</p>
+
+<p>I leave you the link here:</p>
+
+<p>(http://dcortarello.googlepages.com/ttysnoop-0.12c-fixes.patch)</p>
+
+<hr width="40%">
+<h3>Issues in xfce4-mount-plugin</h3><h8>Posted on: 2014-11-01 11:45:26</h8><p>I planed to add xfce4-mount-plugin to Kwort's panel, but there was some things to fix and to change.</p>
+
+<p>The first patch fixes some issues with some file systems which shouldn't be shown, like tmpfs and root partition. I mean, those shouldn't be displayed, since the users should not mount or umount it.</p>
+
+<p>(http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch)</p>
+
+<p>This patch is for the same plugin, but is just for behavior. It just make the plugin to not display the device block since the user is not interested on it but where the data will be displayed.</p>
+
+<p>(http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-no-block-device.patch)</p>
+
+<p>I mailed Jean Baptiste Dulong to change it, but he's not maintaining the plugin anymore, so who knows who should I send the patch. :P</p>
+
+<hr width="40%">
+
+						</div>
+                    </div>
+
+                    <div class="mastfoot">
+                        <div class="inner">
+                        	<br>
+							<table style="width:100%"><tr><td><a href="index4.html">Previous posts</a></td><td align="right"><a href="index2.html">Next posts</a></td></tr></table>
+                        	<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>
