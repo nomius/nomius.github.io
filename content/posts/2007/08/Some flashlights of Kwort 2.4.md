@@ -7,6 +7,7 @@ Stijn Segers is working on the new interface for the users admin system (as my m
 He will also take care of the kernel. So this time, getting kernel source to compile drivers won't be needed and as he told me we will include some drivers by default like those free ralink ones. But kernel work stopped until 2.6.23 come out, as that one will be the one for Kwort 2.4.
 
 And it's time to tell what I'm doing... Well, until Andreas and Stijn doesn't finish I'm still maintaining 2.2 serie including and upgrading packages <http://www.kwort.org/?page=MorePackages>.
+
 But until that happens I'm checking projects and taking decisions for the desktop and in core (helping Andreas and Stijn). Today I did some user custom actions for kwort packages:
 
 ![Installing Kwort packages from the file manager](https://sites.google.com/site/dcortarello/kpkg_install.png)

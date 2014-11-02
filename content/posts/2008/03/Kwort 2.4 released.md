@@ -19,7 +19,7 @@ As in every old version now comes the things that I look forward to improving:
 * Better support for wireless devices: This is not part of Kwort itself, but the kernel, but finally affects Kwort users.
 * Amule: Once again amule is giving the hebbe-jeebes. There is no stable version of amule that works well enough with Kwort. The latest version is dated from middle of 2006 wich is very old and buggy with newer versions of wxGTK.
 
-Screenshots available here: <http://kwort.org/?page=ScreenshotView>
+Screenshots available here: <http://kwort.org/?n=Main.Screenshots>
 
 People who I would like to thank:
 Andreas Schipplock for making and maintaining the website, mirroring the iso, working in Kwort core (he made most part of the job with Core) and bring lzma support to Kwort.

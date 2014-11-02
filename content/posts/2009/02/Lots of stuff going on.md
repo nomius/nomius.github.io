@@ -16,7 +16,8 @@ with Kwort 2.4.1. I wouldn't matter to ship a beta 3 with 2.4.1, but we'll see, 
 Resuming, lots of improvements are going on and I'm trying to make it pretty cool and easy for the end user.
 
 That's just for Kwort, now... Some friends saw I was migrating to git, and yeah, I did, since in the past I used git with [gitorious.org](http://www.gitorious.org/) which didn't convinced me, I came back to darcs. But now, I discovered [GitHub](https://www.github.com/) which is really cool, fast and easy to use and with lots of guides around, so you can see and follow my work
-at: (http://github.com/nomius).
+at: <http://github.com/nomius>.
+
 I have to admit here that I was influenced at work by warlock, which is the author of the [wbar](http://www.warlockshome.com.ar/), to move from darcs to git, so I found a darcs2git python script and it was like charm.
 
 Also, I implemented lots of cool new features for kpkg, and I merged kpkg with the kwort network manager and user manager making a "big" project called [kwtools](http://github.com/nomius/kwtools/tree/master). Looking right now at the master tree page, you'll see this: "Implemented kpkg search /all with csv support" and you might be asking "What the hell is this guy making with kpkg implementing stuff like this?", well, I hope this feature is just enough, but basically, it is because a friend, x-ip, and I we are writing a graphical interface for kpkg, at the moment the interface is pretty rough but does show the idea, of course, icons and all that stuff is going to be implemented with also a more eye-candy interface, so you can see a preview of the application here:

@@ -41,7 +41,7 @@
                     <div class="inner cover">
 						<div class="left cover">
 							<br><br><br>
-	                        <p><h3>Kwort 2.4 released</h3><h8>Posted on: 2014-11-02 00:02:06</h8><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
+	                        <p><h3>Kwort 2.4 released</h3><h8>Posted on: 2014-11-02 00:34:34</h8><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
 
 <p>The core system is based on Slackware and provides a rock solid system, and it's also a great place to start making a full featured and usable desktop environment using Xfce.
 This version includes several changes from 2.2 from a new toolchain to a completely new base system. The inclusion of hal provides a great way to communicate the hardware with the desktop making the system a lot more user friendly.</p>
@@ -62,7 +62,7 @@ This version includes several changes from 2.2 from a new toolchain to a complet
 * Better support for wireless devices: This is not part of Kwort itself, but the kernel, but finally affects Kwort users.
 * Amule: Once again amule is giving the hebbe-jeebes. There is no stable version of amule that works well enough with Kwort. The latest version is dated from middle of 2006 wich is very old and buggy with newer versions of wxGTK.</p>
 
-<p>Screenshots available here: <a href="http://kwort.org/?page=ScreenshotView">http://kwort.org/?page=ScreenshotView</a></p>
+<p>Screenshots available here: <a href="http://kwort.org/?n=Main.Screenshots">http://kwort.org/?n=Main.Screenshots</a></p>
 
 <p>People who I would like to thank:
 Andreas Schipplock for making and maintaining the website, mirroring the iso, working in Kwort core (he made most part of the job with Core) and bring lzma support to Kwort.
@@ -75,15 +75,17 @@ Finally, but not less important a very big THANKS to Patrick Volkerding for Slac
 <p>As usual, if you need support, help, or you just feel like talking about Kwort (or anything else), or you just want to meet the people who is behind Kwort, you can join us on IRC: irc://irc.oftc.net/Kwort</p>
 
 <hr width="40%">
-<h3>ktsuss 1.3... Finally</h3><h8>Posted on: 2014-11-01 12:11:41</h8><p>Well, today I'm releasing the new ktsuss.
+<h3>ktsuss 1.3... Finally</h3><h8>Posted on: 2014-11-02 00:34:50</h8><p>Well, today I'm releasing the new ktsuss.
 It toke quite some time, not because it was too much work, but because I didn't the enough time to finish it.
 This new version includes the new authentication backend, and the new interface, which I have to say it's quite better than the old one. The main setuid program has a better comand line parser, not for the user, but if someone wants to understand it, is quite easy.</p>
 
 <p>I would like to thank Christian Dywan for putting so much work in the graphical interface, he made an excellent job with it. I would like to thank too to all the people who reported bugs to make this release the best one.</p>
 
-<p>Summary: https://developer.berlios.de/projects/ktsuss
-Changelog: <a href="https://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14175">here</a>
-Download link: <a href="http://prdownload.berlios.de/ktsuss/ktsuss-1.3.tar.gz">here</a></p>
+<p>Summary: <a href="https://developer.berlios.de/projects/ktsuss">https://developer.berlios.de/projects/ktsuss</a></p>
+
+<p>Changelog: <a href="https://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14175">here</a></p>
+
+<p>Download link: <a href="http://prdownload.berlios.de/ktsuss/ktsuss-1.3.tar.gz">here</a></p>
 
 <hr width="40%">
 <h3>Why ktsuss use setuid</h3><h8>Posted on: 2014-11-01 12:12:25</h8><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
@@ -114,16 +116,18 @@ I should see that like something in a long distant future... But I think it coul
 <p>So since ktsuss have its own implementation of authentication backend, that's why it needs setuid.</p>
 
 <hr width="40%">
-<h3>MPD: What's missing?</h3><h8>Posted on: 2014-11-01 12:10:22</h8><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
+<h3>MPD: What's missing?</h3><h8>Posted on: 2014-11-02 00:25:33</h8><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
 Well, I started working on gmpc to add support for tag editing when I stopped with the following issue: The fact that mpd doesn't support tag editing was the reason for gmpc to not support it (which makes sense), because mpd is run on a different machine so gmpc does not have access to these files.
 Some of you will tell me "Dude! Sonata supports tag editing even when mpd doesn't", and I know, but what sonata does is actually a very like a "half done work" with that, as you can only edit tags if mpd runs on the same machine sonata is running, which normally doesn't happen (that's the idea of a client-server structure).
 So, now, my approach to resolve the problem was completely different as I had to include a new command in the mpd protocol so I could add tag editing support.
 Well, I did include the command, I did gave support to tag edition and I even gave a command to check if the file can be edited or not. Finally, I gave support to libmpd and gmpc, so now, gmpc can "full edit" tags. :-)</p>
 
 <p>So here are the patches (descriptions on how to use the commads can be found in mpd's patch, and descriptions on how to use the new functions libraries can be found in libmpd's patch):
-MPD (stable version, by now 0.13.0): <a href="http://dcortarello.googlepages.com/mpd-0.13.0-tag_edit_support.patch">mpd-0.13.0-tag<em>edit</em>support.patch</a>
-LIBMPD (stable version, by now 0.15.0): <a href="http://dcortarello.googlepages.com/libmpd-0.15.0-tag_edit_support.patch">libmpd-0.15.0-tag<em>edit</em>support.patch</a>
-GMPC (stable version, by now 0.15.0): <a href="http://dcortarello.googlepages.com/gmpc-0.15.5.0-tag_edit_support.patch">gmpc-0.15.5.0-tag<em>edit</em>support.patch</a></p>
+MPD (stable version, by now 0.13.0): <a href="http://dcortarello.googlepages.com/mpd-0.13.0-tag_edit_support.patch">mpd-0.13.0-tag<em>edit</em>support.patch</a></p>
+
+<p>LIBMPD (stable version, by now 0.15.0): <a href="http://dcortarello.googlepages.com/libmpd-0.15.0-tag_edit_support.patch">libmpd-0.15.0-tag<em>edit</em>support.patch</a></p>
+
+<p>GMPC (stable version, by now 0.15.0): <a href="http://dcortarello.googlepages.com/gmpc-0.15.5.0-tag_edit_support.patch">gmpc-0.15.5.0-tag<em>edit</em>support.patch</a></p>
 
 <p>Now, the main problem wasn't the code itself, I mean, I had to spend some time investigating the code to finally hint the right keys. But the problem is now in what mpd developers want to do with this patch. Some developers like it (specially client's developers and users, like Qball Cow and Scott Horowitz), but others disagree. I really understand both sides (I have to admit I
 like more mine's, that's why I developed this patch).
@@ -136,7 +140,7 @@ People say that if this doesn't get in trunk tag editing is off the table. Well 
 <p>Anyways, Kwort 2.4 will use mpd+libmpd+gmpc with tag editing support. :-)</p>
 
 <hr width="40%">
-<h3>The childs of my son are my enemies... What about their childs</h3><h8>Posted on: 2014-11-01 12:08:29</h8><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
+<h3>The childs of my son are my enemies... What about their childs</h3><h8>Posted on: 2014-11-02 00:26:10</h8><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
 
 <p>I was trying to run a process, this process forks itself and ran some bash scripts. So far there's nothing bad on it, the problem is that those shell scripts create some childs, and it is more than sure that the parent (the main script) die before the childs, so I'll get some orphans process. And the main C program shouldn't die before all the childs die.</p>
 
@@ -165,37 +169,37 @@ People say that if this doesn't get in trunk tag editing is off the table. Well 
 
 <p>So, this was the first attempt to control this mess but unfortunately didn't work as expected because this process was in another Process Group ID (avoid comments about controlling the return value of fork and such, since this is an example of something that didn't work):</p>
 
-<pre><code>int main(int argc, char *argv[]){
-    int status;
-    if(fork())
-        waitpid(-1*getpgrp(), &amp;status, 0);
-    else
-        execlp(argv[1], argv[1], argv+1, NULL);
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
+    <span class="kt">int</span> <span class="n">status</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">fork</span><span class="p">())</span>
+        <span class="n">waitpid</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">getpgrp</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="n">execlp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
 <p>So, basically, the idea was that the main C program shown above shouldn't die until all the childrens of the scripts die (that's why I was using using getpgrp(), which didn't work as expected for what I explained above).
 On Linux, running ps axfj, showed me that the small childrens (those one generated by the script) are in the same group, but I couldn't wait for them, as they are not my childrens, but then child of my child process children's.</p>
 
 <p>After dealing a little of time I came up whit this program that control all the childrens, grandchildrens and rest of the "family". The code is very simple to understand and explains on itself:</p>
 
-<pre><code>int main(int argc, char *argv[]){
-    int status;
-    pid_t pid;
-    if((pid=fork()) != 0) {
-        sleep(2);
-        waitpid(pid, &amp;status, 0);
-        while(killpg(pid, 0) != -1)
-            usleep(0.1);
-    }
-    else if(pid==0){
-        setpgid(getpid(), getpid());
-        execv(argv[1], argv+1);
-    }
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
+    <span class="kt">int</span> <span class="n">status</span><span class="p">;</span>
+    <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">((</span><span class="n">pid</span><span class="o">=</span><span class="n">fork</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+        <span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">killpg</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">usleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">pid</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+        <span class="n">setpgid</span><span class="p">(</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">getpid</span><span class="p">());</span>
+        <span class="n">execv</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
 <p>Thanks to Marcel, who actually helped me a lot with some concepts and ideas to find a workaround to this.</p>
 
@@ -211,7 +215,7 @@ Added to the main launcher are options -v, --version, -h, and --help.You can rea
 <p>Finishing... You guys know, report bugs and all that kind of stuff. ;)</p>
 
 <hr width="40%">
-<h3>Some flashlights of Kwort 2.4</h3><h8>Posted on: 2014-11-01 23:52:42</h8><p>Well, me and the rest of the team are working in Kwort 2.4 (2.2.2? I dunno, but I think 2.4 will be alright).</p>
+<h3>Some flashlights of Kwort 2.4</h3><h8>Posted on: 2014-11-02 00:27:22</h8><p>Well, me and the rest of the team are working in Kwort 2.4 (2.2.2? I dunno, but I think 2.4 will be alright).</p>
 
 <p>Andreas Schipplock (aka Avaurus) is working on the core system and as far as I know he is making a remarkable work on it.
 One of the most important parts is the lzma compression for the packages, so the final iso will be smaller than the Kwort 2.2 one. He is now working on the installation system, so when he gets done I'll put Kwort desktop on it.</p>
@@ -219,8 +223,9 @@ One of the most important parts is the lzma compression for the packages, so the
 <p>Stijn Segers is working on the new interface for the users admin system (as my mockup looked very bad :-P), so once he finishes with it I will make a Xfce plugin of it and include it in the mcs settings manager.
 He will also take care of the kernel. So this time, getting kernel source to compile drivers won't be needed and as he told me we will include some drivers by default like those free ralink ones. But kernel work stopped until 2.6.23 come out, as that one will be the one for Kwort 2.4.</p>
 
-<p>And it's time to tell what I'm doing... Well, until Andreas and Stijn doesn't finish I'm still maintaining 2.2 serie including and upgrading packages <a href="http://www.kwort.org/?page=MorePackages">http://www.kwort.org/?page=MorePackages</a>.
-But until that happens I'm checking projects and taking decisions for the desktop and in core (helping Andreas and Stijn). Today I did some user custom actions for kwort packages:</p>
+<p>And it's time to tell what I'm doing... Well, until Andreas and Stijn doesn't finish I'm still maintaining 2.2 serie including and upgrading packages <a href="http://www.kwort.org/?page=MorePackages">http://www.kwort.org/?page=MorePackages</a>.</p>
+
+<p>But until that happens I'm checking projects and taking decisions for the desktop and in core (helping Andreas and Stijn). Today I did some user custom actions for kwort packages:</p>
 
 <p><img src="https://sites.google.com/site/dcortarello/kpkg_install.png" alt="Installing Kwort packages from the file manager" /></p>
 

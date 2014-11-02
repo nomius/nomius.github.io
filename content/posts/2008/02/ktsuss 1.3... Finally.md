@@ -4,7 +4,9 @@ This new version includes the new authentication backend, and the new interface,
 
 I would like to thank Christian Dywan for putting so much work in the graphical interface, he made an excellent job with it. I would like to thank too to all the people who reported bugs to make this release the best one.
 
-Summary: https://developer.berlios.de/projects/ktsuss
+Summary: <https://developer.berlios.de/projects/ktsuss>
+
 Changelog: [here](https://developer.berlios.de/project/shownotes.php?group_id=8800&release_id=14175)
+
 Download link: [here](http://prdownload.berlios.de/ktsuss/ktsuss-1.3.tar.gz)
 

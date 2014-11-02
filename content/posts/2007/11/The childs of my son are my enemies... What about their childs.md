@@ -28,7 +28,7 @@ fi
 
 So, this was the first attempt to control this mess but unfortunately didn't work as expected because this process was in another Process Group ID (avoid comments about controlling the return value of fork and such, since this is an example of something that didn't work):
 
-```C
+```c
 int main(int argc, char *argv[]){
     int status;
     if(fork())
@@ -44,7 +44,7 @@ On Linux, running ps axfj, showed me that the small childrens (those one generat
 
 After dealing a little of time I came up whit this program that control all the childrens, grandchildrens and rest of the "family". The code is very simple to understand and explains on itself:
 
-```C
+```c
 int main(int argc, char *argv[]){
     int status;
     pid_t pid;

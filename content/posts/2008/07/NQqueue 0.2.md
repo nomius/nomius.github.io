@@ -3,7 +3,9 @@ Well, I just tagged NQqueue as 0.2. Several changes has been done from 0.1. For 
 Download the latest release version here: <http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.2.tar.gz>
 
 Changelog can be found here: <http://europa.fapyd.unr.edu.ar/darcs/NQqueue/Changelog>
+
 If you want to get nightly builds packages. Use this link: <http://europa.fapyd.unr.edu.ar/darcs/NQqueue/NQqueue.tar.gz>
+
 Darcs repository: <http://europa.fapyd.unr.edu.ar/darcs/NQqueue>
 
 NQqueue stills in development, it is stable enough, but there are some things that must be fixed before the next release.
