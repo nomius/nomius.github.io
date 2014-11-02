@@ -40,14 +40,14 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Nice picture</h3><h8>Posted on: 2014-11-02 00:24:07</h8><p>Well, not much to say these days...</p>
+                        <br><br><h3>Nice picture</h3><h8>Posted on: Mar 2008</h8><p>Well, not much to say these days...</p>
 
 <p><img src="http://4.bp.blogspot.com/_7bn3_3YdSWU/R8zGzB7Bw2I/AAAAAAAAAIc/8_urwRHbh6A/s400/Einstein.jpg" alt="Einstein" /></p>
 
 <p>Sometimes we have to find a reason to laugh, even a little bit... I found this picture very funny. :)</p>
 
 <hr width="40%">
-<h3>Kwort 2.4 released</h3><h8>Posted on: 2014-11-02 00:34:34</h8><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
+<h3>Kwort 2.4 released</h3><h8>Posted on: Mar 2008</h8><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
 
 <p>The core system is based on Slackware and provides a rock solid system, and it's also a great place to start making a full featured and usable desktop environment using Xfce.
 This version includes several changes from 2.2 from a new toolchain to a completely new base system. The inclusion of hal provides a great way to communicate the hardware with the desktop making the system a lot more user friendly.</p>
@@ -81,7 +81,7 @@ Finally, but not less important a very big THANKS to Patrick Volkerding for Slac
 <p>As usual, if you need support, help, or you just feel like talking about Kwort (or anything else), or you just want to meet the people who is behind Kwort, you can join us on IRC: irc://irc.oftc.net/Kwort</p>
 
 <hr width="40%">
-<h3>ktsuss 1.3... Finally</h3><h8>Posted on: 2014-11-02 00:34:50</h8><p>Well, today I'm releasing the new ktsuss.
+<h3>ktsuss 1.3... Finally</h3><h8>Posted on: Feb 2008</h8><p>Well, today I'm releasing the new ktsuss.
 It toke quite some time, not because it was too much work, but because I didn't the enough time to finish it.
 This new version includes the new authentication backend, and the new interface, which I have to say it's quite better than the old one. The main setuid program has a better comand line parser, not for the user, but if someone wants to understand it, is quite easy.</p>
 
@@ -94,7 +94,7 @@ This new version includes the new authentication backend, and the new interface,
 <p>Download link: <a href="http://prdownload.berlios.de/ktsuss/ktsuss-1.3.tar.gz">here</a></p>
 
 <hr width="40%">
-<h3>Why ktsuss use setuid</h3><h8>Posted on: 2014-11-01 12:12:25</h8><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
+<h3>Why ktsuss use setuid</h3><h8>Posted on: Feb 2008</h8><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
 
 <p>Using pam would requiere setuid too (since pam_unix2 doesn't have it's own wrapper), which doesn't bother me as long as I program in a secure way... What really does, is that not every distribution out there use pam, slackware is the most important it comes to my mind now.
 Using su, well, there might be a problem there, gksu does it in a very unportable way waiting for the string " Authentication failure" which is a very bad idea, look this example:</p>
@@ -122,7 +122,7 @@ I should see that like something in a long distant future... But I think it coul
 <p>So since ktsuss have its own implementation of authentication backend, that's why it needs setuid.</p>
 
 <hr width="40%">
-<h3>MPD: What's missing?</h3><h8>Posted on: 2014-11-02 00:25:33</h8><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
+<h3>MPD: What's missing?</h3><h8>Posted on: Jan 2008</h8><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
 Well, I started working on gmpc to add support for tag editing when I stopped with the following issue: The fact that mpd doesn't support tag editing was the reason for gmpc to not support it (which makes sense), because mpd is run on a different machine so gmpc does not have access to these files.
 Some of you will tell me "Dude! Sonata supports tag editing even when mpd doesn't", and I know, but what sonata does is actually a very like a "half done work" with that, as you can only edit tags if mpd runs on the same machine sonata is running, which normally doesn't happen (that's the idea of a client-server structure).
 So, now, my approach to resolve the problem was completely different as I had to include a new command in the mpd protocol so I could add tag editing support.
@@ -146,7 +146,7 @@ People say that if this doesn't get in trunk tag editing is off the table. Well 
 <p>Anyways, Kwort 2.4 will use mpd+libmpd+gmpc with tag editing support. :-)</p>
 
 <hr width="40%">
-<h3>The childs of my son are my enemies... What about their childs</h3><h8>Posted on: 2014-11-02 00:26:10</h8><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
+<h3>The childs of my son are my enemies... What about their childs</h3><h8>Posted on: Nov 2007</h8><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
 
 <p>I was trying to run a process, this process forks itself and ran some bash scripts. So far there's nothing bad on it, the problem is that those shell scripts create some childs, and it is more than sure that the parent (the main script) die before the childs, so I'll get some orphans process. And the main C program shouldn't die before all the childs die.</p>
 
@@ -210,7 +210,7 @@ On Linux, running ps axfj, showed me that the small childrens (those one generat
 <p>Thanks to Marcel, who actually helped me a lot with some concepts and ideas to find a workaround to this.</p>
 
 <hr width="40%">
-<h3>ktsuss 1.2 released</h3><h8>Posted on: 2014-11-01 23:53:17</h8><p>I just released ktsuss 1.2. There's not much to say about this new version. The most important changes were made to the GUI which now uses a native gtk dialog instead of a custom window. (Thanks to Christian Dywan for the patch).
+<h3>ktsuss 1.2 released</h3><h8>Posted on: Sep 2007</h8><p>I just released ktsuss 1.2. There's not much to say about this new version. The most important changes were made to the GUI which now uses a native gtk dialog instead of a custom window. (Thanks to Christian Dywan for the patch).
 Ktsuss now allows running applications as any user instead of root only. The code was in the authentication backend, now it is used in the GUI.
 Added to the main launcher are options -v, --version, -h, and --help.You can read the full changelog and download the new version here: <a href="http://developer.berlios.de/projects/ktsuss">http://developer.berlios.de/projects/ktsuss</a></p>
 
@@ -221,7 +221,7 @@ Added to the main launcher are options -v, --version, -h, and --help.You can rea
 <p>Finishing... You guys know, report bugs and all that kind of stuff. ;)</p>
 
 <hr width="40%">
-<h3>Some flashlights of Kwort 2.4</h3><h8>Posted on: 2014-11-02 00:27:22</h8><p>Well, me and the rest of the team are working in Kwort 2.4 (2.2.2? I dunno, but I think 2.4 will be alright).</p>
+<h3>Some flashlights of Kwort 2.4</h3><h8>Posted on: Aug 2007</h8><p>Well, me and the rest of the team are working in Kwort 2.4 (2.2.2? I dunno, but I think 2.4 will be alright).</p>
 
 <p>Andreas Schipplock (aka Avaurus) is working on the core system and as far as I know he is making a remarkable work on it.
 One of the most important parts is the lzma compression for the packages, so the final iso will be smaller than the Kwort 2.2 one. He is now working on the installation system, so when he gets done I'll put Kwort desktop on it.</p>
@@ -242,7 +242,7 @@ He will also take care of the kernel. So this time, getting kernel source to com
 <p>Well, that's all for now folks, I will keep bringing Kwort newsflash :)</p>
 
 <hr width="40%">
-<h3>The IT Crowd for download</h3><h8>Posted on: 2014-11-01 14:32:38</h8><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
+<h3>The IT Crowd for download</h3><h8>Posted on: Jul 2007</h8><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
 
 <div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
 
@@ -262,7 +262,7 @@ wget http://stage6.divx.com/The-IT-Crowd---Spanish-Subtitled/videos/
 <p>EDIT: Unfortunately, this doesn't work anymore, since stage6 was closed.</p>
 
 <hr width="40%">
-<h3>Knowing the network speed at a given moment</h3><h8>Posted on: 2014-11-01 14:32:44</h8><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
+<h3>Knowing the network speed at a given moment</h3><h8>Posted on: Jul 2007</h8><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
 
 <div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
 
