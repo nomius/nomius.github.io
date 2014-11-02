@@ -10,7 +10,7 @@ link_patternss = [
 ]
 
 def FullParse(Content):
-    return markdown2.markdown(Content, extras=['fenced-code-blocks', 'link-patterns'], link_patterns=link_patternss)
+    return markdown2.markdown(Content, extras=['fenced-code-blocks'])
 
 
 def WriteBlogPage(page_counter, template, parsed_content, bottom):
