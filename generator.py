@@ -4,16 +4,11 @@
 from conf import *
 import sys, os, fnmatch, datetime, re, markdown2
 
-link_patternss = [
-    #(re.compile(r"[(.*)]([A-Za-z0-9]*://.*)", re.I), r"<a href=\"\2\">\1</a>"),
-    #(re.compile(r"([A-Za-z0-9]*://.*)", re.I), r"\1")
-]
-
 def FullParse(Content):
     return markdown2.markdown(Content, extras=['fenced-code-blocks'])
 
 
-def WriteBlogPage(page_counter, template, parsed_content, bottom):
+def WriteBlogPage(page_counter, parsed_content, bottom):
     if INDEX_AS_BLOG:
         fstr = 'index'
     else:
@@ -40,7 +35,7 @@ def WriteBlogPage(page_counter, template, parsed_content, bottom):
         print 'Writing file: ' + out
         WriteHTMLHead(fout)
         WriteNavBar(fout, 'Home')
-        fout.write(template.replace('%CONTENT%', '<p>' + parsed_content))
+        WriteMainContent(fout, '<br><br>' + parsed_content, False)
         WriteFooter(fout, prev_next)
         fout.close()
     return (page_counter + 1)
@@ -53,8 +48,6 @@ def CreateBlog():
             if fnmatch.fnmatch(basename, '*.md'):
                 fposts.append(os.path.join(root, basename))
     fposts.sort(reverse=True)
-    with open ("templates/blog.html", "r") as tf:
-        txt_template = tf.read()
 
     post_counter = page_counter = 0
     parsed_content = ""
@@ -75,14 +68,14 @@ def CreateBlog():
         # Change the page
         if post_counter == POSTS_PER_PAGE:
             if current_item + 1 == total_items:
-                page_counter = WriteBlogPage(page_counter, txt_template, parsed_content, True)
+                page_counter = WriteBlogPage(page_counter, parsed_content, True)
             else:
-                page_counter = WriteBlogPage(page_counter, txt_template, parsed_content, False)
+                page_counter = WriteBlogPage(page_counter, parsed_content, False)
             post_counter = 0
             parsed_content = ""
 
     if post_counter != 0:
-        WriteBlogPage(page_counter, txt_template, parsed_content, True)
+        WriteBlogPage(page_counter, parsed_content, True)
 
 
 def WriteHTMLHead(f):
@@ -90,10 +83,13 @@ def WriteHTMLHead(f):
         f.write(tf.read().replace('%TITLE%', TITLE))
 
 
-def WriteMainContent(f, content):
-    with open ("content/" + content + '.md', "r") as cf:
-        o_content = cf.read()
-        parsed_content = FullParse(o_content)
+def WriteMainContent(f, content, content_as_file = True):
+    if content_as_file:
+        with open ("content/" + content + '.md', "r") as cf:
+            o_content = cf.read()
+            parsed_content = FullParse(o_content)
+    else:
+        parsed_content = content
 
     with open ("templates/content.html", "r") as tf:
             f.write(tf.read().replace('%CONTENT%', parsed_content))
