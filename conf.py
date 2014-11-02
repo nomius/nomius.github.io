@@ -16,3 +16,6 @@ TITLE = "David's Website"
 POSTS_PER_PAGE = 10
 INDEX_AS_BLOG = True
 
+CONTENT_LOCATION = 'content'
+TEMPLATE_LOCATION = 'templates'
+POSTS_LOCATION = CONTENT_LOCATION + '/posts'
