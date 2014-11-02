@@ -41,7 +41,25 @@
                     <div class="inner cover">
 						<div class="left cover">
 							<br><br><br>
-	                        <p><h3>Firefox freshmeat.net search plugin</h3><h8>Posted on: 2014-11-02 00:02:41</h8><p>A long time since my last post, looks like that was from the caves times. :-P
+	                        <p><h3>Here we go again with margins in openbox</h3><h8>Posted on: 2014-11-01 23:49:35</h8><p>I wrote a patch for openbox 3.3.1 at the very beginning of the year which was rejected by the openbox leader (to me the reasons wasn't right, but it is his project :-P).
+So a new release of openbox was released some weeks ago and yes, as you guess, that patch isn't compatible with the new version (3.4), so I re-wrote the patch to work.</p>
+
+<p>The configuration is made in the same way as before in the rc.xml:</p>
+
+<div class="codehilite"><pre><code><span class="nt">&lt;margin&gt;</span>
+  <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
+  <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
+  <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
+  <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
+<span class="nt">&lt;/margin&gt;</span>
+</code></pre></div>
+
+<p>So, here it is, patch supporting margins in openbox 3.4: <a href="http://dcortarello.googlepages.com/openbox-3.4.0-margins.patch">http://dcortarello.googlepages.com/openbox-3.4.0-margins.patch</a></p>
+
+<p>Thanks to all the people asking me for this, as it inspiring.</p>
+
+<hr width="40%">
+<h3>Firefox freshmeat.net search plugin</h3><h8>Posted on: 2014-11-02 00:02:41</h8><p>A long time since my last post, looks like that was from the caves times. :-P
 Anyways, I was boring in this almost winter afternoon, so I started to see what I could do in a short amount of time. So I wrote a small search plugin for Firefox, so I can search for projects in freshmeat.net, you can get it from here:</p>
 
 <p><a href="http://dcortarello.googlepages.com/freshmeat.xml">http://dcortarello.googlepages.com/freshmeat.xml</a></p>
@@ -171,19 +189,6 @@ And please, if someone finds Carl Declerck's email (another than carl[@]miskaton
 <p>I leave you the link here:</p>
 
 <p><a href="http://dcortarello.googlepages.com/ttysnoop-0.12c-fixes.patch">http://dcortarello.googlepages.com/ttysnoop-0.12c-fixes.patch</a></p>
-
-<hr width="40%">
-<h3>Issues in xfce4-mount-plugin</h3><h8>Posted on: 2014-11-02 00:02:51</h8><p>I planed to add xfce4-mount-plugin to Kwort's panel, but there was some things to fix and to change.</p>
-
-<p>The first patch fixes some issues with some file systems which shouldn't be shown, like tmpfs and root partition. I mean, those shouldn't be displayed, since the users should not mount or umount it.</p>
-
-<p><a href="http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch">http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch</a></p>
-
-<p>This patch is for the same plugin, but is just for behavior. It just make the plugin to not display the device block since the user is not interested on it but where the data will be displayed.</p>
-
-<p><a href="http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-no-block-device.patch">http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-no-block-device.patch</a></p>
-
-<p>I mailed Jean Baptiste Dulong to change it, but he's not maintaining the plugin anymore, so who knows who should I send the patch. :P</p>
 
 <hr width="40%">
 
