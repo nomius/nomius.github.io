@@ -8,6 +8,6 @@ So, as everybody loves screenshots and you probably want to see how this looks:
 
 ![Thunar and partitions](http://1.bp.blogspot.com/_7bn3_3YdSWU/SlohSHN0aCI/AAAAAAAAAPs/uRExbB-PPIk/s400/thunar_hd_partitions.png)
 
-And finally, the patch: (http://dcortarello.googlepages.com/Thunar-1.0.0-hd-partitions.diff)
+And finally, the patch: <http://dcortarello.googlepages.com/Thunar-1.0.0-hd-partitions.diff>
 
 Enjoy!

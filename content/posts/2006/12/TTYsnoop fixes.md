@@ -5,4 +5,4 @@ If you want to start using it you'll probably want to apply this patch.
 
 I leave you the link here:
 
-(http://dcortarello.googlepages.com/ttysnoop-0.12c-fixes.patch)
+<http://dcortarello.googlepages.com/ttysnoop-0.12c-fixes.patch>

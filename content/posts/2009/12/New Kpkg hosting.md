@@ -1,4 +1,4 @@
-Well, the C version of kpkg is now hosted at: http://code.google.com/p/kpkg. It would be cool if people start checking it out.
+Well, the C version of kpkg is now hosted at: <http://code.google.com/p/kpkg>. It would be cool if people start checking it out.
 
 Upgrade support is working partially, as only one package at the time can be upgrated, I will try to finish the whole upgrade support soon.
 

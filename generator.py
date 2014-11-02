@@ -1,10 +1,16 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 
 from conf import *
-import sys, os, fnmatch, datetime, markdown2
+import sys, os, fnmatch, datetime, re, markdown2
+
+link_patternss = [
+    #(re.compile(r"[(.*)]([A-Za-z0-9]*://.*)", re.I), r"<a href=\"\2\">\1</a>"),
+    #(re.compile(r"([A-Za-z0-9]*://.*)", re.I), r"\1")
+]
 
 def FullParse(Content):
-    return markdown2.markdown(Content, extras=['fenced-code-blocks'])
+    return markdown2.markdown(Content, extras=['fenced-code-blocks', 'link-patterns'], link_patterns=link_patternss)
 
 
 def WriteBlogPage(page_counter, template, parsed_content, bottom):

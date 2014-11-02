@@ -10,4 +10,4 @@ As I know you guys love screenshots, this is how the program looks like:
 
 Anyways, I would like to get feedback on this, so please, let me know if it fails or anything is or goes wrong on it.
 
-Get the program from here: http://dcortarello.googlepages.com/ktsuss-1.0.tar.gz
+Get the program from here: <http://dcortarello.googlepages.com/ktsuss-1.0.tar.gz>

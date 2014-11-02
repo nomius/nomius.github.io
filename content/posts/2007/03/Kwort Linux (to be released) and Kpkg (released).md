@@ -1,4 +1,4 @@
-Kpkg 2.4 was released some minutes ago, you can download it from here: (http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz)
+Kpkg 2.4 was released some minutes ago, you can download it from here: <http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz>
 
 This version is a bug fix release, now PKG_GOOD and PKG_FAIL works with upgrade as it should and I fixed a weird issue due to a scope problem in bash functions.
 

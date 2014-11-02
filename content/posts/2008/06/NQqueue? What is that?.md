@@ -92,4 +92,4 @@ As you can see it is very easy to write plugins for NQqueue. I know it stills ne
 So, those are some of the features in NQqueue there are more of course, but those are enough to mention.
 NQqueue needs a lot of testing, so I'm counting with all of you to run tests. Also documentation is needed, and it will take some time to me to write it, so people wanting to write documentation are welcome. Also people writing plugins, I wrote some which are already in my darcs server (a dspam, clamav, blacklist and quarantine) modules.
 
-You can follow NQqueue's development in my darcs server at: (http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi)
+You can follow NQqueue's development in my darcs server at: <http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi>

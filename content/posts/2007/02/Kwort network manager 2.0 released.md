@@ -9,6 +9,6 @@ And you can download this new release at here: [Download](http://prdownload.berl
 
 In other news, Kwort 2.2rc2 have been released, check Kwort site at my right or [here](http://www.kwort.org/) (Thanks to Josep Subils Rigau who keep both the domains (.com and .org) registered). Please, if you're gonna download the iso, use Andreas's (aka avarus) mirror, as it is faster.
 
-Finally, I'm working in a patch for wavemon ((http://www.janmorgenstern.de/projects-software.html)), I already fixed any gcc incompatibilities but I'm still working trying to fix the ap list feature, because as it says in the source code it should be changed to the new 2.6 kernel api.
+Finally, I'm working in a patch for wavemon (<http://www.janmorgenstern.de/projects-software.html>), I already fixed any gcc incompatibilities but I'm still working trying to fix the ap list feature, because as it says in the source code it should be changed to the new 2.6 kernel api.
 
 That's all for today... Stay tuned. ;)

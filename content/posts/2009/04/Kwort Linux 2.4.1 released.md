@@ -11,7 +11,7 @@ Good things in this new version:
 * Kwort Network Manager: Also re-written from scratch, allows you to configure your network (wired and wireless), as manage your dns and hostname system. It also allows you to switch wireless drivers.
 * Xfce: This new version brings a lot of changes under the hood making the desktop more extensible.
 * Audacious: This is the default music player since Kwort 2.4.1 allowing you to play your music in a very simple way.
-* Our new Google group (http://groups.google.com/group/kwort-linux): Ok, this has nothing to do with something included in the release, but it allows the developers behind Kwort to communicate between them and also with the users (who are what Kwort is all about).
+* Our new Google group <http://groups.google.com/group/kwort-linux>: Ok, this has nothing to do with something included in the release, but it allows the developers behind Kwort to communicate between them and also with the users (who are what Kwort is all about).
 
 As in every old version now comes the things that I look forward to improving:
 
@@ -32,5 +32,5 @@ As usual, if you need support, help, or you just feel like talking about Kwort (
 
 IRC: irc://irc.oftc.net/Kwort
 
-Google Group: (http://groups.google.com/group/kwort-linux)
+Google Group: <http://groups.google.com/group/kwort-linux>
 

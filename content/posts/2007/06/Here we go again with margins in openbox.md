@@ -12,7 +12,7 @@ The configuration is made in the same way as before in the rc.xml:
 </margin>
 ```
 
-So, here it is, patch supporting margins in openbox 3.4: (http://dcortarello.googlepages.com/openbox-3.4.0-margins.patch)
+So, here it is, patch supporting margins in openbox 3.4: <http://dcortarello.googlepages.com/openbox-3.4.0-margins.patch>
 
 Thanks to all the people asking me for this, as it inspiring.
 

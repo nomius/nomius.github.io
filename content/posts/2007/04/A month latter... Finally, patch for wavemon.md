@@ -12,8 +12,8 @@ So, as it says in the patch, the following bug fixes and features:
 * Changed ap list functions, so now it use the new iw api (this is the most important thing).
 The last change is the most important, as it made the code simpler, now it works with all cards because the new wireless tools extensions are up to date.
 
-Get the patch from here: (http://dcortarello.googlepages.com/wavemon-0.4.0b-comp-fix-new-ap.patch)
+Get the patch from here: <http://dcortarello.googlepages.com/wavemon-0.4.0b-comp-fix-new-ap.patch>
 
-And for those that don't know wavemon, you can get the source code from here: (http://www.janmorgenstern.de/wavemon-current.tar.gz)
+And for those that don't know wavemon, you can get the source code from here: <http://www.janmorgenstern.de/wavemon-current.tar.gz>
 
 I hope you guys find it useful like I do. :)

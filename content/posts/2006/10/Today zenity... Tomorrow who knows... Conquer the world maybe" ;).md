@@ -6,4 +6,4 @@ I know they use it to fit the gnome's look & feel, but use canvas just for an ab
 So today I wrote a patch to drop the libgnome-canvas package as dependency. Now Xfce users and everyone else not using gnome can install zenity without installing half gnome. :)
 
 Anyways, I leave you the patch:
-(http://dcortarello.googlepages.com/zenity-no-canvas.patch)
+<http://dcortarello.googlepages.com/zenity-no-canvas.patch>

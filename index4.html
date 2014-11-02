@@ -41,17 +41,17 @@
                     <div class="inner cover">
 						<div class="left cover">
 							<br><br><br>
-	                        <p><h3>Has to be the Brazilian Air (GNU bc readline patch)</h3><h8>Posted on: 2014-11-01 11:42:54</h8><p>The same day I wrote the patch for Xdialog's extra button feature (when I was in Rio de Janeiro - Brazil) I found a little bug in the GNU bc using readline.
+	                        <p><h3>Has to be the Brazilian Air (GNU bc readline patch)</h3><h8>Posted on: 2014-11-02 00:03:31</h8><p>The same day I wrote the patch for Xdialog's extra button feature (when I was in Rio de Janeiro - Brazil) I found a little bug in the GNU bc using readline.
 The bug actually is very simple, there was a wrong prototype declaration of the extern function readline. The prompt argument, according to readline(3) from GNU, is a const char *, not a char *.
 So bc didn't even compile if you wanted to use readline (which actually is very good). I must think that eveyone uses bc without readline, so nobody saw that error.
 Anyways, I wrote the patch and send it to Phil Nelson (author of GNU bc), and he thank me for it.</p>
 
 <p>I don't know when bc is gonna be updated so I don't know either when the patch will be included. So, for now, you'll have to download it from here and apply it manually.</p>
 
-<p>(http://dcortarello.googlepages.com/bc-1.06-readline-const-char.patch)</p>
+<p><a href="http://dcortarello.googlepages.com/bc-1.06-readline-const-char.patch">http://dcortarello.googlepages.com/bc-1.06-readline-const-char.patch</a></p>
 
 <hr width="40%">
-<h3>Today zenity... Tomorrow who knows... Conquer the world maybe" ;)</h3><h8>Posted on: 2014-11-01 11:33:31</h8><p>I was trying to make some visual scripts for Kwort Linux. I tried Xdialog but wasn't very nice. So I give a look at zenity (which I already did 2 years ago).
+<h3>Today zenity... Tomorrow who knows... Conquer the world maybe" ;)</h3><h8>Posted on: 2014-11-02 00:03:24</h8><p>I was trying to make some visual scripts for Kwort Linux. I tried Xdialog but wasn't very nice. So I give a look at zenity (which I already did 2 years ago).
 So the screenshots and its flexibility was amazing, there was just one thing... It needed gnome-canvas, which requiere half gnome's dependencies.
 Then I started to look into the code to see if there's a way to get rid of canvas package. After few minutes I realised that canvas was only needed in about dialog; this is not a post with criticism to the zenity developers, who I think they made an excelent job with it, but add a new dependency just to draw their's about dialog wasn't the smartest thing.
 I know they use it to fit the gnome's look &amp; feel, but use canvas just for an about dialog was kind of silly, with it you only get gnome users (which unfortunally is the gnome's development idea, but I know that you guys want to do the right thing in the right way :D).</p>
@@ -59,10 +59,10 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 <p>So today I wrote a patch to drop the libgnome-canvas package as dependency. Now Xfce users and everyone else not using gnome can install zenity without installing half gnome. :)</p>
 
 <p>Anyways, I leave you the patch:
-(http://dcortarello.googlepages.com/zenity-no-canvas.patch)</p>
+<a href="http://dcortarello.googlepages.com/zenity-no-canvas.patch">http://dcortarello.googlepages.com/zenity-no-canvas.patch</a></p>
 
 <hr width="40%">
-<h3>Patch for Xdialog (Yes! Made in Brasil)</h3><h8>Posted on: 2014-11-01 11:37:17</h8><p>Ok, ok, ok... I know I was in vacations, but the day wasn't very pretty, and I felt like taking a coding time. :D</p>
+<h3>Patch for Xdialog (Yes! Made in Brasil)</h3><h8>Posted on: 2014-11-02 00:03:19</h8><p>Ok, ok, ok... I know I was in vacations, but the day wasn't very pretty, and I felt like taking a coding time. :D</p>
 
 <p>Some weeks ago I wrote a small plugin for Xfce to configure the network in Kwort Linux; I was going to use Zenity, but then I saw again Xdialog and surprise... GTK2 based interface!</p>
 
@@ -83,7 +83,7 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 
 <p>So... Here's the patch, I hope someone finds it useful like me:</p>
 
-<p>(http://dcortarello.googlepages.com/Xdialog-2.3.1-patch-extra-button.patch)</p>
+<p><a href="http://dcortarello.googlepages.com/Xdialog-2.3.1-patch-extra-button.patch">http://dcortarello.googlepages.com/Xdialog-2.3.1-patch-extra-button.patch</a></p>
 
 <hr width="40%">
 <h3>Something interesting</h3><h8>Posted on: 2014-11-01 11:33:13</h8><p>This is kind of "off topic" but I see this interesting:</p>
@@ -153,13 +153,13 @@ I modify the this patch to make it compatible with both versions (5.1.2 and 5.1.
 </code></pre></div>
 
 <hr width="40%">
-<h3>Patch to provide features to sqwebmail</h3><h8>Posted on: 2014-11-01 11:33:26</h8><p>Recently I've been working with qmail+vpopmail+sqwebmail+courier-imap+...+a lot of things at work.
+<h3>Patch to provide features to sqwebmail</h3><h8>Posted on: 2014-11-02 00:03:09</h8><p>Recently I've been working with qmail+vpopmail+sqwebmail+courier-imap+...+a lot of things at work.
 Sqwebmail has a nice code style, but unfortunally it isn't docummented at all, so for all of us that don't belong to the project itself is very painful. In addition, the way they've done some things can really piss off someone. Not to mention that it's extremely un-extensible. So adding a new feature involves understanding and modifying the whole source code.
 Anyway, vacations mode is only implemented through qmailadmin, which is good, but users should use only one web interface, and that interface should be sqwebmail.</p>
 
 <p>So anyways, let's cut off the story and show you some code:</p>
 
-<p>(http://dcortarello.googlepages.com/sqwebmail-5.1.2-vacations-mode.patch)</p>
+<p><a href="http://dcortarello.googlepages.com/sqwebmail-5.1.2-vacations-mode.patch">http://dcortarello.googlepages.com/sqwebmail-5.1.2-vacations-mode.patch</a></p>
 
 <hr width="40%">
 <h3>My keyboard</h3><h8>Posted on: 2014-10-27 12:06:23</h8><p>Yesterday I got this new "old keyboard". Believe or not, this treasure was going to the trash, and my little brother save it because I told him I was looking for one. He came to me with it at 1:30 in the morning.
