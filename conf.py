@@ -19,3 +19,6 @@ INDEX_AS_BLOG = True
 CONTENT_LOCATION = 'content'
 TEMPLATE_LOCATION = 'templates'
 POSTS_LOCATION = CONTENT_LOCATION + '/posts'
+CSS_LOCATION = 'css/cover.css'
+ADDITIONAL_CSS = [ 'css/vim.css' ]
+BLOG_POST_SEPARATOR = '<hr width="60%">'

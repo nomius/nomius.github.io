@@ -8,10 +8,11 @@ def FullParse(Content):
     return markdown2.markdown(Content, extras=['fenced-code-blocks'])
 
 class Blog:
-    def __init__(self):
+    def __init__(self, blog_name  = 'Home'):
         self.parsed_content = ""
         self.page_counter = 0
         self.file_posts = []
+        self.blog_name = blog_name
 
     def GetPosts(self):
         for root, dirs, files in os.walk(POSTS_LOCATION):
@@ -28,11 +29,11 @@ class Blog:
 
             with open(post, "r") as pst:
                 print "    .·-> Parsing post: " + post
-                date_posted = post.replace('content/posts', '').split('/')
+                date_posted = post.replace(POSTS_LOCATION, '').split('/')
                 self.parsed_content += "<h3>" + os.path.splitext(os.path.basename(post))[0] + "</h3>"
-                self.parsed_content += "<h8>Posted on: " + calendar.month_abbr[int(date_posted[2])] + ' ' + date_posted[1] + "</h8>"
+                self.parsed_content += "<h6>Posted on: " + calendar.month_abbr[int(date_posted[2])] + ' ' + date_posted[1] + "</h6>"
                 self.parsed_content += FullParse(pst.read())
-                self.parsed_content += '\n<hr width="40%">\n'
+                self.parsed_content += '\n' + BLOG_POST_SEPARATOR + '\n'
                 post_counter += 1
                 current_item += 1
 
@@ -69,13 +70,13 @@ class Blog:
                 pprev = '<a href="' + fstr + str(self.page_counter + 1) + '.html">Previous posts</a>'
             else:
                 pprev = ''
-        prev_next = '<table style="width:100%"><tr><td>' + pprev + '</td><td align="right">' + pnext + '</td></tr></table>'
+        prev_next = '<table style="width:100%"><tr><td>' + pprev + '</td><td align="right">' + pnext + '</td></tr></table><br>'
 
         with open(fname, 'w') as page_file:
             print '   Writing file: ' + fname
             pw = Writters(page_file, '<br><br>' + self.parsed_content)
             pw.WriteHTMLHead()
-            pw.WriteNavBar('Home')
+            pw.WriteNavBar(self.blog_name)
             pw.WriteMainContent(content_is_filename = False)
             pw.WriteFooter(prev_next)
         self.page_counter += 1
@@ -86,8 +87,14 @@ class Writters:
         self.content = content
 
     def WriteHTMLHead(self):
+        csss = ""
+        try:
+            for css in ADDITIONAL_CSS:
+                csss += '<link href="' + css + '" rel="stylesheet">'
+        except:
+            pass
         with open (TEMPLATE_LOCATION + '/head.html', "r") as tf:
-            self.file_output.write(tf.read().replace('%TITLE%', TITLE))
+            self.file_output.write(tf.read().replace('%TITLE%', TITLE).replace('%MORE_CSS%', csss))
 
     def WriteMainContent(self, content_is_filename = True):
         if content_is_filename:
@@ -111,6 +118,8 @@ class Writters:
                 link = item.split('|')[1]
                 if link == 'blog' and INDEX_AS_BLOG:
                     link = 'index.html'
+                elif link == 'blog':
+                    link = 'blog.html'
                 if name == active:
                     navbar += '<li class="active"><a href="' + link + '">' + name + '</a></li>\n'
                 else:
@@ -145,7 +154,7 @@ def main(argv):
             cfile = CONTENT_LOCATION + '/' + name + '.md'
             if outfname == 'blog':
                 print "Creating a weblog in: " + name
-                b = Blog().CreateBlogPages()
+                b = Blog(name).CreateBlogPages()
             elif os.path.isfile(cfile):
                 Page(name, outfname)
                 print "Generating: " + outfname
