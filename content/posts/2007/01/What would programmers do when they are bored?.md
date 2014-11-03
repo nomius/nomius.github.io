@@ -13,5 +13,4 @@ So... What have I done? I improved my "IDE", and it is quoted because it's actua
 Or if you don't want to spend your money on that, you can actually learn vim with :help inside of vim.
 So, this is my new vimrc file, there's nothing very weird on it, only a set of templates, some options and options to compile simple projects and full autotools projects.
 
-I hope you enjoy it and of course, take whatever you need from it: <http://dcortarello.googlepages.com/vimrc>
-
+I hope you enjoy it and of course, take whatever you need from it: <https://github.com/nomius/dotfiles/blob/master/.vimrc>
