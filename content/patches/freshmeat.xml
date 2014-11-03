@@ -1,0 +1,11 @@
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Freshmeat</ShortName>
+<Description>Freshmeat Search</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1wYRFB0ZJCKMHQAAAkpJREFUOMutkr9PU1EUxz+vtzUhpRRo+RFKpLVASBMWUBMWBzQoAwMLwT/AyUQMm4NuJBJ/bDoxMxrDAisDLg4spskrCAEbokaFxD59r7zXr8ODAgGd/CY3957ce77f7zn3wP/E0tKSxu9k9Xy+W+XtuPZ20dpqTvNPuzUyMqLFxUX9k2BgIKOD7zlJzVLVSFVLqqEgiOr1qz719bWrXC7rQuX+/i5Jw/KrL+V7j1R1LsurNMirIK+CqhUkWerNt6tYLJ4lGR3t0sG3Th260wqCDY2N3VAmc0mekxSgWzepE+3tpDQ7O6uVlRUBRADGb1skU/tIn0Ef8f0fgEA+AEFwItaeOcC2bba2tgCIAtyd2odDDwXvCWr3oPaVmnwgOFeuqQXY9jrZbJZSqaQoQMT8Orp2kb4gDrFQ6OICuO5vHMfBdd2whK3tniMvAVAFxF//KwqdnTkcx8HzvJBg7Z1PTab+JhYD6xRDLHZyDmqG1tY0xhgikUio++ZtN42NDXza3eRDEfb3YXrKAsTV4TC+/wDSKWhr66GpqYlUKkUikQgJZmZmePL4IRubFlXnWDrc11bDyAJicYv8lZ9cu25oaWkhHo+fWCuXy+Gk7aTl+1GpSrhqyPejevEsr3y+TRMTE5qbm6vPgXW6P8ViUQsLC9i2jW2v43kuHR1ZWlvTJJNJjDEMDg4yOTlJoVCw6nNwjEKhYC0vL6u3t5dcLux0pVLBGEM6naa5uZmhoaF68jkHp1EqleS6Lq7rYowhkUgQj8fJZDJncv4A70QqdteL1PQAAAAASUVORK5CYII%3D</Image>
+<Url type="text/html" method="GET" template="http://freshmeat.net/search/">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="section" value="projects"/>
+</Url>
+<SearchForm>http://freshmeat.net</SearchForm>
+</SearchPlugin>

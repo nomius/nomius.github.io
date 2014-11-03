@@ -1,0 +1,106 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 22-12-2006
+Initial Package Version: 0.12c
+Description: The patch was created from the original ttysnoop package
+This patch provides the following bug solution:
+    * Moved from linux/time.h to time.h since linux/time.h shouldn't be used
+      anymore.
+    * Fixed some warnings with strcmp. Both "strings" in strcmp use const *,
+      so this patch fix that too
+    * Added DATADIR and MANDIR to Makefile so now editing those variables 
+      someone can install the manpages somewhere else outside /usr/share/man.
+    * Added a return sentence to both programs. We need a return data, so that 
+      way we can know when the program endded ok.
+    * Added flag -lcrypt, since it is needed to compile the main program.
+
+diff -Naur ttysnoop-0.12c.old/Makefile ttysnoop-0.12c/Makefile
+--- ttysnoop-0.12c.old/Makefile	1994-09-06 18:06:59.000000000 -0300
++++ ttysnoop-0.12c/Makefile	2006-12-31 10:44:15.000000000 -0300
+@@ -7,12 +7,10 @@
+ # Without shadow support
+ 
+ CCOPTS	= -O2
+-LIBS	= 
++LIBS	= -lcrypt
+ 
+-# For shadow support
+-
+-#CCOPTS	= -O2 -DSHADOW_PWD
+-#LIBS	= -lshadow
++DATADIR = /usr
++MANDIR = $(DATADIR)/man
+ 
+ SERVEROBJS	= ttysnoops.o common.o
+ CLIENTOBJS	= ttysnoop.o common.o
+@@ -43,6 +41,6 @@
+ install:
+ 		install -s ttysnoop /sbin
+ 		install -s ttysnoops /sbin
+-		install -m 644 ttysnoop.8 /usr/man/man8/
++		install -m 644 ttysnoop.8 $(MANDIR)/man8/
+ 		@echo ... copy snooptab.dist to /etc/snooptab and edit it ...
+- 
+\ No newline at end of file
++ 
+diff -Naur ttysnoop-0.12c.old/ttysnoop.c ttysnoop-0.12c/ttysnoop.c
+--- ttysnoop-0.12c.old/ttysnoop.c	1994-09-07 10:04:01.000000000 -0300
++++ ttysnoop-0.12c/ttysnoop.c	2006-12-31 10:44:38.000000000 -0300
+@@ -14,7 +14,6 @@
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
+ #include <sys/socket.h>
+-#include <linux/time.h>
+ #include <linux/un.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -25,6 +24,7 @@
+ #include <grp.h>
+ #include <utmp.h>
+ #include <errno.h>
++#include <time.h>
+ 
+ #include "config.h"
+ #include "common.h"
+@@ -94,4 +94,5 @@
+ 	}
+ 	
+ 	printf ("\r\nBack at local tty.\r\n");
++	return 0;
+ }
+diff -Naur ttysnoop-0.12c.old/ttysnoops.c ttysnoop-0.12c/ttysnoops.c
+--- ttysnoop-0.12c.old/ttysnoops.c	1996-03-21 15:47:08.000000000 -0300
++++ ttysnoop-0.12c/ttysnoops.c	2006-12-31 10:49:39.000000000 -0300
+@@ -22,7 +22,6 @@
+ #include <sys/ioctl.h>
+ #include <sys/socket.h>
+ #include <sys/syslog.h>
+-#include <linux/time.h>
+ #include <linux/un.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -36,6 +35,7 @@
+ #include <pwd.h>
+ #include <utmp.h>
+ #include <errno.h>
++#include <time.h>
+ #ifdef SHADOW_PWD
+ #include <shadow.h>
+ #endif
+@@ -340,9 +340,9 @@
+ 		if (inputs(buff, 16, stdin) == 0)
+ 		{
+ #ifndef SHADOW_PWD
+-			if (strcmp(pw->pw_passwd, crypt(buff, pw->pw_passwd)) == 0)
++			if (strcmp(pw->pw_passwd, (const char *)crypt(buff, pw->pw_passwd)) == 0)
+ #else
+-                        if (strcmp(spw->sp_pwdp, crypt(buff, spw->sp_pwdp)) == 0)
++                        if (strcmp(spw->sp_pwdp, (const char *)crypt(buff, spw->sp_pwdp)) == 0)
+ #endif
+ 			{
+ 				printf ("\r\nVerified OK... Snoop started.\r\n");
+@@ -596,4 +596,5 @@
+ 			/* fdmax = max(fdmax, snoopfd); */
+ 		}			
+ 	}
++	return 0;
+ }

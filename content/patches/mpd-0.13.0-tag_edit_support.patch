@@ -1,0 +1,394 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 04-01-2008
+Initial Package Version: 0.13.0
+Description: The patch was created from the original mpd package
+This patch provides the following features:
+    * Added support for tag edition in mpd with taglib
+Notes:
+    * Allowed labels: artist, title, album, genre, date, track, composer,
+      perfomer and comment.
+    * Command syntax:
+       tagedit <file> "artist" "Some name" "title" "Some title" ...
+    * To check if a <file> is tageable there is a check command in this way:
+       tageditcheck <file>
+
+diff -Naur mpd-0.13.0.orig/configure.ac mpd-0.13.0/configure.ac
+--- mpd-0.13.0.orig/configure.ac	2007-05-28 10:19:32.000000000 -0300
++++ mpd-0.13.0/configure.ac	2007-12-31 16:30:35.000000000 -0300
+@@ -93,6 +93,13 @@
+ AC_ARG_WITH(id3tag-libraries,[  --with-id3tag-libraries=DIR Directory where libid3tag library is installed (optional)], id3tag_libraries="$withval", id3tag_libraries="")
+ AC_ARG_WITH(id3tag-includes,[  --with-id3tag-includes=DIR  Directory where libid3tag header files are installed (optional)], id3tag_includes="$withval", id3tag_includes="")
+ 
++# taglib support
++AC_ARG_ENABLE(taglib,[  --disable-taglib        disable taglib support (default: enable)],[enable_taglib=$enableval],[enable_taglib=yes])
++AC_ARG_WITH(taglib,[  --with-taglib=PFX           Prefix where taglib is installed (optional)], taglib_prefix="$withval", taglib_prefix="")
++AC_ARG_WITH(taglib-libraries,[  --with-taglib-libraries=DIR Directory where taglib library is installed (optional)], taglib_libraries="$withval", taglib_libraries="")
++AC_ARG_WITH(taglib-includes,[  --with-taglib-includes=DIR  Directory where taglib header files are installed (optional)], taglib_includes="$withval", taglib_includes="")
++# end of taglib support
++
+ AC_ARG_WITH(mad,[  --with-mad=PFX              Prefix where libmad is installed (optional)], mad_prefix="$withval", mad_prefix="")
+ AC_ARG_WITH(mad-libraries,[  --with-mad-libraries=DIR    Directory where libmad library is installed (optional)], mad_libraries="$withval", mad_libraries="")
+ AC_ARG_WITH(mad-includes,[  --with-mad-includes=DIR     Directory where mad header files are installed (optional)], mad_includes="$withval", mad_includes="")
+@@ -283,6 +290,53 @@
+ 	fi
+ fi
+ 
++# taglib support
++TAGLIB_SUBDIR=""
++
++if test x$enable_taglib = xyes; then
++	if test "x$taglib_libraries" != "x" ; then
++		TAGLIB_LIBS="-L$taglib_libraries"
++	elif test "x$taglib_prefix" != "x" ; then
++		TAGLIB_LIBS="-L$taglib_prefix/lib"
++	fi
++
++	TAGLIB_LIBS="$ID3TAG_LIBS -ltag_c"
++
++	if test "x$taglib_includes" != "x" ; then
++		TAGLIB_CFLAGS="-I$taglib_includes"
++	elif test "x$taglib_prefix" != "x" ; then
++		TAGLIB_CFLAGS="-I$taglib_prefix/include"
++	fi
++
++	TAGLLIB_CFLAGS="$TAGLIB_CFLAGS"
++
++	oldcflags=$CFLAGS
++	oldlibs=$LIBS
++	oldcppflags=$CPPFLAGS
++	CFLAGS="$CFLAGS $MPD_CFLAGS $TAGLIB_CFLAGS"
++	LIBS="$LIBS $MPD_LIBS $TAGLIB_LIBS"
++	CPPFLAGS=$CFLAGS
++	AC_CHECK_HEADERS(taglib/tag_c.h,use_taglib=yes,
++		[use_taglib=no])
++	if test x$use_taglib = xyes; then
++		AC_CHECK_LIB(tag_c,taglib_file_new,
++			[MPD_LIBS="$MPD_LIBS $TAGLIB_LIBS";
++			MPD_CFLAGS="$MPD_CFLAGS $TAGLIB_CFLAGS";
++			use_taglib=yes],
++			[use_taglib=no])
++	fi
++	CFLAGS=$oldcflags
++	LIBS=$oldlibs
++	CPPFLAGS=$oldcppflags
++	if test x$use_taglib = xyes; then
++		AC_DEFINE(HAVE_TAGLIB,1,[Define to use taglib])
++	else
++		enable_taglib=no
++	fi
++fi
++#end of taglib support
++
++
+ MAD_SUBDIR=""
+ 
+ if test x$enable_mp3 = xyes; then
+@@ -681,6 +735,11 @@
+ else
+ 	echo " ID3 tag support ...............disabled"
+ fi
++if test x$enable_taglib = xyes; then
++	echo " Tag editing support ...........enabled"
++else
++	echo " Tag editing support ...........disabled"
++fi
+ 
+ if test x$enable_mp3 = xyes; then
+ 	echo " mp3 support ...................enabled"
+diff -Naur mpd-0.13.0.orig/src/Makefile.am mpd-0.13.0/src/Makefile.am
+--- mpd-0.13.0.orig/src/Makefile.am	2007-05-28 10:19:32.000000000 -0300
++++ mpd-0.13.0/src/Makefile.am	2007-12-31 16:02:19.000000000 -0300
+@@ -76,7 +76,8 @@
+ 	ioops.h \
+ 	zeroconf.h \
+ 	locate.h \
+-	storedPlaylist.h
++	storedPlaylist.h \
++	tagedit.h
+ 
+ 
+ mpd_SOURCES = \
+@@ -128,7 +129,8 @@
+ 	utf8.c \
+ 	zeroconf.c \
+ 	locate.c \
+-	storedPlaylist.c
++	storedPlaylist.c \
++	tagedit.c
+ 
+ 
+ mpd_CFLAGS = $(MPD_CFLAGS)
+diff -Naur mpd-0.13.0.orig/src/command.c mpd-0.13.0/src/command.c
+--- mpd-0.13.0.orig/src/command.c	2007-05-28 10:19:32.000000000 -0300
++++ mpd-0.13.0/src/command.c	2008-01-04 23:32:03.000000000 -0300
+@@ -31,6 +31,7 @@
+ #include "tag.h"
+ #include "utils.h"
+ #include "storedPlaylist.h"
++#include "tagedit.h"
+ 
+ #include <assert.h>
+ #include <stdarg.h>
+@@ -98,9 +99,11 @@
+ #define COMMAND_PLAYLISTSEARCH	"playlistsearch"
+ #define COMMAND_PLAYLISTMOVE	"playlistmove"
+ #define COMMAND_PLAYLISTDELETE	"playlistdelete"
+-#define COMMAND_TAGTYPES	"tagtypes"
+-#define COMMAND_COUNT		"count"
+-#define COMMAND_RENAME		"rename"
++#define COMMAND_TAGTYPES		"tagtypes"
++#define COMMAND_COUNT			"count"
++#define COMMAND_RENAME			"rename"
++#define COMMAND_TAGEDIT			"tagedit"
++#define COMMAND_TAGEDITCHECK	"tageditcheck"
+ 
+ #define COMMAND_STATUS_VOLUME           "volume"
+ #define COMMAND_STATUS_STATE            "state"
+@@ -427,6 +430,20 @@
+ 	return renameStoredPlaylist(fd, argv[1], argv[2]);
+ }
+ 
++static int handleEditCheckTag(int fd, int *permission, int argc, char *argv[])
++{
++	if(CheckEditTag(fd, argv[1]))
++		fdprintf(fd, "check: permission denied\n");
++	return 0;
++}
++
++static int handleEditTag(int fd, int *permission, int argc, char *argv[])
++{
++	if(EditTag(fd, argv))
++		fdprintf(fd, "check: permission denied\n");
++	return 0;
++}
++
+ static int handlePlaylistChanges(int fd, int *permission,
+ 				 int argc, char *argv[])
+ {
+@@ -1124,6 +1141,8 @@
+ 	addCommand(COMMAND_TAGTYPES,         PERMISSION_READ,    0,   0,   handleTagTypes,             NULL);
+ 	addCommand(COMMAND_COUNT,            PERMISSION_READ,    2,   -1,  handleCount,                NULL);
+ 	addCommand(COMMAND_RENAME,           PERMISSION_CONTROL, 2,   2,   handleRename,               NULL);
++	addCommand(COMMAND_TAGEDIT,          PERMISSION_TAG,     2,   19,  handleEditTag,              NULL);
++	addCommand(COMMAND_TAGEDITCHECK,     PERMISSION_READ,    1,   1,   handleEditCheckTag,         NULL);
+ 
+ 	sortList(commandList);
+ }
+diff -Naur mpd-0.13.0.orig/src/permission.c mpd-0.13.0/src/permission.c
+--- mpd-0.13.0.orig/src/permission.c	2007-05-28 10:19:32.000000000 -0300
++++ mpd-0.13.0/src/permission.c	2008-01-04 22:49:22.000000000 -0300
+@@ -32,6 +32,7 @@
+ #define PERMISSION_ADD_STRING		"add"
+ #define PERMISSION_CONTROL_STRING	"control"
+ #define PERMISSION_ADMIN_STRING		"admin"
++#define PERMISSION_TAG_STRING		"tag"
+ 
+ static List *permission_passwords;
+ 
+@@ -56,6 +57,8 @@
+ 			permission |= PERMISSION_CONTROL;
+ 		} else if (strcmp(temp, PERMISSION_ADMIN_STRING) == 0) {
+ 			permission |= PERMISSION_ADMIN;
++		} else if (strcmp(temp, PERMISSION_TAG_STRING) == 0) {
++			permission |= PERMISSION_TAG;
+ 		} else {
+ 			FATAL("unknown permission \"%s\"\n", temp);
+ 		}
+@@ -77,7 +80,7 @@
+ 	permission_passwords = makeList(free, 1);
+ 
+ 	permission_default = PERMISSION_READ | PERMISSION_ADD |
+-	    PERMISSION_CONTROL | PERMISSION_ADMIN;
++	    PERMISSION_CONTROL | PERMISSION_ADMIN | PERMISSION_TAG;
+ 
+ 	param = getNextConfigParam(CONF_PASSWORD, NULL);
+ 
+diff -Naur mpd-0.13.0.orig/src/permission.h mpd-0.13.0/src/permission.h
+--- mpd-0.13.0.orig/src/permission.h	2007-05-28 10:19:32.000000000 -0300
++++ mpd-0.13.0/src/permission.h	2008-01-04 22:46:46.000000000 -0300
+@@ -26,6 +26,7 @@
+ #define PERMISSION_ADD     2
+ #define PERMISSION_CONTROL 4
+ #define PERMISSION_ADMIN   8
++#define PERMISSION_TAG    16
+ 
+ 
+ int getPermissionFromPassword(char *password, int *permission);
+diff -Naur mpd-0.13.0.orig/src/tagedit.c mpd-0.13.0/src/tagedit.c
+--- mpd-0.13.0.orig/src/tagedit.c	1969-12-31 21:00:00.000000000 -0300
++++ mpd-0.13.0/src/tagedit.c	2008-01-04 23:07:39.000000000 -0300
+@@ -0,0 +1,149 @@
++/* the Music Player Daemon (MPD)
++ * Copyright (C) 2003-2007 by Warren Dukes (warren.dukes@gmail.com)
++ * This project's homepage is: http://www.musicpd.org
++ * Module by: David B. Cortarello (Nomius) <nomius@users.berlios.de>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <command.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include "../config.h"
++#include "tagedit.h"
++#include "directory.h"
++#include "path.h"
++#include "ack.h"
++
++#ifdef HAVE_TAGLIB
++
++#include <taglib/tag_c.h>
++
++static char *utf8pathToFullFsPath(const char *utf8path, int fd)
++{
++	char *ret, *file;
++	int len=strlen(musicDir)+strlen(utf8path)+1;
++
++	if((ret=calloc(len, sizeof(char)))==NULL)
++		return NULL;
++
++    file = utf8ToFsCharset((char *)utf8path);
++	snprintf(ret, len, "%s%s", musicDir, utf8path);
++
++    return ret;
++}
++#endif
++
++int CheckEditTag(int fd, char *file){
++	char *filename;
++	int i;
++	if((filename = utf8pathToFullFsPath(file, fd)) == NULL){
++		commandError(fd, ACK_ERROR_SYSTEM, "Not enough memory");
++		return -1;
++	}
++	if((i=open(filename, O_RDWR))==-1)
++		{ free(filename); return 1; }
++	close(i);
++	free(filename);
++	return 0;
++}
++
++
++int EditTag(int fd, char *argv[]){
++#ifdef HAVE_TAGLIB
++	int track = -1 , date = -1, i=2, err=0;
++	char *title=NULL, *artist=NULL, *album=NULL, *genre=NULL, *composer=NULL, *perfomer=NULL, *comment=NULL;
++	char *filename;
++	List *pathList;
++	TagLib_File *taglib_file;
++	TagLib_Tag *taglib_tag;
++	const TagLib_AudioProperties *taglib_ap;
++
++	if((filename = utf8pathToFullFsPath(argv[1], fd)) == NULL){
++		commandError(fd, ACK_ERROR_SYSTEM, "Not enough memory");
++		return -1;
++	}
++
++	while(argv[i]!=NULL){
++		if(!strcmp(argv[i], "title") && argv[i+1]!=NULL)
++			title = argv[i+1];
++		else if(!strcmp(argv[i], "artist") && argv[i+1]!=NULL)
++			artist = argv[i+1];
++		else if(!strcmp(argv[i], "album") && argv[i+1]!=NULL)
++			album = argv[i+1];
++		else if(!strcmp(argv[i], "genre") && argv[i+1]!=NULL)
++			genre = argv[i+1];
++		else if(!strcmp(argv[i], "date") && argv[i+1]!=NULL)
++			date = atoi(argv[i+1]);
++		else if(!strcmp(argv[i], "track") && argv[i+1]!=NULL)
++			track = atoi(argv[i+1]);
++		else if(!strcmp(argv[i], "composer") && argv[i+1]!=NULL)
++			composer = argv[i+1];
++		else if(!strcmp(argv[i], "perfomer") && argv[i+1]!=NULL)
++			perfomer = argv[i+1];
++		else if(!strcmp(argv[i], "comment") && argv[i+1]!=NULL)
++			comment = argv[i+1];
++		else
++			err=1;
++		i+=2;
++	}
++	if(err)
++		return 1;
++	if((taglib_file = taglib_file_new(filename))==NULL)
++		{ free(filename); return -1; }
++	if((taglib_tag = taglib_file_tag(taglib_file))==NULL)
++		{ free(filename); return -1; }
++	if((taglib_ap = taglib_file_audioproperties(taglib_file))==NULL)
++		{ free(filename); return -1; }
++
++	if(artist)
++		taglib_tag_set_artist(taglib_tag, artist);
++	if(title)
++		taglib_tag_set_title(taglib_tag, title);
++	if(album)
++		taglib_tag_set_album(taglib_tag, album);
++	if(comment)
++		taglib_tag_set_comment(taglib_tag, comment);
++	if(genre)
++		taglib_tag_set_genre(taglib_tag, genre);
++	if(date != -1)
++		taglib_tag_set_year(taglib_tag, date);
++	if(track != -1)
++		taglib_tag_set_track(taglib_tag, track);
++	if(!taglib_file_save(taglib_file))
++		err=1;
++	taglib_file_free(taglib_file);
++	taglib_tag_free_strings();
++
++	free(filename);
++
++	if(!err){
++		pathList = makeList(NULL, 1);
++		insertInList(pathList, argv[1], NULL);
++		if(updateInit(fd, pathList) != 0){
++			commandError(fd, ACK_ERROR_UNKNOWN, "Error updating tag list");
++			err=1;
++		}
++		freeList(pathList);
++	}
++
++#else
++	commandError(fd, ACK_ERROR_SYSTEM, "Your version of mpd wasn't compiled with taglib");
++#endif
++	return err;
++}
+diff -Naur mpd-0.13.0.orig/src/tagedit.h mpd-0.13.0/src/tagedit.h
+--- mpd-0.13.0.orig/src/tagedit.h	1969-12-31 21:00:00.000000000 -0300
++++ mpd-0.13.0/src/tagedit.h	2008-01-04 23:08:07.000000000 -0300
+@@ -0,0 +1,21 @@
++/* the Music Player Daemon (MPD)
++ * Copyright (C) 2003-2007 by Warren Dukes (warren.dukes@gmail.com)
++ * This project's homepage is: http://www.musicpd.org
++ * Module by: David B. Cortarello (Nomius) <nomius@users.berlios.de>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ */
++
++int EditTag(int fd, char *argv[]);
++int CheckEditTag(int fd, char *file);

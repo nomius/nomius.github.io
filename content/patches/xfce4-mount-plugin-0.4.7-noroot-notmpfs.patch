@@ -1,0 +1,63 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 17-12-2006
+Initial Package Version: 0.4.7
+Description: The patch was created from the original xfce4-mount-plugin
+This patch provides the following bug solution:
+ * tmpfs shouldn't be displayed, since the users should not mount or umount it
+   so this patch will remove it from the list.
+ * root directory shouldn't be displayed for mounting and umounting, so this 
+   patch remove that this one too.
+
+diff -Naur xfce4-mount-plugin-0.4.7.old/panel-plugin/devices.c xfce4-mount-plugin-0.4.7/panel-plugin/devices.c
+--- xfce4-mount-plugin-0.4.7.old/panel-plugin/devices.c	2006-07-02 12:51:17.000000000 -0300
++++ xfce4-mount-plugin-0.4.7/panel-plugin/devices.c	2006-12-17 21:48:34.000000000 -0300
+@@ -320,13 +320,19 @@
+     
+     for (pfstab = getfsent(); pfstab!=NULL; pfstab = getfsent()) {
+ 
+-        /*
+-        pfstab = getfsent(); //read a line in fstab
+-        if (pfstab == NULL) break ; // on EOF exit loop
+-        */
+-        
+-        gboolean has_valid_mount_device =
+-                        g_str_has_prefix(pfstab->fs_spec, "/dev/");
++		gboolean has_valid_mount_device =
++			g_str_has_prefix(pfstab->fs_spec, "/dev/") &
++			~( g_ascii_strcasecmp(pfstab->fs_file, "/" ) == 0 ) &
++			~( g_ascii_strcasecmp(pfstab->fs_vfstype, "tmpfs" ) == 0 ) &
++			g_str_has_prefix(pfstab->fs_vfstype, "ext3") |
++			g_str_has_prefix(pfstab->fs_vfstype, "ext2") |
++			g_str_has_prefix(pfstab->fs_vfstype, "vfat") |
++			g_str_has_prefix(pfstab->fs_vfstype, "fat") |
++			g_str_has_prefix(pfstab->fs_vfstype, "iso9660") |
++			g_str_has_prefix(pfstab->fs_vfstype, "joliet") |
++			g_str_has_prefix(pfstab->fs_vfstype, "reiserfs") |
++			g_str_has_prefix(pfstab->fs_vfstype, "udf") |
++			g_str_has_prefix(pfstab->fs_vfstype, "auto");
+ 
+         if (include_NFSs)
+             has_valid_mount_device = has_valid_mount_device |
+@@ -461,13 +467,15 @@
+ 
+                 /* create a new struct t_disk and add it to pdisks */
+                 /* test for mnt_dir!=none or neither block device nor NFS */
+-                if ( (g_ascii_strcasecmp(pmntent->mnt_dir, "none") == 0) ||
+-                !(g_str_has_prefix(pmntent->mnt_fsname, "/dev/") || 
+-                  g_str_has_prefix(pmntent->mnt_type, "fuse") ||
+-                  g_str_has_prefix(pmntent->mnt_type, "nfs") || 
+-                  g_str_has_prefix(pmntent->mnt_type, "smbfs") ||
+-                  g_str_has_prefix(pmntent->mnt_type, "shfs") )
+-                ) continue;
++				if ( (g_ascii_strcasecmp(pmntent->mnt_dir, "none") == 0) ||
++			    (g_ascii_strcasecmp(pmntent->mnt_type, "tmpfs") == 0) ||
++			   	(g_ascii_strcasecmp(pmntent->mnt_dir, "/") == 0) ||
++			   	!(g_str_has_prefix(pmntent->mnt_fsname, "/dev/") ||
++				g_str_has_prefix(pmntent->mnt_type, "fuse") ||
++				g_str_has_prefix(pmntent->mnt_type, "nfs") ||
++				g_str_has_prefix(pmntent->mnt_type, "smbfs") ||
++				g_str_has_prefix(pmntent->mnt_type, "shfs") )) 
++					continue;
+ 
+                 /* else have valid entry reflecting block device or NFS */
+                 pdisk = disk_new (pmntent->mnt_fsname, pmntent->mnt_dir);

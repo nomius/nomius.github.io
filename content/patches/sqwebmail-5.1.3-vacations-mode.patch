@@ -1,0 +1,450 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at unixlive dot org>
+Date: 13-09-2006
+Initial Package Version: 5.1.3
+Description: The patch was created from the original sqwebmail package
+This patch provide the following bug solution:
+    * Vacations mode implementation and creation of its htmls files.
+
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/Makefile.am ./sqwebmail/Makefile.am
+--- ../sqwebmail-5.1.3.old/sqwebmail/Makefile.am	2006-01-29 13:54:58.000000000 -0300
++++ ./sqwebmail/Makefile.am	2006-09-12 23:45:22.000000000 -0300
+@@ -68,7 +68,7 @@
+ 
+ sqwebmaild_SOURCES=acl.c acl.h \
+ 		addressbook.c addressbook.h args.c attachments.c \
+-		auth.c auth.h autoresponse.c autoresponse.h buf.c buf.h \
++		auth.c auth.h autoresponse.c  autoresponse.h buf.c buf.h \
+ 		changepw.c \
+ 		filter.c filter.h folder.c folder.h gpg.c gpg.h html.c html.h \
+ 		ldaplist.c logindomainlist.c logindomainlist.h \
+@@ -76,7 +76,7 @@
+ 		mailfilter.h mailinglist.c mailinglist.h newmsg.c newmsg.h \
+ 		newmsg_create.c	newmsg_newdraft.c pcp.c pcp.h pref.c pref.h \
+ 		rfc2646html.c rfc2646html.h sqconfig.c sqconfig.h sqwebmail.c \
+-		strftime.c strftime.h \
++		strftime.c strftime.h vacation.c vacation.h \
+ 		sqwebmail.h token.c token.h $(SQISPELLSOURCES)
+ sqwebmaild_LDADD=libwebmail.la `cat ../maildir/maildir.libdeps` \
+ 	@NETLIBS@ @LDAUTH@ -lcourierauth -lpcre
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/Makefile.in ./sqwebmail/Makefile.in
+--- ../sqwebmail-5.1.3.old/sqwebmail/Makefile.in	2006-08-25 22:39:21.000000000 -0300
++++ ./sqwebmail/Makefile.in	2006-09-12 23:45:22.000000000 -0300
+@@ -93,7 +93,7 @@
+ 	newmsg.h newmsg_create.c newmsg_newdraft.c pcp.c pcp.h pref.c \
+ 	pref.h rfc2646html.c rfc2646html.h sqconfig.c sqconfig.h \
+ 	sqwebmail.c strftime.c strftime.h sqwebmail.h token.c token.h \
+-	sqispell.c ispell.c ispell.h
++	sqispell.c ispell.c ispell.h vacation.c vacation.h
+ am__objects_1 = sqispell.$(OBJEXT) ispell.$(OBJEXT)
+ @ISPELL_TRUE@am__objects_2 = $(am__objects_1)
+ am_sqwebmaild_OBJECTS = acl.$(OBJEXT) addressbook.$(OBJEXT) \
+@@ -105,7 +105,7 @@
+ 	newmsg_create.$(OBJEXT) newmsg_newdraft.$(OBJEXT) \
+ 	pcp.$(OBJEXT) pref.$(OBJEXT) rfc2646html.$(OBJEXT) \
+ 	sqconfig.$(OBJEXT) sqwebmail.$(OBJEXT) strftime.$(OBJEXT) \
+-	token.$(OBJEXT) $(am__objects_2)
++	token.$(OBJEXT) vacation.$(OBJEXT) $(am__objects_2)
+ sqwebmaild_OBJECTS = $(am_sqwebmaild_OBJECTS)
+ am_sqwebpasswd_OBJECTS = sqwebpasswd.$(OBJEXT)
+ sqwebpasswd_OBJECTS = $(am_sqwebpasswd_OBJECTS)
+@@ -327,7 +327,7 @@
+ 		newmsg_create.c	newmsg_newdraft.c pcp.c pcp.h pref.c pref.h \
+ 		rfc2646html.c rfc2646html.h sqconfig.c sqconfig.h sqwebmail.c \
+ 		strftime.c strftime.h \
+-		sqwebmail.h token.c token.h $(SQISPELLSOURCES)
++		sqwebmail.h token.c token.h vacation.c vacation.h $(SQISPELLSOURCES)
+ 
+ sqwebmaild_LDADD = libwebmail.la `cat ../maildir/maildir.libdeps` \
+ 	@NETLIBS@ @LDAUTH@ -lcourierauth -lpcre
+@@ -516,6 +516,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sqwebpasswd.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strftime.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/token.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vacation.Po@am__quote@
+ 
+ .c.o:
+ @am__fastdepCC_TRUE@	@echo Compiling $< ; if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/Makefile.am ./sqwebmail/html/en-us/Makefile.am
+--- ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/Makefile.am	2006-03-18 18:03:31.000000000 -0300
++++ ./sqwebmail/html/en-us/Makefile.am	2006-09-12 23:45:22.000000000 -0300
+@@ -14,7 +14,7 @@
+ 	     printredirect.html quickadd.html print.html readmsg.html \
+ 	     redirect.html refreshfr.html spellchk.html \
+ 	     gpg.html gpgcreate.html gpgerr.html \
+-	     loginform.inc.html \
++	     loginform.inc.html vacation.html \
+ 	     navbar.inc.html navbar2.inc.html navbar3.inc.html \
+ 	     calendarlogin.inc.html \
+ 	     eventnotifynew.txt eventnotifydelete.txt eventnotifysubject.txt
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/Makefile.in ./sqwebmail/html/en-us/Makefile.in
+--- ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/Makefile.in	2006-03-18 18:03:46.000000000 -0300
++++ ./sqwebmail/html/en-us/Makefile.in	2006-09-12 23:45:22.000000000 -0300
+@@ -143,7 +143,7 @@
+ 	     printredirect.html quickadd.html print.html readmsg.html \
+ 	     redirect.html refreshfr.html spellchk.html \
+ 	     gpg.html gpgcreate.html gpgerr.html \
+-	     loginform.inc.html \
++	     loginform.inc.html vacation.html \
+ 	     navbar.inc.html navbar2.inc.html navbar3.inc.html \
+ 	     calendarlogin.inc.html \
+ 	     eventnotifynew.txt eventnotifydelete.txt eventnotifysubject.txt
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/navbar.inc.html ./sqwebmail/html/en-us/navbar.inc.html
+--- ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/navbar.inc.html	2006-03-12 10:58:32.000000000 -0300
++++ ./sqwebmail/html/en-us/navbar.inc.html	2006-09-12 23:45:22.000000000 -0300
+@@ -22,6 +22,9 @@
+         href="[#s#]&amp;newmsg=1&amp;form=newmsg">Create&nbsp;Message</a></td>
+       <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
+       <td valign="middle" align="center"><a
++        href="[#s#]&amp;form=vacation">Vacations</a></td>
++      <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
++      <td valign="middle" align="center"><a
+         href="[#s#]&amp;form=preferences">Preferences</a></td>
+       <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
+       <td valign="middle" align="center"><a
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/navbar2.inc.html ./sqwebmail/html/en-us/navbar2.inc.html
+--- ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/navbar2.inc.html	2006-03-12 10:58:32.000000000 -0300
++++ ./sqwebmail/html/en-us/navbar2.inc.html	2006-09-12 23:45:22.000000000 -0300
+@@ -22,6 +22,9 @@
+         href="[#s#]&amp;newmsg=1&amp;form=newmsg">Create&nbsp;Message</a></td>
+       <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
+       <td valign="middle" align="center"><a
++        href="[#s#]&amp;form=vacation">Vacations</a></td>
++      <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
++      <td valign="middle" align="center"><a
+         href="[#s#]&amp;form=preferences">Preferences</a></td>
+       <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
+       <td valign="middle" align="center"><a
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/navbar3.inc.html ./sqwebmail/html/en-us/navbar3.inc.html
+--- ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/navbar3.inc.html	2006-03-12 10:58:32.000000000 -0300
++++ ./sqwebmail/html/en-us/navbar3.inc.html	2006-09-12 23:45:22.000000000 -0300
+@@ -22,6 +22,9 @@
+         href="[#s#]&amp;newmsg=1&amp;form=newmsg&amp;fromscreen=mailfilter">Create&nbsp;Message</a></td>
+       <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
+       <td valign="middle" align="center"><a
++        href="[#s#]&amp;form=vacation">Vacations</a></td>
++      <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
++      <td valign="middle" align="center"><a
+         href="[#s#]&amp;form=preferences&amp;fromscreen=mailfilter">Preferences</a></td>
+       <td valign="middle" align="center">[#@sep.png,alt="|"@|@#]</td>
+       <td valign="middle" align="center"><a
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/vacation.html ./sqwebmail/html/en-us/vacation.html
+--- ../sqwebmail-5.1.3.old/sqwebmail/html/en-us/vacation.html	1969-12-31 21:00:00.000000000 -0300
++++ ./sqwebmail/html/en-us/vacation.html	2006-09-12 23:45:22.000000000 -0300
+@@ -0,0 +1,114 @@
++<?xml version="1.0" encoding="iso-8859-1"?>
++<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
++      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
++<html xmlns="http://www.w3.org/1999/xhtml">
++<head>
++  <meta name="GENERATOR" content="amaya 8.0, see http://www.w3.org/Amaya/" />
++  <meta name="MSSmartTagsPreventParsing" content="TRUE" />
++  <title>Vacations</title>
++  <link rel="stylesheet" type="text/css" href="[#SQWEBMAILCSS#]" />
++  <!-- $Id: vacation.html,v 1.0 2006/08/22 18:06:00 mrsam Exp $ -->
++</head>
++
++<body>
++<!--
++
++[#$BADNAME=<span style="color: #ee0000">ERROR: Invalid character in autoreply name</span><br />#]
++[#$EEXIST=<span style="color: #ee0000">ERROR: Autoreply name already exists</span><br />#]
++[#$SAVEFAILED=<span style="color: #ee0000">ERROR: Unable to save autoreply text: %s</span><br />#]
++[#$QUOTA=<span style="color: #ee0000">ERROR: autoreply exceeds allowed quota</span>#]
++[#$ERROR=<span style="color: #ee0000">ERROR: %s</span><br />#]
++
++[#$VSTATUS=Status#]
++[#$VACAPPLIED=Vacations mode enabled#]
++[#$VACADELETED=Vacacions mode disabled#]
++
++[#$SAVE=Save#]
++[#$DELETE=Delete#]
++
++[#$ATT=<table align="center" border="0" bgcolor="#000000" cellpadding="1" cellspacing="0" class="box-small-outer"><tr><td><table border="0" bgcolor="#eeeeee" cellpadding="4" cellspacing="0" width="100%" class="mailfilter"><tr><td>Attachment: %s</td></tr></table></td></tr></table><br /><br /><br />#]
++
++[#$CHSET=<table align="center" border="0" bgcolor="#000000" cellpadding="1" cellspacing="0" class="box-small-outer"><tr><td><table border="0" bgcolor="#eeeeee" cellpadding="4" cellspacing="0" width="100%" class="mailfilter"><tr><td>Unable to show text in the <span class="tt">%s</span> character set,<br />(your display is set for the <span class="tt">%s</span> character set)</td></tr></table></td></tr></table><br /><br /><br />#]
++
++-->
++<!-- Top Header. Shows folder list and email address. -->
++
++<div align="center">
++
++<table cellpadding="0" cellspacing="0" border="0" width="95%">
++  <tbody>
++    <tr style="line-height: 0">
++      <td align="left" valign="top"
++        style="line-height: 0">[#@graytopleft.png, width="11" height="11"
++        alt="" border="0"@@#]</td>
++      <td bgcolor="#cccccc" class="graybox"></td>
++      <td align="right" valign="top"
++        style="line-height: 0">[#@graytopright.png, width="11" height="11"
++        alt="" border="0"@@#]</td>
++    </tr>
++    <tr bgcolor="#cccccc" class="graybox">
++      <td>&nbsp;</td>
++      <td bgcolor="#cccccc" class="graybox" width="100%">
++        <table width="100%" border="0" cellspacing="0" cellpadding="0">
++          <tbody>
++            <tr>
++              <td align="left" width="100%" valign="middle"
++              class="pageheader">Vacations Mode</td>
++              <td align="right" valign="middle">[#G#]</td>
++            </tr>
++          </tbody>
++        </table>
++      </td>
++      <td>&nbsp;</td>
++    </tr>
++    <tr style="line-height: 0">
++      <td align="left" valign="bottom">[#@graybottomleft.png, width="11"
++        height="11" alt="" border="0"@@#]</td>
++      <td bgcolor="#cccccc" class="graybox"></td>
++      <td align="right" valign="bottom">[#@graybottomright.png, width="11"
++        height="11" alt="" border="0"@@#]</td>
++    </tr>
++  </tbody>
++</table>
++<!-- End of Top Header -->
++<!-- Sections. Folders, Create Messages, Preferences, Etc. -->
++[#include:navbar#]
++
++<form method="post" enctype="multipart/form-data" action="[#R#]">
++  [#P#]<input type="hidden" name="form" value="vacation" />
++
++  <table cellpadding="0" cellspacing="0" border="0" width="95%">
++    <tbody>
++      <tr style="line-height: 0">
++        <td align="left" valign="top">[#@bluetopleft.png, width="11"
++          height="11" alt="" border="0"@@#]</td>
++        <td bgcolor="#99ccff" class="bluebox" valign="middle" width="100%"></td>
++        <td style="line-height: 0" align="right"
++          valign="top">[#@bluetopright.png, width="11" height="11" alt=""
++          border="0"@@#]</td>
++      </tr>
++      <tr>
++        <td bgcolor="#99ccff" class="bluebox"></td>
++        <td bgcolor="#99ccff" class="bluebox" valign="middle">
++          <table border="0" cellpadding="4" cellspacing="0" width="100%"
++          class="mailfilter">
++            <td colspan="2">[#VACATIONYESNO#]</td>
++          </table>
++        </td>
++        <td bgcolor="#99ccff" class="bluebox"></td>
++      </tr>
++      <tr style="line-height: 0">
++        <td align="left" valign="bottom">[#@bluebottomleft.png, width="11"
++          height="11" alt="" border="0"@@#]</td>
++        <td bgcolor="#99ccff" class="bluebox" valign="middle"></td>
++        <td align="right" valign="bottom">[#@bluebottomright.png, width="11"
++          height="11" alt="" border="0"@@#]</td>
++      </tr>
++    </tbody>
++  </table>
++</form>
++</div>
++
++<p>[#B#]</p>
++</body>
++</html>
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/sqwebmail.c ./sqwebmail/sqwebmail.c
+--- ../sqwebmail-5.1.3.old/sqwebmail/sqwebmail.c	2006-07-24 22:21:46.000000000 -0300
++++ ./sqwebmail/sqwebmail.c	2006-09-12 23:45:22.000000000 -0300
+@@ -21,6 +21,7 @@
+ #include	"acl.h"
+ #include	"addressbook.h"
+ #include	"autoresponse.h"
++#include	"vacation.h"
+ #include	"http11/http11.h"
+ #include	"random128/random128.h"
+ #include	"maildir/maildirmisc.h"
+@@ -1544,6 +1545,11 @@
+ 		{
+ 			ab_addrselect();
+ 		}
++		else if (strcmp(kw, "VACATIONYESNO") == 0)
++		{
++			vacation();
++		}
++
+ 		else if (strcmp(kw, "LISTRIGHTS") == 0)
+ 			listrights();
+ 		else if (strcmp(kw, "GETACL") == 0)
+@@ -1720,6 +1726,9 @@
+ 		/* Script kiddies... */
+ 		formname="nofilter";
+ 
++/*	if (strcmp(formname, "vacation") == 0)
++		vacation();
++*/
+ 	if (strcmp(formname, "filter") == 0 && *cgi("do.submitfilter"))
+ 		mailfilter_submit();
+ 
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/vacation.c ./sqwebmail/vacation.c
+--- ../sqwebmail-5.1.3.old/sqwebmail/vacation.c	1969-12-31 21:00:00.000000000 -0300
++++ ./sqwebmail/vacation.c	2006-09-12 23:45:34.000000000 -0300
+@@ -0,0 +1,160 @@
++/*
++** $Id: vacation.c,v 1.0 2006/08/22 18:06:00 mrsam Exp $
++*/
++
++/*
++** Copyright 2006 David B. Cortarello (Nomius) <nomius@unixlive.org>
++** See COPYING distribution information.
++*/
++
++#include	"config.h"
++#include	"unicode/unicode.h"
++#include	"sqwebmail.h"
++#include	"htmllibdir.h"
++#include	"maildir.h"
++#include	"maildir/maildirmisc.h"
++#include	"maildir/maildirfilter.h"
++#include	"rfc2045/rfc2045.h"
++#include	"rfc2045/rfc2646.h"
++#include	"cgi/cgi.h"
++#include	"pcp.h"
++#include	"numlib/numlib.h"
++#include	<string.h>
++#include	<stdlib.h>
++#include	<stdio.h>
++#include	<signal.h>
++#include	<ctype.h>
++#include	<errno.h>
++#if HAVE_SYS_WAIT_H
++#include	<sys/wait.h>
++#endif
++#ifndef WEXITSTATUS
++#define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
++#endif
++#ifndef WIFEXITED
++#define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
++#endif
++
++void save_vacation(const char *body, const char *from){
++	FILE *fp=NULL, *qmailf=NULL;
++	char *p;
++	int i;
++	mkdir("../vacation", 0755);
++	fp=fopen("../vacation/message", "w");
++	if (fp){
++		fprintf(fp, "From: %s\n", from);
++		fprintf(fp, "%s\n", "Subject: Respuesta de modo vacaciones\n\n");
++		fprintf(fp, "%s", body);
++	}
++	p=get_current_dir_name();
++	for(i=strlen(p)-1;p[i]!='/';i--) ;
++	p[i]=0;
++	if((qmailf=fopen("../.qmail", "r"))!=NULL){
++		fclose(qmailf);
++		qmailf=fopen("../.qmail", "a");
++		fprintf(qmailf, "| %s %d %d %s/vacation/message %s/vacation\n", "/usr/bin/autorespond", 86400, 3, p, p);
++	}
++	else {
++		qmailf=fopen("../.qmail", "a");
++		fprintf(qmailf, "%s/\n", get_current_dir_name());
++		fprintf(qmailf, "| %s %d %d %s/vacation/message %s/vacation", "/usr/bin/autorespond", 86400, 3, p, p);
++	}
++	fclose(qmailf);
++}
++
++void vacation_yes_no(void){
++	FILE *vacation;
++	int evacation;
++	if((vacation=fopen("../vacation/message", "r"))!=NULL){
++		fclose(vacation);
++		evacation=1;
++	}
++	else {
++		evacation=0;
++	}
++	printf("%s: <input type=\"checkbox\" name=\"isinvac\" id=\"isinvac\" %s DISABLED/>", getarg("VSTATUS"), (evacation==1)?"checked=\"checked\"":"");
++}
++
++void show_message(char *file_vacation){
++	FILE *vacat=NULL;
++	char c;
++	char a[1024];
++	if((vacat=fopen(file_vacation, "r"))!=NULL){
++		fgets(a, 1024, vacat);
++		fgets(a, 1024, vacat);
++		fgets(a, 1024, vacat);
++		while((c=fgetc(vacat))!=EOF)
++			printf("%c", c);
++		fclose(vacat);
++	}
++}
++
++void modify_dotqmail(void){
++	int i=0, wrote=0, j;
++	char qmailadmin_opts[6][1024];
++	FILE *qmailf=fopen("../.qmail", "r");
++	while(!feof(qmailf) && i<6){
++		fgets(qmailadmin_opts[i], 1024, qmailf);
++		i+=1;
++	}
++	i-=2;
++	fclose(qmailf);
++	remove("../.qmail");
++	qmailf=fopen("../.qmail", "a");
++	for(j=0;j<=i;j++){
++		if(qmailadmin_opts[j][0]=='&' || qmailadmin_opts[j][0]=='#'){
++			if(strstr(qmailadmin_opts[j+1], "autorespond")==NULL){
++				fputs(qmailadmin_opts[j], qmailf);
++				fputs(qmailadmin_opts[j+1], qmailf);
++				wrote+=1;
++				j+=1;
++			}
++			else {
++				fputs(qmailadmin_opts[j], qmailf);
++				wrote+=1;
++			}
++		}
++		else {
++			if(strstr(qmailadmin_opts[j], "autorespond")==NULL && qmailadmin_opts[j][0]!='/'){
++				fputs(qmailadmin_opts[j], qmailf);
++				wrote+=1;
++			}
++		}
++	}
++	fclose(qmailf);
++	if(!wrote)
++		remove("../.qmail");
++}
++
++
++void vacation(void){
++	umask(022);
++	if ( *cgi("do.newvacation")){
++		const char *from=cgi("headerfrom");
++		const char *vacation_msg=cgi("text");
++		save_vacation(vacation_msg, from);
++		printf("%s", getarg("VACAPPLIED"));
++		return;
++	}
++
++	if ( *cgi("do.vacationdelete")){
++		remove("../vacation/message");
++		rmdir("../vacation");
++		modify_dotqmail();
++		printf("%s", getarg("VACADELETED"));
++		return;
++	}
++	vacation_yes_no();
++	printf("<br /><br />\n");
++	printf("<input type=\"hidden\" name=\"vacation\" value=\"message\"/>");
++	sqpcp_eventfrom();
++	printf("<br /><br />\n");
++	printf("<textarea style=\"font-family: courier;\" cols=\"75\" rows=\"10\" name=\"text\" wrap=\"soft\">");
++	show_message("../vacation/message");
++	printf("</textarea>\n");
++	printf("<br /><br />\n");
++	printf("<input type=\"submit\" name=\"do.newvacation\" value=\"%s\" />", getarg("SAVE"));
++	printf("&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"do.vacationdelete\" value=\"%s\" />", getarg("DELETE"));
++	return;
++}
++
+diff -Naur ../sqwebmail-5.1.3.old/sqwebmail/vacation.h ./sqwebmail/vacation.h
+--- ../sqwebmail-5.1.3.old/sqwebmail/vacation.h	1969-12-31 21:00:00.000000000 -0300
++++ ./sqwebmail/vacation.h	2006-09-12 23:45:22.000000000 -0300
+@@ -0,0 +1,2 @@
++void vacation_yes_no();
++void vacation();

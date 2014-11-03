@@ -1,0 +1,152 @@
+Submitted By: David B. Cortarello (Nomius) <dcortarello at gmail dot com>
+Date: 11-07-2006
+Initial Package Version: 1.0.0
+Description: The patch was created from the original Thunar package
+This patch provides the following bug solution:
+    * It shows the hard drive partitions in the left shortcut pane.
+
+diff -Naur Thunar-1.0.0.old/thunar/thunar-shortcuts-model.c Thunar-1.0.0/thunar/thunar-shortcuts-model.c
+--- Thunar-1.0.0.old/thunar/thunar-shortcuts-model.c	2009-01-12 18:38:48.000000000 -0200
++++ Thunar-1.0.0/thunar/thunar-shortcuts-model.c	2009-07-11 14:50:04.000000000 -0300
+@@ -271,6 +271,7 @@
+   ThunarVfsPath   *system_path_list[4];
+   ThunarVfsPath   *fhome;
+   ThunarVfsPath   *fpath;
++  ThunarVfsPath   *where;
+   GtkTreePath     *path;
+   ThunarFile      *file;
+   GList           *volumes;
+@@ -379,18 +380,24 @@
+                         G_CALLBACK (thunar_shortcuts_model_volume_changed), model);
+ 
+       /* we list only present, removable devices here */
+-      if (thunar_vfs_volume_is_removable (volume) && thunar_vfs_volume_is_present (volume))
++      if (thunar_vfs_volume_is_present (volume))
+         {
+-          /* generate the shortcut (w/o a file, else we might
+-           * prevent the volume from being unmounted)
+-           */
+-          shortcut = _thunar_slice_new0 (ThunarShortcut);
+-          shortcut->type = THUNAR_SHORTCUT_REMOVABLE_MEDIA;
+-          shortcut->volume = volume;
+-
+-          /* link the shortcut to the list */
+-          thunar_shortcuts_model_add_shortcut (model, shortcut, path);
+-          gtk_tree_path_next (path);
++          where = thunar_vfs_volume_get_mount_point(volume);
++          if (!thunar_vfs_path_is_root(where)) {
++             /* generate the shortcut (w/o a file, else we might
++             * prevent the volume from being unmounted)
++             */
++             shortcut = _thunar_slice_new0 (ThunarShortcut);
++             if (thunar_vfs_volume_is_removable (volume))
++               shortcut->type = THUNAR_SHORTCUT_REMOVABLE_MEDIA;
++             else
++               shortcut->type = THUNAR_SHORTCUT_SYSTEM_DEFINED;
++             shortcut->volume = volume;
++     
++             /* link the shortcut to the list */
++             thunar_shortcuts_model_add_shortcut (model, shortcut, path);
++            gtk_tree_path_next (path);
++          }
+         }
+       else
+         {
+diff -Naur Thunar-1.0.0.old/thunar/thunar-shortcuts-view.c Thunar-1.0.0/thunar/thunar-shortcuts-view.c
+--- Thunar-1.0.0.old/thunar/thunar-shortcuts-view.c	2009-01-12 18:38:48.000000000 -0200
++++ Thunar-1.0.0/thunar/thunar-shortcuts-view.c	2009-07-11 14:48:02.000000000 -0300
+@@ -839,11 +839,13 @@
+   if (G_UNLIKELY (volume != NULL))
+     {
+       /* append the "Mount Volume" menu action */
+-      item = gtk_image_menu_item_new_with_mnemonic (_("_Mount Volume"));
+-      gtk_widget_set_sensitive (item, !thunar_vfs_volume_is_mounted (volume));
+-      g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_shortcuts_view_mount), view);
+-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+-      gtk_widget_show (item);
++      if (thunar_vfs_volume_is_removable(volume)) {
++        item = gtk_image_menu_item_new_with_mnemonic (_("_Mount Volume"));
++        gtk_widget_set_sensitive (item, !thunar_vfs_volume_is_mounted (volume));
++        g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_shortcuts_view_mount), view);
++        gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
++        gtk_widget_show (item);
++      }
+ 
+       /* check if the volume is ejectable */
+       if (thunar_vfs_volume_is_ejectable (volume))
+@@ -857,17 +859,19 @@
+       else
+         {
+           /* append the "Unmount Volume" menu item */
+-          item = gtk_image_menu_item_new_with_mnemonic (_("_Unmount Volume"));
+-          gtk_widget_set_sensitive (item, thunar_vfs_volume_is_mounted (volume));
+-          g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_shortcuts_view_unmount), view);
+-          gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+-          gtk_widget_show (item);
++          if (thunar_vfs_volume_is_removable(volume)) {
++            item = gtk_image_menu_item_new_with_mnemonic (_("_Unmount Volume"));
++            gtk_widget_set_sensitive (item, thunar_vfs_volume_is_mounted (volume));
++            g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_shortcuts_view_unmount), view);
++            gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
++            gtk_widget_show (item);
++          }
+         }
+ 
+       /* append a menu separator */
+-      item = gtk_separator_menu_item_new ();
++/*      item = gtk_separator_menu_item_new ();
+       gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+-      gtk_widget_show (item);
++      gtk_widget_show (item);*/
+     }
+   else if (G_UNLIKELY (file != NULL && thunar_file_is_trashed (file) && thunar_file_is_root (file)))
+     {
+diff -Naur Thunar-1.0.0.old/thunar/thunar-tree-view.c Thunar-1.0.0/thunar/thunar-tree-view.c
+--- Thunar-1.0.0.old/thunar/thunar-tree-view.c	2009-01-12 18:38:48.000000000 -0200
++++ Thunar-1.0.0/thunar/thunar-tree-view.c	2009-07-11 14:48:11.000000000 -0300
+@@ -1086,11 +1086,13 @@
+   if (G_UNLIKELY (volume != NULL))
+     {
+       /* append the "Mount Volume" menu action */
+-      item = gtk_image_menu_item_new_with_mnemonic (_("_Mount Volume"));
+-      gtk_widget_set_sensitive (item, !thunar_vfs_volume_is_mounted (volume));
+-      g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_tree_view_action_mount), view);
+-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+-      gtk_widget_show (item);
++      if (thunar_vfs_volume_is_removable(volume)) {
++        item = gtk_image_menu_item_new_with_mnemonic (_("_Mount Volume"));
++        gtk_widget_set_sensitive (item, !thunar_vfs_volume_is_mounted (volume));
++        g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_tree_view_action_mount), view);
++        gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
++        gtk_widget_show (item);
++      }
+ 
+       /* check if the volume is ejectable */
+       if (thunar_vfs_volume_is_ejectable (volume))
+@@ -1104,17 +1106,19 @@
+       else
+         {
+           /* append the "Unmount Volume" menu item */
+-          item = gtk_image_menu_item_new_with_mnemonic (_("_Unmount Volume"));
+-          gtk_widget_set_sensitive (item, thunar_vfs_volume_is_mounted (volume));
+-          g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_tree_view_action_unmount), view);
+-          gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+-          gtk_widget_show (item);
++          if (thunar_vfs_volume_is_removable(volume)) {
++            item = gtk_image_menu_item_new_with_mnemonic (_("_Unmount Volume"));
++            gtk_widget_set_sensitive (item, thunar_vfs_volume_is_mounted (volume));
++            g_signal_connect_swapped (G_OBJECT (item), "activate", G_CALLBACK (thunar_tree_view_action_unmount), view);
++            gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
++            gtk_widget_show (item);
++          }
+         }
+ 
+       /* append a menu separator */
+-      item = gtk_separator_menu_item_new ();
++/*      item = gtk_separator_menu_item_new ();
+       gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+-      gtk_widget_show (item);
++      gtk_widget_show (item);*/
+     }
+   else if (G_UNLIKELY (file != NULL && thunar_file_is_trashed (file) && thunar_file_is_root (file)))
+     {

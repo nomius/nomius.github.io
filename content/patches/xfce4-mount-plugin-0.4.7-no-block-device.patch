@@ -1,0 +1,23 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 17-12-2006
+Initial Package Version: 0.4.7
+Description: The patch was created from the original xfce4-mount-plugin
+This patch provides the following bug solution:
+ * Do not display the device block since the user is not interested on it but
+   where the data will be displayed
+
+diff -Naur xfce4-mount-plugin-0.4.7.old/panel-plugin/mount-plugin.c xfce4-mount-plugin-0.4.7/panel-plugin/mount-plugin.c
+--- xfce4-mount-plugin-0.4.7.old/panel-plugin/mount-plugin.c	2006-07-02 13:48:35.000000000 -0300
++++ xfce4-mount-plugin-0.4.7/panel-plugin/mount-plugin.c	2006-12-17 22:47:48.000000000 -0300
+@@ -108,10 +108,9 @@
+ 		dd->hbox = gtk_hbox_new (FALSE, 10);
+ 		gtk_container_add (GTK_CONTAINER(dd->menu_item), dd->hbox);
+ 		
+-		dd->label_disk = gtk_label_new (g_strconcat(disk->device, " -> ",
+-		                                disk->mount_point, NULL));
++		dd->label_disk = gtk_label_new (g_strconcat(disk->mount_point, NULL));
+ 		/*change to uniform label size*/
+-		gtk_label_set_width_chars(GTK_LABEL(dd->label_disk),28);
++		gtk_label_set_width_chars(GTK_LABEL(dd->label_disk),10);
+ 		gtk_label_set_justify(GTK_LABEL(dd->label_disk),GTK_JUSTIFY_LEFT);
+ 		gtk_box_pack_start(GTK_BOX(dd->hbox),dd->label_disk,FALSE,TRUE,0);

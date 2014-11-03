@@ -1,0 +1,193 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 13-01-2008
+Initial Package Version: 0.15.0
+Description: The patch was created from the original libmpd package
+This patch provides the following features:
+    * Added support for tag edition to the library, mpd must be compiled with
+      mpd-0.13.0-tag_edit_support.patch.
+Notes:
+    * Function mpd_database_tagedit_check() is used to check the permissions on
+      the server to modify the tags.
+    * Function mpd_database_tagedit() is used to modify the tags.
+	* Usage:
+		mpd_database_tagedit_check(connection, "file")
+		mpd_database_tagedit(connection, "file", "artist", "artist name", ...)
+
+
+diff -Naur libmpd-0.15.0.orig/src/libmpd-database.c libmpd-0.15.0/src/libmpd-database.c
+--- libmpd-0.15.0.orig/src/libmpd-database.c	2007-11-29 10:51:27.000000000 -0300
++++ libmpd-0.15.0/src/libmpd-database.c	2008-01-13 18:22:07.000000000 -0300
+@@ -1048,3 +1048,60 @@
+ 	return MPD_OK;
+ }
+ 
++int mpd_database_tagedit(MpdObj *mi, const char *file, int how_many_params, ...)
++{
++	va_list arguments;
++	va_start(arguments, how_many_params);
++	if(!mpd_check_connected(mi))
++	{
++		debug_printf(DEBUG_WARNING,"not connected\n");
++		return MPD_NOT_CONNECTED;
++	}
++	if(mpd_lock_conn(mi))
++	{
++		debug_printf(DEBUG_ERROR,"lock failed\n");
++		return MPD_LOCK_FAILED;
++	}
++
++	if(file==NULL)
++		return MPD_ACK_ERROR_ARG;
++
++	mpd_sendTagEditCommand(mi->connection, (char *)file, how_many_params, arguments);
++	if(!mpd_finishTagCheckCommand(mi->connection)){
++		mpd_unlock_conn(mi);
++		return MPD_STATUS_FAILED;
++	}
++
++	/* unlock */
++	mpd_unlock_conn(mi);
++	va_end(arguments);
++	return MPD_OK;
++}
++
++int mpd_database_tagedit_check(MpdObj *mi, const char *file)
++{
++	if(!mpd_check_connected(mi))
++	{
++		debug_printf(DEBUG_WARNING,"not connected\n");
++		return MPD_NOT_CONNECTED;
++	}
++
++	if(mpd_lock_conn(mi))
++	{
++		debug_printf(DEBUG_ERROR,"lock failed\n");
++		return MPD_LOCK_FAILED;
++	}
++
++	if(file==NULL)
++		return MPD_ACK_ERROR_ARG;
++
++	mpd_sendTagEditCheckCommand(mi->connection, (char *)file);
++
++	if(!mpd_finishTagCheckCommand(mi->connection)){
++		mpd_unlock_conn(mi);
++		return MPD_STATUS_FAILED;
++	}
++
++	mpd_unlock_conn(mi);
++	return MPD_OK;
++}
+diff -Naur libmpd-0.15.0.orig/src/libmpd-database.h libmpd-0.15.0/src/libmpd-database.h
+--- libmpd-0.15.0.orig/src/libmpd-database.h	2007-11-29 10:51:27.000000000 -0300
++++ libmpd-0.15.0/src/libmpd-database.h	2008-01-13 18:22:20.000000000 -0300
+@@ -323,5 +323,24 @@
+  * Needs mpd 0.13.0
+  */
+ int mpd_database_playlist_move(MpdObj *mi, const char *playlist, int old_pos, int new_pos);
++
++/**
++ * @param mi a #MpdObj
++ * @param file a string contains the filename
++ * @param the tag string format
++ * 
++ * Edit the idtag
++ * Needs mpd 0.13.0
++ */
++int mpd_database_tagedit(MpdObj *mi, const char *file, int how_many_params, ...);
++
++/**
++ * @param mi a #MpdObj 
++ * @param file a string contains the filename
++ * 
++ * Checks if a file is tag editable
++ * Needs mpd 0.13.0
++ */
++int mpd_database_tagedit_check(MpdObj *mi, const char *file);
+ /*@}*/
+ #endif
+diff -Naur libmpd-0.15.0.orig/src/libmpdclient.c libmpd-0.15.0/src/libmpdclient.c
+--- libmpd-0.15.0.orig/src/libmpdclient.c	2007-11-29 10:51:27.000000000 -0300
++++ libmpd-0.15.0/src/libmpdclient.c	2008-01-13 18:28:14.000000000 -0300
+@@ -634,6 +634,19 @@
+ 	}
+ }
+ 
++int mpd_finishTagCheckCommand(mpd_Connection * connection) {
++	int editable=1;
++	while(!connection->doneProcessing) {
++		if(connection->doneListOk) connection->doneListOk = 0;
++		mpd_getNextReturnElement(connection);
++		if(connection->returnElement!=NULL)
++			if(connection->returnElement->name!=NULL && connection->returnElement->value!=NULL)
++				if(!strcmp(connection->returnElement->name, "check") && !strcmp(connection->returnElement->value, "permission denied"))
++					editable=0;
++	}
++	return editable;
++}
++
+ static void mpd_finishListOkCommand(mpd_Connection * connection) {
+ 	while(!connection->doneProcessing && connection->listOks &&
+ 			!connection->doneListOk)
+@@ -1983,3 +1996,34 @@
+ void mpd_sendClearErrorCommand(mpd_Connection * connection) {
+ 	mpd_executeCommand(connection,"clearerror\n");
+ }
++
++void mpd_sendTagEditCommand(mpd_Connection *connection, char *file, int x, va_list arguments)
++{
++	int i;
++	char *str;
++	int len = strlen("tagedit ")+strlen(file)+6;
++	char *string = calloc(len, sizeof(char));
++	sprintf(string, "tagedit \"%s\"", file);
++	for(i=0;i<x;i++){
++		str=va_arg(arguments, char *);
++		if(str!=NULL){
++			str=mpd_sanitizeArg(str);
++			string=realloc(string, strlen(string)+strlen(str)+8);
++			sprintf(string, "%s \"%s\"", string, str);
++			free(str);
++		}
++	}
++	sprintf(string, "%s\n", string);
++	mpd_executeCommand(connection, string);
++	free(string);
++}
++
++void mpd_sendTagEditCheckCommand(mpd_Connection *connection, char *file)
++{
++	int len = strlen("tageditcheck")+6+strlen(file);
++	char *string = malloc(len);
++	snprintf(string, len, "tageditcheck \"%s\"\n", file);
++	mpd_executeCommand(connection, string);
++	free(string);
++}
++
+diff -Naur libmpd-0.15.0.orig/src/libmpdclient.h libmpd-0.15.0/src/libmpdclient.h
+--- libmpd-0.15.0.orig/src/libmpdclient.h	2007-11-29 10:51:27.000000000 -0300
++++ libmpd-0.15.0/src/libmpdclient.h	2008-01-13 14:38:43.000000000 -0300
+@@ -53,6 +53,7 @@
+ #define MPD_ERROR_CONNCLOSED	17 /* connection closed by mpd */
+ #define MPD_ERROR_ACK		18 /* ACK returned! */
+ #define MPD_ERROR_BUFFEROVERRUN	19 /* Buffer was overrun! */
++#define MPD_TAG_PERMISSION_DENIED 20 /* Permission denied to edit tags */
+ 
+ #define MPD_ACK_ERROR_UNK	-1
+ #define MPD_ERROR_AT_UNK	-1
+@@ -685,6 +686,15 @@
+  */
+ void mpd_sendQueueIdCommand(mpd_Connection * connection, int songId);
+ void mpd_sendClearErrorCommand(mpd_Connection * connection);
++
++/*
++ * Tag edition functions
++ *
++ */
++void mpd_sendTagEditCommand(mpd_Connection *connection, char *file, int how_many_tags, va_list arguments);
++void mpd_sendTagEditCheckCommand(mpd_Connection *connection, char *file);
++int mpd_finishTagCheckCommand(mpd_Connection * connection);
++
+ #ifdef __cplusplus
+ }
+ #endif

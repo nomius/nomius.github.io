@@ -1,0 +1,346 @@
+diff -Naur gmpc-0.15.5.0.orig/src/browsers/playlist3-metadata-browser.c gmpc-0.15.5.0/src/browsers/playlist3-metadata-browser.c
+--- gmpc-0.15.5.0.orig/src/browsers/playlist3-metadata-browser.c	2007-11-29 10:52:03.000000000 -0300
++++ gmpc-0.15.5.0/src/browsers/playlist3-metadata-browser.c	2008-02-10 13:05:18.000000000 -0300
+@@ -16,6 +16,7 @@
+ 	{ "internal-drop",GTK_TARGET_SAME_APP,99}
+ };
+ 
++GtkWidget *artist, *title, *album, *genre, *comment, *composer, *perfomer, *track, *date;
+ 
+ extern GladeXML *pl3_xml;
+ void info2_disable_show_current(void);
+@@ -32,6 +33,7 @@
+ static void info2_fill_view(void);
+ static int info2_key_press_event(GtkWidget *mw, GdkEventKey *event, int type);
+ static void as_song_clicked(GtkButton *button, gpointer data);
++static void tag_replace_data(GtkButton *button, gpointer data);
+ static gboolean info2_row_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
+ static void info2_fill_artist_similar_destroy(GtkWidget *widget, gpointer id);
+ static GtkWidget *info2_create_artist_button(mpd_Song *song);
+@@ -321,19 +323,24 @@
+     }
+ }
+ 
+-static void info2_add_table_item(GtkWidget *table,char *name, char *value, int i, int selectable)
++static GtkWidget *info2_add_table_item(GtkWidget *table,char *name, char *value, int i, int selectable)
+ {
+ 	GtkWidget *label;
+ 	label = gtk_label_new("");
+ 	gtk_label_set_markup(GTK_LABEL(label), name);
+ 	gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
+ 	gtk_table_attach(GTK_TABLE(table), label,0,1,i,i+1,GTK_SHRINK|GTK_FILL, GTK_SHRINK|GTK_FILL,0,0);
+-	label = gtk_label_new(value);
+-    if(selectable)
+-        gtk_label_set_selectable(GTK_LABEL(label), TRUE);
+-	gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
++	label = gtk_entry_new_with_max_length(255);
++	gtk_entry_set_text(GTK_ENTRY(label), value ? value : "");
++    if(selectable==1)
++        gtk_widget_set_sensitive(GTK_WIDGET(label), TRUE);
++	else if(selectable==0){
++        gtk_editable_set_editable(GTK_EDITABLE(label), FALSE);
++	}
++	else if(selectable==2)
++		gtk_widget_set_sensitive(GTK_WIDGET(label), FALSE);
+ 	gtk_table_attach(GTK_TABLE(table),label,1,2,i,i+1,GTK_EXPAND|GTK_FILL, GTK_SHRINK|GTK_FILL,0,0);
+-	gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
++	return label;
+ }
+ 
+ /**
+@@ -372,7 +379,7 @@
+ 	 *  Artist 
+ 	 */
+ 	if(song->artist) {
+-		info2_add_table_item(table,_("<b>Artist:</b>"),song->artist,i,FALSE);
++		info2_add_table_item(table,_("<b>Artist:</b>"),song->artist,i,0);
+ 		i++;
+ 	}
+ 	if(mpd_server_check_version(connection, 0,13,0) && song->artist)
+@@ -386,15 +393,15 @@
+ 		if(stats)
+ 		{
+ 			buffer = g_strdup_printf("%i", stats->numberOfSongs);
+-			info2_add_table_item(table,_("<b>Songs:</b>"),buffer,i,FALSE);
++			info2_add_table_item(table,_("<b>Songs:</b>"),buffer,i,2);
+ 			i++;
+ 			q_free(buffer); 
+ 			/**
+ 			 * Playtime
+ 			 */
+ 			buffer = format_time_real(stats->playTime,"");
+-			info2_add_table_item(table,_("<b>Playtime:</b>"),buffer,i,FALSE);
+-			i++;                                                    	
++			info2_add_table_item(table,_("<b>Playtime:</b>"),buffer,i,2);
++			i++;
+ 			q_free(buffer); 
+ 			mpd_database_search_free_stats(stats);
+ 		}
+@@ -411,7 +418,7 @@
+ 	}
+ 	if(string->len >0)
+ 	{
+-		info2_add_table_item(table, _("<b>Genre:</b>"), string->str, i,FALSE);
++		info2_add_table_item(table, _("<b>Genre:</b>"), string->str, i,0);
+ 		i++;
+ 	}
+ 	g_string_free(string, TRUE);
+@@ -429,7 +436,7 @@
+ 	}
+ 	if(string->len >0)
+ 	{
+-		info2_add_table_item(table, ngettext("<b>Date: </b>", "<b>Dates: </b>", items), string->str, i,FALSE);
++		info2_add_table_item(table, ngettext("<b>Date: </b>", "<b>Dates: </b>", items), string->str, i,0);
+ 		i++;
+ 	}
+ 	g_string_free(string, TRUE);
+@@ -493,6 +500,7 @@
+ 	GtkWidget *expander, *gmtv,*table, *table2,*image,*ali,*button, *label,*hbox;
+ 	char *markup = NULL;
+ 	int i = 0;
++	int editable, ret;
+     mpd_Song *cur = mpd_playlist_get_current_song(connection);
+    
+ 	/** 
+@@ -631,39 +639,32 @@
+ 	gtk_container_set_border_width(GTK_CONTAINER(table2), 8);
+ 	gtk_table_set_col_spacings(GTK_TABLE(table2), 6);
+ 	gtk_table_attach(GTK_TABLE(table), table2, 1,2,0,1,GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL,0,0);
+-	if(song->artist) {
+-		info2_add_table_item(table2,_("<b>Artist:</b>"),song->artist,i,TRUE);
+-		i++;
+-	}
+-	if(song->album) {
+-		info2_add_table_item(table2,_("<b>Album:</b>"),song->album,i,TRUE);
+-		i++;
+-	}
+-	if(song->genre) {
+-		info2_add_table_item(table2,_("<b>Genre:</b>"),song->genre,i,TRUE);
+-		i++;
+-	}
+-	if(song->date) {
+-		info2_add_table_item(table2,_("<b>Date:</b>"),song->date,i,TRUE);
+-		i++;
+-	}
+-	if(song->track) {
+-		info2_add_table_item(table2,_("<b>Track:</b>"),song->track,i,TRUE);
+-		i++;
+-	}
+-	if(song->composer) {
+-		info2_add_table_item(table2,_("<b>Composer:</b>"),song->composer,i,TRUE);
+-		i++;
+-	}
+-	if(song->performer) {
+-		info2_add_table_item(table2,_("<b>Performer:</b>"),song->performer,i,TRUE);
+-		i++;
+-	}
+-
++	if((ret=mpd_database_tagedit_check(connection, song->file))!=0)
++		editable = 0;
++	else
++		editable = 1;
++	title = info2_add_table_item(table2,_("<b>Title:</b>"),song->title,i,editable);
++	i++;
++	artist = info2_add_table_item(table2,_("<b>Artist:</b>"),song->artist,i,editable);
++	i++;
++	album = info2_add_table_item(table2,_("<b>Album:</b>"),song->album,i,editable);
++	i++;
++	genre = info2_add_table_item(table2,_("<b>Genre:</b>"),song->genre,i,editable);
++	i++;
++	date = info2_add_table_item(table2,_("<b>Date:</b>"),song->date,i,editable);
++	i++;
++	track = info2_add_table_item(table2,_("<b>Track:</b>"),song->track,i,editable);
++	i++;
++	composer = info2_add_table_item(table2,_("<b>Composer:</b>"),song->composer,i,editable);
++	i++;
++	perfomer = info2_add_table_item(table2,_("<b>Performer:</b>"),song->performer,i, editable);
++	i++;
++	comment = info2_add_table_item(table2,_("<b>Comment:</b>"),song->comment,i, editable);
++	i++;
+ 	if(song->file) {
+ 		/*** Dirname */		
+ 		char *dirname = g_path_get_dirname(song->file);
+-		info2_add_table_item(table2,_("<b>Dirname:</b>"),dirname,i,TRUE);
++		info2_add_table_item(table2,_("<b>Dirname:</b>"),dirname,i,2);
+ 		i++;
+ 		q_free(dirname);
+ 	}
+@@ -673,7 +674,7 @@
+ 		int j = strlen(song->file);
+ 		for(;j>0&&song->file[j] != '.';j--);
+ 		ext= g_strdup(&(song->file)[j+1]);
+-		info2_add_table_item(table2,_("<b>Extension:</b>"),ext,i,TRUE);
++		info2_add_table_item(table2,_("<b>Extension:</b>"),ext,i,2);
+ 		i++;
+ 		q_free(ext);
+ 	}
+@@ -681,11 +682,15 @@
+ 	 * Play Button 
+ 	 */
+ 	hbox = gtk_hbox_new(FALSE,6);
+-	button = gtk_button_new_with_label(_("Replace"));
+-	gtk_button_set_image(GTK_BUTTON(button),gtk_image_new_from_stock(GTK_STOCK_REDO,GTK_ICON_SIZE_BUTTON));
++	button = gtk_button_new_with_label(_("Save tags"));
++	gtk_button_set_image(GTK_BUTTON(button),gtk_image_new_from_stock(GTK_STOCK_SAVE,GTK_ICON_SIZE_BUTTON));
+ 	g_object_set_data_full(G_OBJECT(button), "file",g_strdup(song->file), g_free);
+-	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(as_song_clicked), GINT_TO_POINTER(1));
++	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(tag_replace_data), GINT_TO_POINTER(1));
+ 	gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
++	if(editable)
++		gtk_widget_set_sensitive(GTK_WIDGET(button), TRUE);
++	else
++		gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
+ 	ali = gtk_alignment_new(0,0.5,0,0);
+ 	gtk_container_add(GTK_CONTAINER(ali), button);
+ 	gtk_box_pack_start(GTK_BOX(hbox), ali, FALSE,TRUE,0);
+@@ -766,6 +771,27 @@
+ 	}
+ }
+ 
++static void tag_replace_data(GtkButton *button, gpointer data)
++{
++	int clear = GPOINTER_TO_INT(data);
++	char *file = g_object_get_data(G_OBJECT(button), "file");
++	const gchar *artist_text=NULL, *title_text=NULL, *album_text=NULL, *genre_text=NULL, *comment_text=NULL, *composer_text=NULL, *perfomer_text=NULL, *track_text=NULL, *date_text=NULL;
++	if(file && clear) {
++		artist_text = gtk_entry_get_text (GTK_ENTRY (artist));
++		title_text = gtk_entry_get_text (GTK_ENTRY (title));
++		album_text = gtk_entry_get_text (GTK_ENTRY (album));
++		genre_text = gtk_entry_get_text (GTK_ENTRY (genre));
++		comment_text = gtk_entry_get_text (GTK_ENTRY (comment));
++		composer_text = gtk_entry_get_text (GTK_ENTRY (composer));
++		perfomer_text = gtk_entry_get_text (GTK_ENTRY (perfomer));
++		track_text = gtk_entry_get_text (GTK_ENTRY (track));
++		date_text = gtk_entry_get_text (GTK_ENTRY (date));
++	}
++	if(genre==NULL) printf("genre es NULL\n");
++	if(mpd_database_tagedit(connection, file, 18, "artist", artist_text, "title", title_text, "album", album_text, "genre", genre_text, "composer", composer_text, "perfomer", perfomer_text, "track", track_text, "date", date_text, "comment", comment_text ))
++		playlist3_show_error_message(_("Failed to update idtags"), ERROR_CRITICAL);
++}
++
+ static gboolean info2_row_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+ {
+ 
+@@ -1203,7 +1229,7 @@
+ 		items++;
+ 	}
+ 	if(string->len >0) {
+-		info2_add_table_item(table2, ngettext("<b>Genre: </b>", "<b>Genres: </b>", items), string->str, i,TRUE);
++		info2_add_table_item(table2, ngettext("<b>Genre: </b>", "<b>Genres: </b>", items), string->str, i,0);
+ 		i++;
+ 	}
+ 	g_string_free(string, TRUE);
+@@ -1218,7 +1244,7 @@
+ 		items++;
+ 	}
+ 	if(string->len >0) {
+-		info2_add_table_item(table2, ngettext("<b>Date: </b>", "<b>Dates: </b>", items), string->str, i,TRUE);
++		info2_add_table_item(table2, ngettext("<b>Date: </b>", "<b>Dates: </b>", items), string->str, i,0);
+ 		i++;
+ 	}
+ 	g_string_free(string, TRUE);
+@@ -1234,13 +1260,13 @@
+ 		if(stats)
+ 		{
+ 			buffer = g_strdup_printf("%i", stats->numberOfSongs);
+-			info2_add_table_item(table2,_("<b>Songs:</b>"),buffer,i,TRUE);
++			info2_add_table_item(table2,_("<b>Songs:</b>"),buffer,i,2);
+ 			i++;
+ 			q_free(buffer); 
+ 			/* Playtime */
+ 			buffer = format_time_real(stats->playTime,"");
+-			info2_add_table_item(table2,_("<b>Playtime:</b>"),buffer,i,TRUE);
+-			i++;                                                    	
++			info2_add_table_item(table2,_("<b>Playtime:</b>"),buffer,i,2);
++			i++;
+ 			q_free(buffer); 
+ 			mpd_database_search_free_stats(stats);
+ 		}
+@@ -1559,7 +1585,7 @@
+ 		int tracks = 0;
+ 		/** Album name */
+ 		if(song2->album){
+-			info2_add_table_item(table2, _("<b>Album:</b>"), song2->album, i,TRUE);
++			info2_add_table_item(table2, _("<b>Album:</b>"), song2->album, i,0);
+ 			i++;
+ 		}
+ 		/**
+@@ -1575,7 +1601,7 @@
+ 		}
+ 		if(string->len >0)
+ 		{
+-			info2_add_table_item(table2, _("<b>Genre:</b>"), string->str, i,TRUE);
++			info2_add_table_item(table2, _("<b>Genre:</b>"), string->str, i,0);
+ 			i++;
+ 		}
+ 		g_string_free(string, TRUE);
+@@ -1599,24 +1625,24 @@
+ 			time += data2->song->time;
+ 
+ 			if(song->date) {
+-				info2_add_table_item(table2, _("<b>Date:</b>"), song->date, i,TRUE);
++				info2_add_table_item(table2, _("<b>Date:</b>"), song->date, i,0);
+ 				i++;
+ 			}
+ 			if(tracks) {
+ 				char *str = g_strdup_printf("%i", tracks);
+-				info2_add_table_item(table2, _("<b>Tracks:</b>"), str, i,TRUE);
++				info2_add_table_item(table2, _("<b>Tracks:</b>"), str, i,2);
+ 				q_free(str);
+ 				i++;
+ 			}
+ 			if(time) {
+ 				char *buffer = format_time_real(time,"");
+-				info2_add_table_item(table2,_("<b>Playtime:</b>"),buffer,i,TRUE);
++				info2_add_table_item(table2,_("<b>Playtime:</b>"),buffer,i,2);
+ 				i++;                                                    	
+ 				q_free(buffer); 
+ 			}
+ 			if(song->file) {
+ 				char *filename = g_path_get_dirname(song->file);
+-				info2_add_table_item(table2, _("<b>Directory:</b>"), filename, i,TRUE);
++				info2_add_table_item(table2, _("<b>Directory:</b>"), filename, i,2);
+ 				q_free(filename);
+ 				i++;
+ 			}
+@@ -1926,33 +1952,33 @@
+ 	gtk_table_set_col_spacings(GTK_TABLE(table2),6);
+ 	i=0;
+ 	if(song->album) {
+-		info2_add_table_item(table2,_("<b>Album:</b>"), song->album,i,FALSE);
++		info2_add_table_item(table2,_("<b>Album:</b>"), song->album,i,0);
+ 		i++;
+ 	}
+ 	if(song->genre) {
+-		info2_add_table_item(table2, _("<b>Genre:</b>"), song->genre,i,FALSE);
++		info2_add_table_item(table2, _("<b>Genre:</b>"), song->genre,i,0);
+ 		i++;
+ 	}
+ 	if(song->date) {
+-		info2_add_table_item(table2, _("<b>Date:</b>"), song->date,i,FALSE);
++		info2_add_table_item(table2, _("<b>Date:</b>"), song->date,i,0);
+ 		i++;
+         g_object_set_data_full(G_OBJECT(event), "date", g_strdup(song->date),g_free);
+ 	}
+ 	if(tracks) {
+ 		char *str = g_strdup_printf("%i", tracks);
+-		info2_add_table_item(table2, _("<b>Tracks:</b>"), str,i,FALSE);
++		info2_add_table_item(table2, _("<b>Tracks:</b>"), str,i,2);
+ 		q_free(str);
+ 		i++;
+ 	}
+ 	if(time) {
+ 		char *buffer = format_time_real(time,"");
+-		info2_add_table_item(table2,_("<b>Playtime:</b>"),buffer,i,FALSE);
+-		i++;                                                    	
++		info2_add_table_item(table2,_("<b>Playtime:</b>"),buffer,i,2);
++		i++;
+ 		q_free(buffer); 
+ 	}
+ 	if(song->file) {
+ 		gchar *dirname = g_path_get_dirname(song->file);
+-		info2_add_table_item(table2,_("<b>Directory:</b>"),dirname,i,FALSE);
++		info2_add_table_item(table2,_("<b>Directory:</b>"),dirname,i,2);
+ 		i++;
+ 		q_free(dirname);
+ 	}

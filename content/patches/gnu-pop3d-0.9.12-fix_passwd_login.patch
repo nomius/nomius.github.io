@@ -1,0 +1,28 @@
+Submitted By: David B. Cortarello (Nomius) <dcortarello at gmail dot com>
+Date: 06-12-2010
+Initial Package Version: 0.9.12
+Description: The patch was created from the original gnu-pop3d package
+This patch provides the following bug solution:
+ * Fixed: Always getting -ERR Bad login (even when your user and password 
+          is ok) using passwd based auth.
+
+
+Common subdirectories: gnu-pop3d-0.9.12.old/RFC and gnu-pop3d-0.9.12/RFC
+Common subdirectories: gnu-pop3d-0.9.12.old/debian and gnu-pop3d-0.9.12/debian
+diff gnu-pop3d-0.9.12.old/user.c gnu-pop3d-0.9.12/user.c
+197,198c197,200
+< 				syslog (LOG_INFO, "Could not access shadow password for %s", arg);
+< 			  return ERR_BAD_LOGIN;
+---
+> 				{
+> 				  syslog (LOG_INFO, "Could not access shadow password for %s", arg);
+> 				  return ERR_BAD_LOGIN;
+> 				}
+201,202c203,206
+< 				syslog (LOG_INFO, "Incorrect encrypted password for %s", arg);
+< 			  return ERR_BAD_LOGIN;
+---
+> 				{
+> 				  syslog (LOG_INFO, "Incorrect encrypted password for %s", arg);
+> 				  return ERR_BAD_LOGIN;
+> 				}

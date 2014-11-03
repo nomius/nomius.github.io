@@ -1,0 +1,21 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 01-11-2006
+Initial Package Version: 1.06
+Description: The patch was created from the original bc package
+This patch provides the following bug solution:
+    * Wrong prototype declaration of the extern function readline. The prompt 
+      argument, according to readline(3) from GNU, is a const char *, not a 
+      char *.
+
+diff -Naur bc-1.06.old/bc/scan.l bc-1.06/bc/scan.l
+--- bc-1.06.old/bc/scan.l	2000-09-13 15:25:47.000000000 -0300
++++ bc-1.06/bc/scan.l	2006-11-01 19:12:48.000000000 -0300
+@@ -143,7 +143,7 @@
+ 
+ /* Definitions for readline access. */
+ extern FILE *rl_instream;
+-_PROTOTYPE(char *readline, (char *));
++_PROTOTYPE(char *readline, (const char *));
+ 
+ /* rl_input puts upto MAX characters into BUF with the number put in
+    BUF placed in *RESULT.  If the yy input file is the same as

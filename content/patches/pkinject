@@ -1,0 +1,226 @@
+#!/usr/bin/env bash
+
+#
+# Author David Bruno Cortarello <Nomius>. Redistribute under the terms of the 
+# BSD-lite license. Bugs, suggests, nor projects: nomius@users.berlios.de
+#
+# Program: pkinject
+# Version: 1.0
+#
+#
+# Copyright (c) 2005, David B. Cortarello
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without 
+# modification, are permitted provided that the following conditions are met:
+#
+#   * Redistributions of source code must retain the above copyright notice
+#     and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright notice 
+#     and the following disclaimer in the documentation and/or other materials 
+#     provided with the distribution.
+#   * Neither the name of Kwort nor the names of its contributors may be used 
+#     to endorse or promote products derived from this software without 
+#     specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE 
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+# POSSIBILITY OF SUCH DAMAGE.
+#
+
+
+PROGRAM=pkinject
+VERSION=1.0
+
+pksetconf(){
+	echo ${2} > ${1}
+	STATUS=$(cat ${1} | grep "Result: OK:")
+	if [ "${STATUS}" = "" ]; then
+		echo -ne "Error setting your data:\n"
+		cat ${1} | grep Result:
+		exit 1
+	fi
+}
+
+help_pk(){
+	echo "${PROGRAM} v${VERSION} by David B. Cortarello (Nomius) <nomius@unixlive.org>"
+	echo "Use: ${PROGRAM} [OPTIONS]"
+	echo
+	echo "Avaliable options:"
+	echo "-d nanoseconds   delay (Default 0, no dalay)"
+	echo "-f number        number of fragments (Default 1)"
+	echo "-c number        number of packets to send (Default 0, infinite)"
+	echo "-cs number       number of copies of the same packet (Default 0, all the same)"
+	echo "-ps number       packet size (Default 1024)"
+	echo "-dev interface   Network interface"
+	echo "-si ipaddr       set the src IP(s)"
+	echo "-di ipaddr       set the dst IP(s)"
+	echo "-sm macaddr      set the src mac adress"
+	echo "-dm macaddr      set the dstn mac adress"
+	echo "-smi number      set the src number of MACs we'll range through. (Default 1)"
+	echo "-dmi number      set the dst number of MACs we'll range through. (Default 1)"
+	echo "-ud port/port    set the udp dst range port"
+	echo "-us port/port    set the udp src range port"
+	echo "-fl flag         current flags are:"
+	echo "         IPSRC_RND, ip source is random (between min/max)"
+	echo "         IPDST_RND, ip destination is random (between min/man)"
+	echo "         UDPSRC_RND, udp source is random (between min/man)"
+	echo "         UDPDST_RND, udp destination is random (between min/man)"
+	echo "         MACSRC_RND, mac source is random (between min/man)"
+	echo "         MACDST_RND, mac destination is random (between min/man)"
+	exit 1
+}
+
+
+DELAY=0
+FRAGS=1
+COUNT=0
+COPIES=0
+SIZE=1024
+SRC_MAC_INC=1
+DST_MAC_INC=1
+
+i=1
+if [ ! ${#@} -gt 0 ]; then
+	help_pk
+fi
+if [ $(id -u) -ne 0 ]; then
+	echo "You need root to run me"
+	exit 1
+fi
+
+while [ ! -z ${!i} ]; do
+	case ${!i} in
+		"-d")
+			i=$((${i}+1))
+			DELAY=${!i}
+			i=$((${i}+1))
+			;;
+		"-f")
+			i=$((${i}+1))
+			FRAGS=${!i}
+			i=$((${i}+1))
+			;;
+		"-c")
+			i=$((${i}+1))
+			COUNT=${!i}
+			i=$((${i}+1))
+			;;
+		"-cs")
+			i=$((${i}+1))
+			COPIES=${!i}
+			i=$((${i}+1))
+			;;
+		"-ps")
+			i=$((${i}+1))
+			SIZE=${!i}
+			i=$((${i}+1))
+			;;
+		"-dev")
+			i=$((${i}+1))
+			INTERFACE=${!i}
+			i=$((${i}+1))
+			;;
+		"-si")
+			i=$((${i}+1))
+			SRC_IP=${!i}
+			i=$((${i}+1))
+			;;
+		"-di")
+			i=$((${i}+1))
+			DST_IP=${!i}
+			i=$((${i}+1))
+			;;
+		"-sm")
+			i=$((${i}+1))
+			SRC_MAC=${!i}
+			i=$((${i}+1))
+			;;
+		"-dm")
+			i=$((${i}+1))
+			DST_MAC=${!i}
+			i=$((${i}+1))
+			;;
+		"-smi")
+			i=$((${i}+1))
+			SRC_MAC_INC=${!i}
+			i=$((${i}+1))
+			;;
+		"-dmi")
+			i=$((${i}+1))
+			DST_MAC_INC=${!i}
+			i=$((${i}+1))
+			;;
+		"-ud")
+			i=$((${i}+1))
+			UDP_DST_PORT=${!i}
+			i=$((${i}+1))
+			;;
+		"-us")
+			i=$((${i}+1))
+			UDP_SRC_PORT=${!i}
+			i=$((${i}+1))
+			;;
+		"-fl")	
+			i=$((${i}+1))
+			FLAG=${!i}
+			i=$((${i}+1))
+			;;
+		*)
+			help_pk
+			;;
+	esac
+done
+
+FILE=/proc/net/pktgen/kpktgend_0
+
+pksetconf ${FILE} "rem_device_all"
+pksetconf ${FILE} "add_device ${INTERFACE}"
+pksetconf ${FILE} "max_before_softirq 10000"
+
+FILE=/proc/net/pktgen/${INTERFACE}
+
+pksetconf ${FILE} "delay ${DELAY}"
+pksetconf ${FILE} "frags ${FRAGS}"
+pksetconf ${FILE} "count ${COUNT}"
+pksetconf ${FILE} "clone_skb ${COPIES}"
+pksetconf ${FILE} "pkt_size ${SIZE}"
+IFS="." ; ARR_IP=($SRC_IP)
+SRC_MIN=${ARR_IP[0]}.${ARR_IP[1]}.${ARR_IP[2]}.${ARR_IP[3]/\/*}
+pksetconf ${FILE} "src_min ${SRC_MIN}"
+if [ ${ARR_IP[3]/*\/} != "" ]; then
+	SRC_MAX=${ARR_IP[0]}.${ARR_IP[1]}.${ARR_IP[2]}.${ARR_IP[3]/*\/}
+	pksetconf ${FILE} "src_max ${SRC_MAX}"
+fi
+	
+IFS="." ; ARR_IP=($DST_IP)
+DST_MIN=${ARR_IP[0]}.${ARR_IP[1]}.${ARR_IP[2]}.${ARR_IP[3]/\/*}
+pksetconf ${FILE} "dst_min ${DST_MIN}"
+if [ ${ARR_IP[3]/*\/} != "" ]; then
+	DST_MAX=${ARR_IP[0]}.${ARR_IP[1]}.${ARR_IP[2]}.${ARR_IP[3]/*\/}
+	pksetconf ${FILE} "dst_max ${DST_MAX}"
+fi
+pksetconf ${FILE} "src_mac ${SRC_MAC}"
+pksetconf ${FILE} "dst_mac ${DST_MAC}"
+pksetconf ${FILE} "src_mac_count ${SRC_MAC_INC}"
+pksetconf ${FILE} "dst_mac_count ${DST_MAC_INC}"
+pksetconf ${FILE} "udp_src_min ${UDP_SRC_PORT/\/*}"
+pksetconf ${FILE} "udp_src_max ${UDP_SRC_PORT/*\/}"
+pksetconf ${FILE} "udp_dst_min ${UDP_DST_PORT/\/*}"
+pksetconf ${FILE} "udp_dst_max ${UDP_DST_PORT/*\/}"
+
+FILE=/proc/net/pktgen/pgctrl
+
+echo "Packeting, CTRL+C to stop it"
+
+echo start > ${FILE} &
+watch --no-title -n 0 "cat /proc/net/pktgen/${INTERFACE}"
+echo stop > ${FILE}

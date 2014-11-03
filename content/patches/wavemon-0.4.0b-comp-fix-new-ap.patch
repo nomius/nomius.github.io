@@ -1,0 +1,315 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 01-04-2007
+Initial Package Version: 0.4.0b
+Description: The patch was created from the original wavemon package
+This patch provides the following bug fixes and features:
+    * Fixed errors compilation in gcc 3.x due to default label missing
+	* Fixed some warnings due to the lvalue casts deprecated on gcc 3.x
+	* Changed ap list functions, so now it use the new iw api.
+		. This made the code simpler.
+		. Now it works with all cards.
+		. It uses the new wireless tools extensions.
+
+diff -Naur wavemon-0.4.0b.old/Makefile.in wavemon-0.4.0b/Makefile.in
+--- wavemon-0.4.0b.old/Makefile.in	2002-12-21 11:56:09.000000000 -0300
++++ wavemon-0.4.0b/Makefile.in	2007-04-01 20:19:14.000000000 -0300
+@@ -9,7 +9,7 @@
+ 
+ CFLAGS = @CFLAGS@
+ 
+-OBJECTS = conf.o llist.o ui.o error.o timer.o info_scr.o lhist_scr.o aplst_scr.o conf_scr.o help_scr.o about_scr.o iw_if.o net_if.o
++OBJECTS = conf.o llist.o ui.o error.o timer.o info_scr.o lhist_scr.o aplst_scr.o conf_scr.o help_scr.o about_scr.o iw_if.o net_if.o /usr/lib/libiw.a
+ 
+ all: wavemon
+ 
+diff -Naur wavemon-0.4.0b.old/aplst_scr.c wavemon-0.4.0b/aplst_scr.c
+--- wavemon-0.4.0b.old/aplst_scr.c	2002-12-21 09:18:30.000000000 -0300
++++ wavemon-0.4.0b/aplst_scr.c	2007-04-01 20:02:25.000000000 -0300
+@@ -21,6 +21,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <ncurses.h>
++#include <iwlib.h>
+ 
+ #include "conf.h"
+ #include "ui.h"
+@@ -31,55 +32,56 @@
+ 
+ struct wavemon_conf *conf;
+ 
++int count_list(struct wireless_scan_head wi_head){
++	struct wireless_scan *where=wi_head.result;
++	int i=0;
++	while(where!=NULL){
++		where=where->next;
++		i++;
++	}
++	return i;
++}
++
++void free_ap_list(struct wireless_scan_head *wi_head){
++	struct wireless_scan *temp, *where=wi_head->result;
++	while(where!=NULL){
++		temp=where->next;
++		free(where);
++		where=temp;
++	}
++}
++
+ void display_aplist(char *ifname, WINDOW *w_aplst)
+ {
+-	struct iw_aplist axp;
++	struct wireless_scan_head wi_head;
++	struct wireless_scan *where;
+ 	char	s[0x100];
+-	int		ysize, xsize;
+-	int 	i;
++	int		ysize, xsize, i=0, how_many_apps;
+ 	
+ 	getmaxyx(w_aplst, ysize, xsize);
+-	for (i = 1; i < ysize - 1; i++)
+-		mvwhline(w_aplst, i, 1, ' ', xsize - 2);
+ 
+-	if (iw_get_aplist(ifname, &axp)) {
+-		if (axp.num) {
+-			sprintf(s, "%d access point(s) in range.", axp.num);
++	if (iw_get_aplist(ifname, &wi_head)){
++		if ((how_many_apps=count_list(wi_head))!=0){
++			where=wi_head.result;
++			sprintf(s, "%d access point(s) in range. ", how_many_apps);
+ 			mvwaddstr(w_aplst, 1, 1, s);
+-
+-			if (axp.has_quality) {
+-				for (i = 0; i < axp.num; i++) {
+-					wmove(w_aplst, 3 + i * 2, 1);
+-					sprintf(s, "%2d ", i);
+-					waddstr(w_aplst, s);
+-					sprintf(s, "%2hhX:%2hhX:%2hhX:%2hhX:%2hhX:%2hhX",
+-							axp.aplist[i].addr.sa_data[0], axp.aplist[i].addr.sa_data[1], 
+-							axp.aplist[i].addr.sa_data[2], axp.aplist[i].addr.sa_data[3], 
+-							axp.aplist[i].addr.sa_data[4], axp.aplist[i].addr.sa_data[5]);
+-					waddstr_b(w_aplst, s);
+-
+-					wmove(w_aplst, 4 + i * 2, 1);
+-					sprintf(s, "Link quality: %d, signal level: %d, noise level: %d",
+-							axp.aplist[i].quality.qual, axp.aplist[i].quality.level,
+-							axp.aplist[i].quality.noise);
+-					waddstr(w_aplst, s);
+-				}
+-			} else {
+-				for (i = 0; i < axp.num; i++) {
+-					wmove(w_aplst, 3 + i, 1);
+-					sprintf(s, "%2d ", i);
+-					waddstr(w_aplst, s);
+-					sprintf(s, "%2hhX:%2hhX:%2hhX:%2hhX:%2hhX:%2hhX",
+-							axp.aplist[i].addr.sa_data[0], axp.aplist[i].addr.sa_data[1], 
+-							axp.aplist[i].addr.sa_data[2], axp.aplist[i].addr.sa_data[3], 
+-							axp.aplist[i].addr.sa_data[4], axp.aplist[i].addr.sa_data[5]);
+-					waddstr_b(w_aplst, s);
+-				}
+-				waddstr_center(w_aplst, 4 + axp.num, "No link quality information available.");
++			while(where!=NULL){
++				i++;
++				wmove(w_aplst, i+1, 1);
++				sprintf(s, "%d) ", i);
++				waddstr(w_aplst, s);
++				sprintf(s, "%02X:%02X:%02X:%02X:%02X:%02X", (unsigned char)where->ap_addr.sa_data[0], (unsigned char)where->ap_addr.sa_data[1], (unsigned char)where->ap_addr.sa_data[2], (unsigned char)where->ap_addr.sa_data[3], (unsigned char)where->ap_addr.sa_data[4], (unsigned char)where->ap_addr.sa_data[5]);
++				waddstr_b(w_aplst, s);
++				if(wi_head.result->has_stats)
++					sprintf(s, "   Link quality: %3d, signal level: %3d, noise level: %3d", where->stats.qual.qual, where->stats.qual.level, where->stats.qual.noise);
++				else
++					sprintf(s, "   Link quality: N/A, signal level: N/A, noise level: N/A");
++				waddstr(w_aplst, s);
++				where=where->next;
+ 			}
+-
+ 		} else waddstr_center(w_aplst, (LINES >> 1) - 1, "No access points in range.");
+ 	} else waddstr_center(w_aplst, (LINES >> 1) - 1, "Access point list not available.");
++	free_ap_list(&wi_head);
+ }
+ 
+ int scr_aplst(struct wavemon_conf *wmconf) {
+diff -Naur wavemon-0.4.0b.old/conf.c wavemon-0.4.0b/conf.c
+--- wavemon-0.4.0b.old/conf.c	2002-12-21 12:27:14.000000000 -0300
++++ wavemon-0.4.0b/conf.c	2007-04-01 20:09:01.000000000 -0300
+@@ -411,6 +411,8 @@
+ 									break;
+ 					case t_sep: 	/* gcc -Wall sucks */
+ 					case t_func:
++					default:
++						;
+ 				}
+ 			}
+ 		}
+@@ -482,6 +484,8 @@
+ 				case t_listval: sprintf(rv, "%s", (char *)ci->v);
+ 				case t_sep: break;
+ 				case t_func:
++				default:
++					;
+ 			}
+ 			
+ 			add = 1;
+diff -Naur wavemon-0.4.0b.old/conf_scr.c wavemon-0.4.0b/conf_scr.c
+--- wavemon-0.4.0b.old/conf_scr.c	2002-12-21 09:18:30.000000000 -0300
++++ wavemon-0.4.0b/conf_scr.c	2007-04-01 20:12:03.000000000 -0300
+@@ -64,6 +64,8 @@
+ 							break;
+ 			case t_sep:		/* gcc -Wall sucks */
+ 			case t_func:
++			default:
++				;
+ 		}
+ 
+ 		if (!item->unit) {
+@@ -137,6 +139,8 @@
+ 						break;
+ 		case t_sep:		/* gcc -Wall sucks */
+ 		case t_func:
++		default:
++			;
+ 	}
+ }	
+ 
+diff -Naur wavemon-0.4.0b.old/error.c wavemon-0.4.0b/error.c
+--- wavemon-0.4.0b.old/error.c	2002-12-21 09:18:30.000000000 -0300
++++ wavemon-0.4.0b/error.c	2007-04-01 20:12:59.000000000 -0300
+@@ -20,6 +20,7 @@
+ 
+ #include <stdio.h>
+ #include <stdarg.h>
++#include <stdlib.h>
+ #include <ncurses.h>
+ #include "conf.h"
+ 
+diff -Naur wavemon-0.4.0b.old/iw_if.c wavemon-0.4.0b/iw_if.c
+--- wavemon-0.4.0b.old/iw_if.c	2002-12-21 11:23:11.000000000 -0300
++++ wavemon-0.4.0b/iw_if.c	2007-04-01 20:00:13.000000000 -0300
+@@ -30,6 +30,7 @@
+ #include <linux/kd.h>
+ #include <string.h>
+ #include <ncurses.h>
++#include <iwlib.h>
+ 
+ #include "conf.h"
+ #include "error.h"
+@@ -504,44 +505,17 @@
+ }
+ 
+ /*
+- * get a list of access points in range
+- * for now this uses the deprecated SIOCGIWAPLIST facility, next revision
+- * will use SIOCSIWSCAN (if available)
++ * Simple than before. Doesn't it?
+  */
+ 
+-int iw_get_aplist(char *ifname, struct iw_aplist *lst)
+-{
+-    int 	     skfd;
+-    struct iwreq iwr;
+-    char         buf[(sizeof(struct iw_quality) +
+-                      sizeof(struct sockaddr)) * IW_MAX_AP];
+-    int          i, rv = 1;
+-	
+-    if ((skfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) fatal_error("could not open socket");
+-	
+-    memset(lst, 0, sizeof(struct iw_aplist));
+-	
+-    strncpy(iwr.ifr_name, ifname, IFNAMSIZ);
+-    iwr.u.data.pointer = (caddr_t)buf;
+-    iwr.u.data.length = IW_MAX_AP;
+-    iwr.u.data.flags = 0;
+-    if (ioctl(skfd, SIOCGIWAPLIST, &iwr) >= 0) {
+-        lst->num = iwr.u.data.length;
+-
+-/*
+- * copy addresses and quality information (if available) to list array
+- */
+-
+-        for (i = 0; i < lst->num; i++)
+-            memcpy(&lst->aplist[i].addr, buf + i * sizeof(struct sockaddr), sizeof(struct sockaddr));
+-
+-        if ((lst->has_quality = iwr.u.data.flags))
+-            for (i = 0; i < lst->num; i++)
+-                memcpy(&lst->aplist[i].quality,
+-                       buf + lst->num * sizeof(struct sockaddr) + i * sizeof(struct iw_quality),
+-                       sizeof(struct iw_quality));
+-    } else rv = 0;
+-	
+-    close(skfd);
+-    return rv;
++int iw_get_aplist(char *ifname, struct wireless_scan_head *wi_head){
++	struct iw_range range;
++	int skfd;
++	if ((skfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
++		fatal_error("could not open socket");
++	iw_get_range_info(skfd, ifname, &range);
++	if(iw_scan(skfd, ifname, range.we_version_compiled, wi_head)!=-1)
++		return 1;
++	return 0;
+ }
++
+diff -Naur wavemon-0.4.0b.old/iw_if.h wavemon-0.4.0b/iw_if.h
+--- wavemon-0.4.0b.old/iw_if.h	2002-12-21 09:18:30.000000000 -0300
++++ wavemon-0.4.0b/iw_if.h	2007-04-01 20:03:57.000000000 -0300
+@@ -19,7 +19,7 @@
+  */
+ 
+ #include <netdb.h>
+-#include <linux/wireless.h>
++#include <iwlib.h>
+ 
+ #define IW_STACKSIZE 1024
+ 
+@@ -106,7 +106,7 @@
+ void iw_getinf_dyn(char *ifname, struct iw_dyn_info *info);
+ void iw_getinf_range(char *ifname, struct iw_range *range);
+ int iw_getstat(char *ifname, struct iw_stat *stat, struct iw_stat *stack, int slotsize, char random);
+-int iw_get_aplist(char *ifname, struct iw_aplist *lst);
++int iw_get_aplist(char *ifname, struct wireless_scan_head *wi_head);
+ void init_stat_iv(struct wavemon_conf *conf);
+ int iw_getif();
+ float dbm2mw(float in);
+diff -Naur wavemon-0.4.0b.old/llist.c wavemon-0.4.0b/llist.c
+--- wavemon-0.4.0b.old/llist.c	2002-12-21 11:39:33.000000000 -0300
++++ wavemon-0.4.0b/llist.c	2007-04-01 19:58:49.000000000 -0300
+@@ -352,7 +352,7 @@
+ 					*((int *)l->e) = va_arg(*ap, int);
+ 					break;
+ 		case 's':	l->e = (void *)malloc(sizeof(char *));
+-					(char *)l->e = strdup(va_arg(*ap, char *));
++					l->e = strdup(va_arg(*ap, char *));
+ 					break;
+ 		case 'f':	l->e = (void *)malloc(sizeof(double));
+ 					*((double *)l->e) = va_arg(*ap, double);
+diff -Naur wavemon-0.4.0b.old/net_if.c wavemon-0.4.0b/net_if.c
+--- wavemon-0.4.0b.old/net_if.c	2002-12-21 09:18:30.000000000 -0300
++++ wavemon-0.4.0b/net_if.c	2007-04-01 20:13:40.000000000 -0300
+@@ -20,6 +20,7 @@
+ 
+ #include <stdio.h>
+ #include <unistd.h>
++#include <stdlib.h>
+ #include <sys/socket.h>
+ #include <sys/ioctl.h>
+ #include <net/if.h>
+diff -Naur wavemon-0.4.0b.old/wavemon.c wavemon-0.4.0b/wavemon.c
+--- wavemon-0.4.0b.old/wavemon.c	2002-12-21 09:18:30.000000000 -0300
++++ wavemon-0.4.0b/wavemon.c	2007-04-01 20:14:39.000000000 -0300
+@@ -20,6 +20,7 @@
+ 
+ #include <sys/time.h>
+ #include <ncurses.h>
++#include <stdlib.h>
+ 
+ #include "conf.h"
+ #include "ui.h"
+@@ -170,7 +171,7 @@
+ 
+ 	if (conf.dump == 1) {
+ 	  dump_parameters(&conf);
+-	  exit();
++	  exit(1);
+ 	}
+ 
+ 	/* initialize the ncurses interface */

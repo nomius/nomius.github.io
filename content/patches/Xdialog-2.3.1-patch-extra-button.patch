@@ -1,0 +1,309 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 31-10-2006
+Initial Package Version: 2.3.1
+Description: The patch was created from the original Xdialog package
+This patch provides the following features:
+    * Implementation of the --extra-button and --extra-label flags compatible
+      with dialog.
+
+diff -Naur Xdialog-2.3.1.old/src/callbacks.c Xdialog-2.3.1/src/callbacks.c
+--- Xdialog-2.3.1.old/src/callbacks.c	2006-08-18 13:19:14.000000000 -0300
++++ Xdialog-2.3.1/src/callbacks.c	2006-10-31 16:01:49.000000000 -0300
+@@ -88,6 +88,19 @@
+ 	return FALSE;
+ }
+ 
++gboolean exit_extra(gpointer object, gpointer data)
++{
++	if (Xdialog.check) {
++		if (Xdialog.checked)
++			fprintf(Xdialog.output, "checked\n");
++		else
++			fprintf(Xdialog.output, "unchecked\n");
++	}
++	gtk_widget_destroy(Xdialog.window);
++	Xdialog.exit_code = 3;
++	return FALSE;
++}
++
+ gboolean exit_cancel(gpointer object, gpointer data)
+ {
+ 	Xdialog.exit_code = 1;
+diff -Naur Xdialog-2.3.1.old/src/callbacks.h Xdialog-2.3.1/src/callbacks.h
+--- Xdialog-2.3.1.old/src/callbacks.h	2005-11-19 15:49:34.000000000 -0300
++++ Xdialog-2.3.1/src/callbacks.h	2006-10-31 16:51:32.000000000 -0300
+@@ -7,6 +7,8 @@
+ 
+ gboolean exit_ok(gpointer object, gpointer data);
+ 
++gboolean exit_extra(gpointer object, gpointer data);
++
+ gboolean exit_cancel(gpointer object, gpointer data);
+ 
+ gboolean exit_keypress(gpointer object, GdkEventKey *event, gpointer data);
+diff -Naur Xdialog-2.3.1.old/src/extra.xpm Xdialog-2.3.1/src/extra.xpm
+--- Xdialog-2.3.1.old/src/extra.xpm	1969-12-31 21:00:00.000000000 -0300
++++ Xdialog-2.3.1/src/extra.xpm	2006-10-31 22:38:05.000000000 -0300
+@@ -0,0 +1,92 @@
++/* XPM */
++static char * extra_xpm[] = {
++"16 16 73 1",
++" 	c None",
++".	c #959595",
++"+	c #C8C8C8",
++"@	c #777777",
++"#	c #B9B9B9",
++"$	c #F5F5F5",
++"%	c #DADADA",
++"&	c #393838",
++"*	c #717171",
++"=	c #F4F4F4",
++"-	c #FCFCFC",
++";	c #636363",
++">	c #7E7E7E",
++",	c #FBFBFB",
++"'	c #F8F7F7",
++")	c #7F7E7E",
++"!	c #3B3B3B",
++"~	c #676666",
++"{	c #EFEFEF",
++"]	c #BABABA",
++"^	c #7E7D7D",
++"/	c #666565",
++"(	c #B8B8B8",
++"_	c #9B9A9A",
++":	c #3C3C3C",
++"<	c #E6E5E5",
++"[	c #E7E7E7",
++"}	c #DEDDDD",
++"|	c #D5D4D4",
++"1	c #CBCBCB",
++"2	c #C2C1C1",
++"3	c #686868",
++"4	c #9C7A25",
++"5	c #9C9276",
++"6	c #E7E6E6",
++"7	c #C4C4C4",
++"8	c #C8C7C7",
++"9	c #CCCBCB",
++"0	c #C3C2C2",
++"a	c #A68229",
++"b	c #E5C35E",
++"c	c #DAB248",
++"d	c #86754E",
++"e	c #313131",
++"f	c #282727",
++"g	c #535252",
++"h	c #464646",
++"i	c #A8852C",
++"j	c #E6C460",
++"k	c #DFB546",
++"l	c #D49D1C",
++"m	c #674C0E",
++"n	c #AB8830",
++"o	c #E6C562",
++"p	c #DEB241",
++"q	c #D39C1B",
++"r	c #654C10",
++"s	c #AD8B33",
++"t	c #E6C563",
++"u	c #DDB03D",
++"v	c #D39B1B",
++"w	c #624A10",
++"x	c #A48534",
++"y	c #DCAD39",
++"z	c #D29B1A",
++"A	c #604811",
++"B	c #AD944A",
++"C	c #DBAB35",
++"D	c #D29B1B",
++"E	c #5D4712",
++"F	c #423619",
++"G	c #87671D",
++"H	c #574312",
++"                ",
++"         .+@    ",
++"        #$%&    ",
++"       *=-;     ",
++"       >,')  !~ ",
++"        ={]^/(_ ",
++"       :<[}|123 ",
++"      4567890)  ",
++"     abcdefgh   ",
++"    ijklm       ",
++"   nopqr        ",
++"  stuvw         ",
++" xtyzA          ",
++" BCDE           ",
++" FGH            ",
++"                "};
+diff -Naur Xdialog-2.3.1.old/src/interface.c Xdialog-2.3.1/src/interface.c
+--- Xdialog-2.3.1.old/src/interface.c	2006-08-18 13:13:12.000000000 -0300
++++ Xdialog-2.3.1/src/interface.c	2006-10-31 22:26:34.000000000 -0300
+@@ -387,6 +387,8 @@
+ 			stock_id = "gtk-close";
+ 		else if (!strcmp(text, HELP))
+ 			stock_id = "gtk-help";
++		else if (!strcmp(text, EXTRA))
++			stock_id = "gtk-execute";
+ 		else if (!strcmp(text, PRINT))
+ 			stock_id = "gtk-print";
+ 		else if (!strcmp(text, NEXT) || !strcmp(text, ADD))
+@@ -402,6 +404,8 @@
+ 			xpm = no_xpm;
+ 		else if (!strcmp(text, HELP))
+ 			xpm = help_xpm;
++		else if (!strcmp(text, EXTRA))
++			xpm = extra_xpm;
+ 		else if (!strcmp(text, PRINT))
+ 			xpm = print_xpm;
+ 		else if (!strcmp(text, NEXT) || !strcmp(text, ADD))
+@@ -413,6 +417,8 @@
+ 
+ 	if (strlen(Xdialog.ok_label) != 0 && (!strcmp(text, OK) || !strcmp(text, YES)))
+ 		text = Xdialog.ok_label;
++	if (strlen(Xdialog.extra_label) != 0 && (!strcmp(text, EXTRA)))
++		text = Xdialog.extra_label;
+ 	else if (strlen(Xdialog.cancel_label) != 0 && (!strcmp(text, CANCEL) || !strcmp(text, NO)))
+ 		text = Xdialog.cancel_label;
+ 
+@@ -475,6 +481,12 @@
+ 						 GTK_SIGNAL_FUNC(print_text),
+ 						 NULL);
+ 			break;
++		case 5:
++			gtk_signal_connect_after(GTK_OBJECT(button), "clicked",
++						 GTK_SIGNAL_FUNC(exit_extra),
++						 NULL);
++			break;
++
+ 	}
+ 	if (grab_default)
+ 		gtk_widget_grab_default(button);
+@@ -526,8 +538,13 @@
+ 
+ 	if (Xdialog.wizard)
+ 		set_button(PREVIOUS , hbuttonbox, 3, FALSE);
+-	else if (ok)
+-		button_ok = set_button(OK, hbuttonbox, 0, !Xdialog.default_no);
++	else {
++		if(Xdialog.extra_button)
++			button_ok = set_button(EXTRA, hbuttonbox, 5, !Xdialog.default_no);
++
++		if (ok)
++			button_ok = set_button(OK, hbuttonbox, 0, !Xdialog.default_no);
++	}
+ 	if (Xdialog.cancel_button)
+ 		set_button(CANCEL , hbuttonbox, 1, Xdialog.default_no && !Xdialog.wizard);
+ 	if (Xdialog.wizard)
+diff -Naur Xdialog-2.3.1.old/src/interface.h Xdialog-2.3.1/src/interface.h
+--- Xdialog-2.3.1.old/src/interface.h	2006-08-13 15:16:09.000000000 -0300
++++ Xdialog-2.3.1/src/interface.h	2006-10-31 18:13:48.000000000 -0300
+@@ -61,6 +61,7 @@
+ #ifdef FRENCH				/* french translations without NLS */
+ #	define OK "OK"
+ #	define CANCEL "Annuler"
++#   define EXTRA "Supplémentaire"
+ #	define YES "Oui"
+ #	define NO "Non"
+ #	define HELP "Aide"
+@@ -76,6 +77,7 @@
+ #	define HIDE_TYPING "Masquer la saisie"
+ #else
+ #	define OK _("OK")
++#   define EXTRA _("Extra")
+ #	define CANCEL _("Cancel")
+ #	define YES _("Yes")
+ #	define NO _("No")
+@@ -129,6 +131,7 @@
+ 	gchar		check_label[MAX_CHECK_LABEL_LENGTH];	/* Check button label text */
+ 	gchar		ok_label[MAX_BUTTON_LABEL_LENGTH];	/* OK button label text */
+ 	gchar		cancel_label[MAX_BUTTON_LABEL_LENGTH];	/* CANCEL button label text */
++	gchar		extra_label[MAX_BUTTON_LABEL_LENGTH];	/* EXTRA button label text */
+ 	gchar		default_item[MAX_ITEM_LENGTH];		/* Tag of the default item */
+ 	gchar		separator[2];				/* Xdialog output result separator */
+ 	gint		xsize;					/* Xdialog window X size */
+@@ -156,6 +159,7 @@
+ 	gboolean	buttons;				/* FALSE to prevent setting up buttons */
+ 	gboolean	ok_button;				/* FALSE to prevent setting up OK button in tailbox/logbox */
+ 	gboolean	cancel_button;				/* FALSE to prevent setting up Cancel button */
++	gboolean	extra_button;			/* FALSE to prevent setting up EXTRA */
+ 	gboolean	help;					/* TRUE to setup the Help button */
+ 	gboolean	default_no;				/* When TRUE No/Cancel is the default button */
+ 	gboolean	wizard;					/* TRUE to setup Wizard buttons */
+diff -Naur Xdialog-2.3.1.old/src/main.c Xdialog-2.3.1/src/main.c
+--- Xdialog-2.3.1.old/src/main.c	2006-08-13 15:22:58.000000000 -0300
++++ Xdialog-2.3.1/src/main.c	2006-10-31 23:49:01.000000000 -0300
+@@ -87,6 +87,8 @@
+   --check <label> [<status>]\n\
+   --ok-label <label>\n\
+   --cancel-label <label>\n\
++  --extra-button\n\
++  --extra-label <label>\n\
+   --beep\n\
+   --beep-after\n\
+   --begin <Yorg> <Xorg>\n\
+@@ -223,6 +225,7 @@
+ 	T_REVERSE,
+ 	T_KEEPCOLORS,
+ 	T_NOOK,
++	T_EXTRA,
+ 	T_NOCANCEL,
+ 	T_NOBUTTONS,
+ 	T_NOTAGS,
+@@ -234,6 +237,7 @@
+ 	T_DEFAULTNO,
+ 	T_OKLABEL,
+ 	T_CANCELLABEL,
++	T_EXTRALABEL,
+ 	T_ICON,
+ 	T_INTERVAL,
+ 	T_TIMEOUT,
+@@ -276,7 +280,7 @@
+ 
+ 	strcpysafe(Xdialog.title, "Usage for ", MAX_TITLE_LENGTH);
+ 	strcatsafe(Xdialog.title, cmd, MAX_TITLE_LENGTH);
+-	Xdialog.cancel_button = Xdialog.help = Xdialog.icon = Xdialog.check = FALSE;
++	Xdialog.cancel_button = Xdialog.help = Xdialog.icon = Xdialog.check = Xdialog.extra_button = FALSE;
+ 	if (!Xdialog.print) {
+ 		Xdialog.print = TRUE;
+ 		Xdialog.printer[0] = 0;
+@@ -630,6 +634,9 @@
+                 {"version",		0, 0, S_VERSION},
+                 {"print-version",	0, 0, S_PRINTVERSION},
+                 {"clear",		0, 0, S_CLEAR},
++		/* Nomius patch for extra button */
++                {"extra-button",		0, 0, T_EXTRA},
++                {"extra-label",	1, 0, T_EXTRALABEL},
+ 		/* End of options marker */
+ 		{0, 0, 0, 0}
+ 	};
+@@ -681,6 +688,7 @@
+ 	Xdialog.buttons		= TRUE;			/* Display buttons as default */
+ 	Xdialog.ok_button	= TRUE;			/* Display "OK" button as default */
+ 	Xdialog.cancel_button	= TRUE;			/* Display "Cancel" button as default */
++	Xdialog.extra_button	= FALSE;		/* Don't Display "Extra" button as default */
+ 	Xdialog.tags		= TRUE;			/* Display tags before items in lists */
+ #if 0	/* Not needed because of the memset: listed here as a reminder only... */
+ 	Xdialog.passwd		= 0;			/* Don't use passwd input as default */
+@@ -1159,6 +1167,12 @@
+ 			case T_CANCELLABEL:		/* --ok-label option */
+ 				strcpysafe(Xdialog.cancel_label, optarg, MAX_BUTTON_LABEL_LENGTH);
+ 				break;
++			case T_EXTRA:	/* --extra-button option */
++				Xdialog.extra_button = TRUE;
++				break;
++			case T_EXTRALABEL:		/* --extra-label option */
++				strcpysafe(Xdialog.extra_label, optarg, MAX_BUTTON_LABEL_LENGTH);
++				break;
+ 			case T_ICON:		/* --icon option */
+ 				strcpysafe(Xdialog.icon_file, optarg, MAX_FILENAME_LENGTH);
+ 				Xdialog.icon = TRUE;
+@@ -1300,6 +1314,7 @@
+ 			Xdialog.default_item[0]	= 0;
+ 			Xdialog.ok_label[0]	= 0;
+ 			Xdialog.cancel_label[0]	= 0;
++			Xdialog.extra_label[0]	= 0;
+ 			Xdialog.ignore_eof	= FALSE;
+ 			Xdialog.smooth		= FALSE;
+ 		}

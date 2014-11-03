@@ -1,0 +1,153 @@
+Submitted By: David B. Cortarello (Nomius) <nomius at users dot berlios dot de>
+Date: 21-06-2007
+Initial Package Version: 3.4.0
+Description: The patch was created from the original openbox package
+This patch provides the following features:
+    * Add support to define desktop margins.
+
+diff -Naur openbox-3.4.0.clean/data/rc.xml openbox-3.4.0/data/rc.xml
+--- openbox-3.4.0.clean/data/rc.xml	2007-06-03 16:39:16.000000000 -0300
++++ openbox-3.4.0/data/rc.xml	2007-06-21 00:10:09.000000000 -0300
+@@ -34,6 +34,13 @@
+   <!-- 'Smart' or 'UnderMouse' -->
+ </placement>
+ 
++<margins>
++  <top>0</top>
++  <right>0</right>
++  <bottom>0</bottom>
++  <left>0</left>
++</margins>
++
+ <theme>
+   <name>Clearlooks</name>
+   <titleLayout>NLIMC</titleLayout>
+diff -Naur openbox-3.4.0.clean/data/rc.xsd openbox-3.4.0/data/rc.xsd
+--- openbox-3.4.0.clean/data/rc.xsd	2007-06-03 16:39:16.000000000 -0300
++++ openbox-3.4.0/data/rc.xsd	2007-06-21 00:14:02.000000000 -0300
+@@ -54,6 +54,17 @@
+         </xsd:annotation>
+         <xsd:element name="policy" type="ob:placementpolicy"/>
+     </xsd:complexType>
++	<xsd:complexType name="margins">
++	    <xsd:annotation>
++            <xsd:documentation>defines desktop margins</xsd:documentation>
++        </xsd:annotation>
++        <xsd:sequence>
++            <xsd:element minOccurs="0" name="top" type="xsd:integet"/>
++            <xsd:element minOccurs="0" name="right" type="xsd:integer"/>
++            <xsd:element minOccurs="0" name="bottom" type="xsd:integer"/>
++            <xsd:element minOccurs="0" name="left" type="xsd:integer"/>
++        </xsd:sequence>
++    </xsd:complexType>
+     <xsd:complexType name="theme">
+         <xsd:element minOccurs="0" name="name" type="xsd:string"/>
+         <xsd:element minOccurs="0" name="titleLayout" type="xsd:string"/>
+diff -Naur openbox-3.4.0.clean/openbox/client.c openbox-3.4.0/openbox/client.c
+--- openbox-3.4.0.clean/openbox/client.c	2007-06-05 14:04:59.000000000 -0300
++++ openbox-3.4.0/openbox/client.c	2007-06-21 00:19:35.000000000 -0300
+@@ -2816,6 +2816,15 @@
+         i = screen_find_monitor(&desired_area);
+         a = screen_area_monitor(self->desktop, i);
+ 
++        /* We define the margins only with reasonable numbers */
++        if(config_margins_left+config_margins_right <= 400 &&
++            config_margins_top+config_margins_bottom <= 600){
++            a->x += config_margins_left;
++            a->y += config_margins_top;
++            a->height -= (config_margins_bottom+config_margins_top);
++            a->width -= (config_margins_right+config_margins_left);
++        }
++
+         /* set the size and position if maximized */
+         if (self->max_horz) {
+             *x = a->x;
+@@ -2824,6 +2833,16 @@
+         if (self->max_vert) {
+             *y = a->y;
+             *h = a->height - self->frame->size.top - self->frame->size.bottom;
++
++            /* Ok, so now that we have the new x and y values, we have to 
++            restore 'a' to its original */
++            if(config_margins_left+config_margins_right <= 400 &&
++                config_margins_top+config_margins_bottom <= 600){
++                a->x -= config_margins_left;
++                a->y -= config_margins_top;
++                a->height += (config_margins_bottom+config_margins_top);
++                a->width += (config_margins_right+config_margins_left);
++             }
+         }
+ 
+         user = FALSE; /* ignore if the client can't be moved/resized when it
+diff -Naur openbox-3.4.0.clean/openbox/config.c openbox-3.4.0/openbox/config.c
+--- openbox-3.4.0.clean/openbox/config.c	2007-06-03 16:39:16.000000000 -0300
++++ openbox-3.4.0/openbox/config.c	2007-06-21 00:22:42.000000000 -0300
+@@ -37,6 +37,11 @@
+ 
+ ObPlacePolicy config_place_policy;
+ 
++gint config_margins_top;
++gint config_margins_left;
++gint config_margins_bottom;
++gint config_margins_right;
++
+ gchar   *config_theme;
+ gboolean config_theme_keepborder;
+ 
+@@ -485,6 +490,24 @@
+             config_place_policy = OB_PLACE_POLICY_MOUSE;
+ }
+ 
++static void parse_margins(ObParseInst *i, xmlDocPtr doc, xmlNodePtr node,
++                            gpointer d)
++{
++    xmlNodePtr n;
++
++    node = node->children;
++
++    if ((n = parse_find_node("top", node)))
++        config_margins_top = parse_int(doc, n);
++    if ((n = parse_find_node("right", node)))
++        config_margins_right = parse_int(doc, n);
++    if ((n = parse_find_node("bottom", node)))
++        config_margins_bottom = parse_int(doc, n);
++    if ((n = parse_find_node("left", node)))
++        config_margins_left = parse_int(doc, n);
++}
++
++
+ static void parse_theme(ObParseInst *i, xmlDocPtr doc, xmlNodePtr node,
+                         gpointer d)
+ {
+@@ -860,6 +883,13 @@
+ 
+     parse_register(i, "placement", parse_placement, NULL);
+ 
++    config_margins_top = 0;
++    config_margins_left = 0;
++    config_margins_bottom = 0;
++    config_margins_right = 0;
++
++    parse_register(i, "margins", parse_margins, NULL);
++
+     config_theme = NULL;
+ 
+     config_animate_iconify = TRUE;
+diff -Naur openbox-3.4.0.clean/openbox/config.h openbox-3.4.0/openbox/config.h
+--- openbox-3.4.0.clean/openbox/config.h	2007-06-03 16:39:17.000000000 -0300
++++ openbox-3.4.0/openbox/config.h	2007-06-21 00:23:19.000000000 -0300
+@@ -167,6 +167,14 @@
+ extern GSList *config_menu_files;
+ /*! Per app settings */
+ extern GSList *config_per_app_settings;
++/* Top margin*/
++extern gint config_margins_top;
++/* Left margin*/
++extern gint config_margins_left;
++/* Bottom margin*/
++extern gint config_margins_bottom;
++/* Right margin*/
++extern gint config_margins_right;
+ 
+ void config_startup(struct _ObParseInst *i);
+ void config_shutdown();
