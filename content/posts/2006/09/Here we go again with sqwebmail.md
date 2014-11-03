@@ -4,4 +4,5 @@ I modify the this patch to make it compatible with both versions (5.1.2 and 5.1.
 
 Ok, here I leave you the patch:
 
-<http://dcortarello.googlepages.com/sqwebmail-5.1.3-vacations-mode.patch>
+<http://nomius.github.io/content/patches/sqwebmail-5.1.3-vacations-mode.patch>
+

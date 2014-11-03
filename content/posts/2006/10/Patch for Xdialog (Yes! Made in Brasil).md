@@ -20,4 +20,4 @@ will show:
 
 So... Here's the patch, I hope someone finds it useful like me:
 
-<http://dcortarello.googlepages.com/Xdialog-2.3.1-patch-extra-button.patch>
+<http://nomius.github.io/content/patches/Xdialog-2.3.1-patch-extra-button.patch>

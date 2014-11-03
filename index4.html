@@ -44,11 +44,11 @@
 
 <p>The first patch fixes some issues with some file systems which shouldn't be shown, like tmpfs and root partition. I mean, those shouldn't be displayed, since the users should not mount or umount it.</p>
 
-<p><a href="http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch">http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch</a></p>
+<p><a href="http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch">http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch</a></p>
 
 <p>This patch is for the same plugin, but is just for behavior. It just make the plugin to not display the device block since the user is not interested on it but where the data will be displayed.</p>
 
-<p><a href="http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-no-block-device.patch">http://dcortarello.googlepages.com/xfce4-mount-plugin-0.4.7-no-block-device.patch</a></p>
+<p><a href="http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-no-block-device.patch">http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-no-block-device.patch</a></p>
 
 <p>I mailed Jean Baptiste Dulong to change it, but he's not maintaining the plugin anymore, so who knows who should I send the patch. :P</p>
 
@@ -60,7 +60,7 @@ Anyways, I wrote the patch and send it to Phil Nelson (author of GNU bc), and he
 
 <p>I don't know when bc is gonna be updated so I don't know either when the patch will be included. So, for now, you'll have to download it from here and apply it manually.</p>
 
-<p><a href="http://dcortarello.googlepages.com/bc-1.06-readline-const-char.patch">http://dcortarello.googlepages.com/bc-1.06-readline-const-char.patch</a></p>
+<p><a href="http://nomius.github.io/content/patches/bc-1.06-readline-const-char.patch">http://nomius.github.io/content/patches/bc-1.06-readline-const-char.patch</a></p>
 
 <hr width="60%">
 <h3>Today zenity... Tomorrow who knows... Conquer the world maybe" ;)</h3><h6>Posted on: Oct 2006</h6><p>I was trying to make some visual scripts for Kwort Linux. I tried Xdialog but wasn't very nice. So I give a look at zenity (which I already did 2 years ago).
@@ -71,7 +71,7 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 <p>So today I wrote a patch to drop the libgnome-canvas package as dependency. Now Xfce users and everyone else not using gnome can install zenity without installing half gnome. :)</p>
 
 <p>Anyways, I leave you the patch:
-<a href="http://dcortarello.googlepages.com/zenity-no-canvas.patch">http://dcortarello.googlepages.com/zenity-no-canvas.patch</a></p>
+<a href="http://nomius.github.io/content/patches/zenity-no-canvas.patch">http://nomius.github.io/content/patches/zenity-no-canvas.patch</a></p>
 
 <hr width="60%">
 <h3>Patch for Xdialog (Yes! Made in Brasil)</h3><h6>Posted on: Oct 2006</h6><p>Ok, ok, ok... I know I was in vacations, but the day wasn't very pretty, and I felt like taking a coding time. :D</p>
@@ -95,7 +95,7 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 
 <p>So... Here's the patch, I hope someone finds it useful like me:</p>
 
-<p><a href="http://dcortarello.googlepages.com/Xdialog-2.3.1-patch-extra-button.patch">http://dcortarello.googlepages.com/Xdialog-2.3.1-patch-extra-button.patch</a></p>
+<p><a href="http://nomius.github.io/content/patches/Xdialog-2.3.1-patch-extra-button.patch">http://nomius.github.io/content/patches/Xdialog-2.3.1-patch-extra-button.patch</a></p>
 
 <hr width="60%">
 <h3>Something interesting</h3><h6>Posted on: Sep 2006</h6><p>This is kind of "off topic" but I see this interesting:</p>
@@ -122,7 +122,7 @@ I modify the this patch to make it compatible with both versions (5.1.2 and 5.1.
 
 <p>Ok, here I leave you the patch:</p>
 
-<p><a href="http://dcortarello.googlepages.com/sqwebmail-5.1.3-vacations-mode.patch">http://dcortarello.googlepages.com/sqwebmail-5.1.3-vacations-mode.patch</a></p>
+<p><a href="http://nomius.github.io/content/patches/sqwebmail-5.1.3-vacations-mode.patch">http://nomius.github.io/content/patches/sqwebmail-5.1.3-vacations-mode.patch</a></p>
 
 <hr width="60%">
 <h3>An easy to do samba scanner</h3><h6>Posted on: Sep 2006</h6><p>I wrote this simple script to find public samba shared resources. Windows by default leave some "open resources" that normally you can access mounting it or with some samba tools. So, the thing is: How do I find public resources in a network? This is what I did:</p>
@@ -171,7 +171,7 @@ Anyway, vacations mode is only implemented through qmailadmin, which is good, bu
 
 <p>So anyways, let's cut off the story and show you some code:</p>
 
-<p><a href="http://dcortarello.googlepages.com/sqwebmail-5.1.2-vacations-mode.patch">http://dcortarello.googlepages.com/sqwebmail-5.1.2-vacations-mode.patch</a></p>
+<p><a href="http://nomius.github.io/content/patches/sqwebmail-5.1.2-vacations-mode.patch">http://nomius.github.io/content/patches/sqwebmail-5.1.2-vacations-mode.patch</a></p>
 
 <hr width="60%">
 <h3>My keyboard</h3><h6>Posted on: Aug 2006</h6><p>Yesterday I got this new "old keyboard". Believe or not, this treasure was going to the trash, and my little brother save it because I told him I was looking for one. He came to me with it at 1:30 in the morning.

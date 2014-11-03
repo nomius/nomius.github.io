@@ -5,5 +5,5 @@ Anyways, I wrote the patch and send it to Phil Nelson (author of GNU bc), and he
 
 I don't know when bc is gonna be updated so I don't know either when the patch will be included. So, for now, you'll have to download it from here and apply it manually.
 
-<http://dcortarello.googlepages.com/bc-1.06-readline-const-char.patch>
+<http://nomius.github.io/content/patches/bc-1.06-readline-const-char.patch>
 

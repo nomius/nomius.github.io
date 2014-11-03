@@ -5,11 +5,11 @@ So, now, my approach to resolve the problem was completely different as I had to
 Well, I did include the command, I did gave support to tag edition and I even gave a command to check if the file can be edited or not. Finally, I gave support to libmpd and gmpc, so now, gmpc can "full edit" tags. :-)
 
 So here are the patches (descriptions on how to use the commads can be found in mpd's patch, and descriptions on how to use the new functions libraries can be found in libmpd's patch):
-MPD (stable version, by now 0.13.0): [mpd-0.13.0-tag_edit_support.patch](http://dcortarello.googlepages.com/mpd-0.13.0-tag_edit_support.patch)
+MPD (stable version, by now 0.13.0): [mpd-0.13.0-tag_edit_support.patch](http://nomius.github.io/content/patches/mpd-0.13.0-tag_edit_support.patch)
 
-LIBMPD (stable version, by now 0.15.0): [libmpd-0.15.0-tag_edit_support.patch](http://dcortarello.googlepages.com/libmpd-0.15.0-tag_edit_support.patch)
+LIBMPD (stable version, by now 0.15.0): [libmpd-0.15.0-tag_edit_support.patch](http://nomius.github.io/content/patches/libmpd-0.15.0-tag_edit_support.patch)
 
-GMPC (stable version, by now 0.15.0): [gmpc-0.15.5.0-tag_edit_support.patch](http://dcortarello.googlepages.com/gmpc-0.15.5.0-tag_edit_support.patch)
+GMPC (stable version, by now 0.15.0): [gmpc-0.15.5.0-tag_edit_support.patch](http://nomius.github.io/content/patches/gmpc-0.15.5.0-tag_edit_support.patch)
 
 Now, the main problem wasn't the code itself, I mean, I had to spend some time investigating the code to finally hint the right keys. But the problem is now in what mpd developers want to do with this patch. Some developers like it (specially client's developers and users, like Qball Cow and Scott Horowitz), but others disagree. I really understand both sides (I have to admit I
 like more mine's, that's why I developed this patch).

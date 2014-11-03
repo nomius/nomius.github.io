@@ -72,7 +72,7 @@ So IMHO the best solution to this is: Hard Drive partitions managed by hal (Devi
 
 <p><img src="http://1.bp.blogspot.com/_7bn3_3YdSWU/SlohSHN0aCI/AAAAAAAAAPs/uRExbB-PPIk/s400/thunar_hd_partitions.png" alt="Thunar and partitions" /></p>
 
-<p>And finally, the patch: <a href="http://dcortarello.googlepages.com/Thunar-1.0.0-hd-partitions.diff">http://dcortarello.googlepages.com/Thunar-1.0.0-hd-partitions.diff</a></p>
+<p>And finally, the patch: <a href="http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff">http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff</a></p>
 
 <p>Enjoy!</p>
 
@@ -357,10 +357,9 @@ NQqueue needs a lot of testing, so I'm counting with all of you to run tests. Al
 
 <hr width="60%">
 <h3>Hanging up switches and bridges</h3><h6>Posted on: Apr 2008</h6><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
-How this come? Well, very simple, switches and bridges has a small stack (10 bytes per host connected to it) where they save IP and MAC addresses to know where to send a package once the sender and the receiver are known. So, once the first package is sent, a new entry in the stack was made. So now you know the "theory" I'll leave you to think how could this help you to hang it
-(Let me give you a hint: OVERFLOW).</p>
+How this come? Well, very simple, switches and bridges has a small stack (10 bytes per host connected to it) where they save IP and MAC addresses to know where to send a package once the sender and the receiver are known. So, once the first package is sent, a new entry in the stack was made. So now you know the "theory" I'll leave you to think how could this help you to hang it (Let me give you a hint: OVERFLOW).</p>
 
-<p>Anyways, get the code you'll need to produce this overflow from here: <a href="http://dcortarello.googlepages.com/pkinject">http://dcortarello.googlepages.com/pkinject</a></p>
+<p>Anyways, get the code you'll need to produce this overflow from here: <a href="http://nomius.github.io/content/patches/pkinject">http://nomius.github.io/content/patches/pkinject</a></p>
 
 <p>Keep in mind that you'll need the pktgen kernel module to run this.
 See also that I did this 3 years ago with bash, not even C code, so it shows how easy is to generate network packages to produce this effect, which isn't a big deal when it comes to reproduce it, but to create a security policy to avoid it.</p>

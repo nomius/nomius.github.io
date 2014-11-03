@@ -4,4 +4,4 @@ Anyway, vacations mode is only implemented through qmailadmin, which is good, bu
 
 So anyways, let's cut off the story and show you some code:
 
-<http://dcortarello.googlepages.com/sqwebmail-5.1.2-vacations-mode.patch>
+<http://nomius.github.io/content/patches/sqwebmail-5.1.2-vacations-mode.patch>

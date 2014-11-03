@@ -18,4 +18,4 @@ So anyways, the patch is here for everyone who wants to use it. Just has to appl
 </margin>
 ```
 
-So here's the patch:<http://dcortarello.googlepages.com/openbox-3.3.1-margins.patch>
+So here's the patch: <http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch>

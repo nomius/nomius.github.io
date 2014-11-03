@@ -53,8 +53,9 @@ gcc icmp_send.c -o icmp_send
 Get it!
 Anyways, this is a really nice thing to play with and I hope people find it useful. You can get the kernel patch and the ICMP message program from the links below.
 
-[patch\_icmp\_type\_7\_messages.diff](https://sites.google.com/site/dcortarello/patch_icmp_type_7_messages.diff)
+[patch\_icmp\_type\_7\_messages.diff](http://nomius.github.io/content/patches/patch_icmp_type_7_messages.diff)
 
-[icmp\_send.c](https://sites.google.com/site/dcortarello/icmp_send.c)
+[icmp\_send.c](http://nomius.github.io/content/patches/icmp_send.c)
 
 Have fun.
+
