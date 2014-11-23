@@ -40,7 +40,18 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Nice picture</h3><h6>Posted on: Mar 2008</h6><p>Well, not much to say these days...</p>
+                        <br><br><h3>Hanging up switches and bridges</h3><h6>Posted on: Apr 2008</h6><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
+How this come? Well, very simple, switches and bridges has a small stack (10 bytes per host connected to it) where they save IP and MAC addresses to know where to send a package once the sender and the receiver are known. So, once the first package is sent, a new entry in the stack was made. So now you know the "theory" I'll leave you to think how could this help you to hang it (Let me give you a hint: OVERFLOW).</p>
+
+<p>Anyways, get the code you'll need to produce this overflow from here: <a href="http://nomius.github.io/content/patches/pkinject">http://nomius.github.io/content/patches/pkinject</a></p>
+
+<p>Keep in mind that you'll need the pktgen kernel module to run this.
+See also that I did this 3 years ago with bash, not even C code, so it shows how easy is to generate network packages to produce this effect, which isn't a big deal when it comes to reproduce it, but to create a security policy to avoid it.</p>
+
+<p>Have fun.</p>
+
+<hr width="60%">
+<h3>Nice picture</h3><h6>Posted on: Mar 2008</h6><p>Well, not much to say these days...</p>
 
 <p><img src="http://4.bp.blogspot.com/_7bn3_3YdSWU/R8zGzB7Bw2I/AAAAAAAAAIc/8_urwRHbh6A/s400/Einstein.jpg" alt="Einstein" /></p>
 
@@ -260,53 +271,6 @@ wget http://stage6.divx.com/The-IT-Crowd---Spanish-Subtitled/videos/
 <p>I hope someone find it useful.</p>
 
 <p>EDIT: Unfortunately, this doesn't work anymore, since stage6 was closed.</p>
-
-<hr width="60%">
-<h3>Knowing the network speed at a given moment</h3><h6>Posted on: Jul 2007</h6><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
-
-<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
-
-<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;${1}&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Give a network interface&quot;</span>
-   <span class="nb">exit </span>1
-<span class="k">fi</span>
-<span class="nv">DEV</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
-/sbin/ifconfig <span class="k">${</span><span class="nv">DEV</span><span class="k">}</span> &gt;/dev/null 2&gt;&amp;1
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne 0 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Please, do man 8 ifconfig to know what a network interface is&quot;</span>
-   <span class="nb">exit </span>1
-<span class="k">fi</span>
-<span class="nv">LINE_OLD</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
-sleep 1
-<span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
-<span class="k">while</span> <span class="o">[</span> <span class="s2">&quot;${LINE_OLD}&quot;</span> <span class="o">=</span> <span class="s2">&quot;${LINE_NEW}&quot;</span> <span class="o">]</span>; <span class="k">do</span>
-<span class="k">   </span>sleep 0.1
-   <span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
-<span class="k">done</span>
-<span class="nv">OLD_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
-<span class="nv">OLD_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
-<span class="nv">NEW_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
-<span class="nv">NEW_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
-<span class="nv">REST_DOWN</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_DOWN</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_DOWN</span><span class="k">}))</span>
-<span class="nv">REST_UP</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_UP</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_UP</span><span class="k">}))</span>
-<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
-<span class="k">else</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: ${REST_DOWN}b/s&quot;</span>
-<span class="k">fi</span>
-<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
-<span class="k">else</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: ${REST_UP}b/s&quot;</span>
-<span class="k">fi</span>
-</code></pre></div>
-
-<p>You can run it this way for example:</p>
-
-<div class="codehilite"><pre><code><span class="k">while </span><span class="nb">true</span>; <span class="k">do</span> ./netspeed eth0; <span class="k">done</span>
-</code></pre></div>
-
-<p>I don't think this is really reliable, but anyways, see you guys in the next few days to tell you something new :)</p>
 
 <hr width="60%">
 

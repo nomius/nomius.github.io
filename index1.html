@@ -40,7 +40,38 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Kwort 3... The big change</h3><h6>Posted on: Sep 2009</h6><p>Hello everybody. This is just a flashlight of what Kwort 3 will be.
+                        <br><br><h3>Vim bug using ctags</h3><h6>Posted on: Oct 2009</h6><p>Well, lot of people know that I'm a vim fan and that I use it everyday, to me is like the killer app that everyone should know how to use in Unix.
+Even at work, I'm a programmer (doing C on Unix now), and some of my fellows were using Eclipse and after I show them Vim, they was like "woooo, I can use this editor as an IDE and still can use my machine for do something else while programming" (I was like, blame the one who introduced you to Eclipse :-P).</p>
+
+<p>Anyways, I like using tags, allows me to browse the code really fast (for those using Eclipse, I think is like if you press F3 over a function name). But I found this weird behavior using ctags+vim. See the above code:</p>
+
+<div class="codehilite"><pre><code>  <span class="mi">1</span> <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
+  <span class="mi">2</span>
+  <span class="mi">3</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+  <span class="mi">4</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">);</span>
+  <span class="mi">5</span>
+  <span class="mi">6</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+  <span class="mi">7</span> <span class="p">{</span>
+  <span class="mi">8</span>     <span class="n">asd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="sc">&#39;s&#39;</span><span class="p">);</span>
+  <span class="mi">9</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="mi">10</span> <span class="p">}</span>
+ <span class="mi">11</span>
+ <span class="mi">12</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+ <span class="mi">13</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">)</span>
+ <span class="mi">14</span> <span class="p">{</span>
+ <span class="mi">15</span>     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+ <span class="mi">16</span> <span class="p">}</span>
+</code></pre></div>
+
+<p>When I press ctrl+] over asd in line 8, it takes you to the 3rd line instead to the 12th...
+There's a "workaround" to this behavior, using --excmd=number while running ctags put the line numbers in the tags file (without this option ctags puts just an 'f' identifier to tell the editor that it is on that file). But it is just a visualization workaround, because you can't put any new line (or remove) in those files or your tags file will screw the tags file.</p>
+
+<p>Does anyone knows a solution to this issue?</p>
+
+<p>Thanks.</p>
+
+<hr width="60%">
+<h3>Kwort 3... The big change</h3><h6>Posted on: Sep 2009</h6><p>Hello everybody. This is just a flashlight of what Kwort 3 will be.
 Kwort 3 brings a whole new era of Kwort Linux, Kwort public might change now, I'm not focusing anymore in inexperienced users, but on intermediate-advanced users and up.</p>
 
 <p>Why is that?
@@ -354,17 +385,6 @@ Now your question might be: And how can I block more? Well, you can call the plu
 NQqueue needs a lot of testing, so I'm counting with all of you to run tests. Also documentation is needed, and it will take some time to me to write it, so people wanting to write documentation are welcome. Also people writing plugins, I wrote some which are already in my darcs server (a dspam, clamav, blacklist and quarantine) modules.</p>
 
 <p>You can follow NQqueue's development in my darcs server at: <a href="http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi">http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi</a></p>
-
-<hr width="60%">
-<h3>Hanging up switches and bridges</h3><h6>Posted on: Apr 2008</h6><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
-How this come? Well, very simple, switches and bridges has a small stack (10 bytes per host connected to it) where they save IP and MAC addresses to know where to send a package once the sender and the receiver are known. So, once the first package is sent, a new entry in the stack was made. So now you know the "theory" I'll leave you to think how could this help you to hang it (Let me give you a hint: OVERFLOW).</p>
-
-<p>Anyways, get the code you'll need to produce this overflow from here: <a href="http://nomius.github.io/content/patches/pkinject">http://nomius.github.io/content/patches/pkinject</a></p>
-
-<p>Keep in mind that you'll need the pktgen kernel module to run this.
-See also that I did this 3 years ago with bash, not even C code, so it shows how easy is to generate network packages to produce this effect, which isn't a big deal when it comes to reproduce it, but to create a security policy to avoid it.</p>
-
-<p>Have fun.</p>
 
 <hr width="60%">
 

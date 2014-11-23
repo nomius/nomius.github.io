@@ -40,7 +40,54 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Here we go again with margins in openbox</h3><h6>Posted on: Jun 2007</h6><p>I wrote a patch for openbox 3.3.1 at the very beginning of the year which was rejected by the openbox leader (to me the reasons wasn't right, but it is his project :-P).
+                        <br><br><h3>Knowing the network speed at a given moment</h3><h6>Posted on: Jul 2007</h6><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
+
+<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;${1}&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Give a network interface&quot;</span>
+   <span class="nb">exit </span>1
+<span class="k">fi</span>
+<span class="nv">DEV</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
+/sbin/ifconfig <span class="k">${</span><span class="nv">DEV</span><span class="k">}</span> &gt;/dev/null 2&gt;&amp;1
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne 0 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Please, do man 8 ifconfig to know what a network interface is&quot;</span>
+   <span class="nb">exit </span>1
+<span class="k">fi</span>
+<span class="nv">LINE_OLD</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
+sleep 1
+<span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
+<span class="k">while</span> <span class="o">[</span> <span class="s2">&quot;${LINE_OLD}&quot;</span> <span class="o">=</span> <span class="s2">&quot;${LINE_NEW}&quot;</span> <span class="o">]</span>; <span class="k">do</span>
+<span class="k">   </span>sleep 0.1
+   <span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
+<span class="k">done</span>
+<span class="nv">OLD_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+<span class="nv">OLD_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
+<span class="nv">NEW_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+<span class="nv">NEW_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
+<span class="nv">REST_DOWN</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_DOWN</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_DOWN</span><span class="k">}))</span>
+<span class="nv">REST_UP</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_UP</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_UP</span><span class="k">}))</span>
+<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
+<span class="k">else</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: ${REST_DOWN}b/s&quot;</span>
+<span class="k">fi</span>
+<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
+<span class="k">else</span>
+<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: ${REST_UP}b/s&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>You can run it this way for example:</p>
+
+<div class="codehilite"><pre><code><span class="k">while </span><span class="nb">true</span>; <span class="k">do</span> ./netspeed eth0; <span class="k">done</span>
+</code></pre></div>
+
+<p>I don't think this is really reliable, but anyways, see you guys in the next few days to tell you something new :)</p>
+
+<hr width="60%">
+<h3>Here we go again with margins in openbox</h3><h6>Posted on: Jun 2007</h6><p>I wrote a patch for openbox 3.3.1 at the very beginning of the year which was rejected by the openbox leader (to me the reasons wasn't right, but it is his project :-P).
 So a new release of openbox was released some weeks ago and yes, as you guess, that patch isn't compatible with the new version (3.4), so I re-wrote the patch to work.</p>
 
 <p>The configuration is made in the same way as before in the rc.xml:</p>
@@ -182,16 +229,6 @@ So anyways, the patch is here for everyone who wants to use it. Just has to appl
 </code></pre></div>
 
 <p>So here's the patch: <a href="http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch">http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch</a></p>
-
-<hr width="60%">
-<h3>TTYsnoop fixes</h3><h6>Posted on: Dec 2006</h6><p>I started using ttysnoop (it's like a vnc for consoles) at work but there was so troubles while compiling, so this patch fixes errors, warnings and adds things to Makefile to make it more flexible and able to compile the program itself, read the comments in the patch for a more detailed information.
-And please, if someone finds Carl Declerck's email (another than carl[@]miskatonic[.]inbe[.]net), send this patch to him or drop a comment here reporting me his real mail, since I couldn't send him the patch because his email address doesn't exists anymore. </p>
-
-<p>If you want to start using it you'll probably want to apply this patch.</p>
-
-<p>I leave you the link here:</p>
-
-<p><a href="http://nomius.github.io/content/patches/ttysnoop-0.12c-fixes.patch">http://nomius.github.io/content/patches/ttysnoop-0.12c-fixes.patch</a></p>
 
 <hr width="60%">
 
