@@ -40,28 +40,41 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Vim bug using ctags</h3><h6>Posted on: Oct 2009</h6><p>Well, lot of people know that I'm a vim fan and that I use it everyday, to me is like the killer app that everyone should know how to use in Unix.
+                        <br><br><h3>New Kpkg hosting</h3><h6>Posted on: Dec 2009</h6><p>Well, the C version of kpkg is now hosted at: <a href="http://code.google.com/p/kpkg">http://code.google.com/p/kpkg</a>. It would be cool if people start checking it out.</p>
+
+<p>Upgrade support is working partially, as only one package at the time can be upgrated, I will try to finish the whole upgrade support soon.</p>
+
+<p>If any people want to use kpkg in their personal distributions (I don't think ubuntu/suse/etc... users will want to run kpkg on their systems, but who knows), it would be nice to know.</p>
+
+<p>Also patches to add more functionality, fixes or any kind of power, are always welcome.</p>
+
+<p>Oh, and btw, the sqlite databases structures (for mirrors and personal systems) are included in datastructs.h. If you have any questions, please ask here or mail me. :-)</p>
+
+<p>Cheers!</p>
+
+<hr width="60%">
+<h3>Vim bug using ctags</h3><h6>Posted on: Oct 2009</h6><p>Well, lot of people know that I'm a vim fan and that I use it everyday, to me is like the killer app that everyone should know how to use in Unix.
 Even at work, I'm a programmer (doing C on Unix now), and some of my fellows were using Eclipse and after I show them Vim, they was like "woooo, I can use this editor as an IDE and still can use my machine for do something else while programming" (I was like, blame the one who introduced you to Eclipse :-P).</p>
 
 <p>Anyways, I like using tags, allows me to browse the code really fast (for those using Eclipse, I think is like if you press F3 over a function name). But I found this weird behavior using ctags+vim. See the above code:</p>
 
-<div class="codehilite"><pre><code>  <span class="mi">1</span> <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
-  <span class="mi">2</span>
-  <span class="mi">3</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
-  <span class="mi">4</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">);</span>
-  <span class="mi">5</span>
-  <span class="mi">6</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-  <span class="mi">7</span> <span class="p">{</span>
-  <span class="mi">8</span>     <span class="n">asd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="sc">&#39;s&#39;</span><span class="p">);</span>
-  <span class="mi">9</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
- <span class="mi">10</span> <span class="p">}</span>
- <span class="mi">11</span>
- <span class="mi">12</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
- <span class="mi">13</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">)</span>
- <span class="mi">14</span> <span class="p">{</span>
- <span class="mi">15</span>     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
- <span class="mi">16</span> <span class="p">}</span>
-</code></pre></div>
+<pre><code>  1 #include &lt;stdio.h&gt;
+  2
+  3 int asd(int s,
+  4         char a);
+  5
+  6 int main(int argc, char *argv[])
+  7 {
+  8     asd(1, 's');
+  9     return 0;
+ 10 }
+ 11
+ 12 int asd(int s,
+ 13         char a)
+ 14 {
+ 15     return s;
+ 16 }
+</code></pre>
 
 <p>When I press ctrl+] over asd in line 8, it takes you to the 3rd line instead to the 12th...
 There's a "workaround" to this behavior, using --excmd=number while running ctags put the line numbers in the tags file (without this option ctags puts just an 'f' identifier to tell the editor that it is on that file). But it is just a visualization workaround, because you can't put any new line (or remove) in those files or your tags file will screw the tags file.</p>
@@ -290,101 +303,6 @@ This example shown here will block an incoming email from billgates@microsoft.co
 </code></pre>
 
 <p>I hope people start using nqqueue, since it is fast, secure, flexible and very easy to use.</p>
-
-<hr width="60%">
-<h3>NQqueue? What is that?</h3><h6>Posted on: Jun 2008</h6><p>As some people asked me the last few weeks what I've been doing I've decided to take some time to write this and explain what NQqueue (aka nqq) is all about.
-Well, some of you maybe listened (or read) me telling that queues for qmail are bloated. We don't have several choices, there is just plain qmail-queue which is unfeatured, qmail-scanner (aka give me my CPU back) which is the bloatest one, and simscan which is kind of featured, fast, but not extensible at all, both of the last ones are buggy when getting an email with several
-Rcpts (they only analyze one. Which is a big bug).
-So, because of all this, I've been using simscan, I actually extended it from those 2000 lines to 4000 adding features. But it became so big, that it is hard to maintain and to trace errors in it.
-This situation drove me nuts the last year so I decided "Why I don't just write my own qmail queue?". Well, NQqueue is the result of this self asked question.</p>
-
-<p>Let me show you and tell you some of the features of NQq:</p>
-
-<ul>
-<li>Modular - not like simscan with a big file with all the problem.</li>
-<li>Pluggable - this is what NQq is all about, it support the addition of plugins. There are some now in the darcs server.</li>
-<li>Threaded - this is quite a nice feature for mails with several Rcpts, nqqueue triggers a thread for every Rcpt to be analyzed.</li>
-<li>Fast - This is like simscan. But it improves it when analyzing more than one Rcpt because of the threads.</li>
-<li>Secure and reliable - I been working quite a lot on this, since simscan has several bugs, and I didn't want this on NQq.</li>
-</ul>
-
-<p>Plugins: Well, some of you might be asking "Dude, nice, but how do I write a plugin for NQq?". Well, first of all, I have to tell you that there are two types of plugins:
-1st. we have the general plugins. Those plugins are run to an email before to trigger all the threads for every rcpt. Why is this? Well, it would be dumb to call for example a clamav plugin for every user (in every thread). So for example we can write a plugin that should not care about the Rcpts and/or From, like clamav, since it depends on a general database.
-2nd. besides of general plugins, there are also per user plugins. These plugins are run in every thread. This is the example of a spam plugin, since it depends on a special per user database.</p>
-
-<p>So now I can show you a small general plugin to block a Sender:</p>
-
-<div class="codehilite"><pre><code><span class="cm">/* vim: set sw=4 sts=4 : */</span>
-
-<span class="cp">#include &lt;string.h&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;stdlib.h&gt;</span>
-<span class="cp">#include &lt;nqqueue.h&gt;</span>
-
-<span class="cp">#define PLUGIN_VERSION &quot;1.0&quot;</span>
-<span class="cp">#define PLUGIN_NAME &quot;black&quot;</span>
-<span class="cp">#define REJECTED_MESSAGE &quot;Message rejected because of black list&quot;</span>
-
-<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_name</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_NAME</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_version</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_VERSION</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="cm">/* Parameters:</span>
-<span class="cm"> * params = a char pointer with parameters used to call the module (in this case, the email address to block).</span>
-<span class="cm"> * mail = It&#39;s a char pointer to the filename that contains the email.</span>
-<span class="cm"> * From = a char pointer with the From email address. (if it matchs the param, the mail would be blocked)</span>
-<span class="cm"> * Rcpt = an union that contains space for a char pointer (if user pluing) or a pointer to a PUStruct</span>
-<span class="cm"> *        struct (if general plugin).</span>
-<span class="cm"> * general = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
-<span class="cm"> *           already runned by general plugins</span>
-<span class="cm"> * peruser = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
-<span class="cm"> *           already runned by per user plugins</span>
-<span class="cm"> */</span>
-<span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="nf">plugin_init</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">mail</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">From</span><span class="p">,</span> <span class="k">const</span> <span class="k">union</span> <span class="n">Tos</span> <span class="n">Rcpt</span><span class="p">,</span> \
-                              <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">general</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">peruser</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="n">ret</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">ModReturn</span><span class="p">));</span>
-
-    <span class="n">ret</span><span class="o">-&gt;</span><span class="n">NewFile</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">From</span><span class="p">))</span> <span class="p">{</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="n">REJECTED_MESSAGE</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Looks easy don't you think? So, how do we make NQqueue to load our plugin? Simple: in /var/qmail/control/general.cfb put a line like this:</p>
-
-<pre><code>:black=billgates@microsoft.com
-</code></pre>
-
-<p>That will set the sender billgates@microsoft.com as a blocked server. In fact, this plugin acts just like a black list.
-Now your question might be: And how can I block more? Well, you can call the plugin several times, like this:</p>
-
-<pre><code>:black=billgates@microsoft.com;black=steveballmer@microsoft.com
-</code></pre>
-
-<p>Or you can modify the plugin_init function to allow more than one email (like black=billgates@microsoft.com,steveballmer@microsoft.com) and do some simple parsing with strtok.</p>
-
-<p>As you can see it is very easy to write plugins for NQqueue. I know it stills need a lot of documentation, since at it is now, it's very poor in this aspect. The only documentation in NQqueue so far is a configuration scheme in the NQqueue darcs in case you want to know how to configure it right (it's very easy).</p>
-
-<p>So, those are some of the features in NQqueue there are more of course, but those are enough to mention.
-NQqueue needs a lot of testing, so I'm counting with all of you to run tests. Also documentation is needed, and it will take some time to me to write it, so people wanting to write documentation are welcome. Also people writing plugins, I wrote some which are already in my darcs server (a dspam, clamav, blacklist and quarantine) modules.</p>
-
-<p>You can follow NQqueue's development in my darcs server at: <a href="http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi">http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi</a></p>
 
 <hr width="60%">
 

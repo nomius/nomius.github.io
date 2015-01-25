@@ -40,7 +40,102 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Hanging up switches and bridges</h3><h6>Posted on: Apr 2008</h6><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
+                        <br><br><h3>NQqueue? What is that?</h3><h6>Posted on: Jun 2008</h6><p>As some people asked me the last few weeks what I've been doing I've decided to take some time to write this and explain what NQqueue (aka nqq) is all about.
+Well, some of you maybe listened (or read) me telling that queues for qmail are bloated. We don't have several choices, there is just plain qmail-queue which is unfeatured, qmail-scanner (aka give me my CPU back) which is the bloatest one, and simscan which is kind of featured, fast, but not extensible at all, both of the last ones are buggy when getting an email with several
+Rcpts (they only analyze one. Which is a big bug).
+So, because of all this, I've been using simscan, I actually extended it from those 2000 lines to 4000 adding features. But it became so big, that it is hard to maintain and to trace errors in it.
+This situation drove me nuts the last year so I decided "Why I don't just write my own qmail queue?". Well, NQqueue is the result of this self asked question.</p>
+
+<p>Let me show you and tell you some of the features of NQq:</p>
+
+<ul>
+<li>Modular - not like simscan with a big file with all the problem.</li>
+<li>Pluggable - this is what NQq is all about, it support the addition of plugins. There are some now in the darcs server.</li>
+<li>Threaded - this is quite a nice feature for mails with several Rcpts, nqqueue triggers a thread for every Rcpt to be analyzed.</li>
+<li>Fast - This is like simscan. But it improves it when analyzing more than one Rcpt because of the threads.</li>
+<li>Secure and reliable - I been working quite a lot on this, since simscan has several bugs, and I didn't want this on NQq.</li>
+</ul>
+
+<p>Plugins: Well, some of you might be asking "Dude, nice, but how do I write a plugin for NQq?". Well, first of all, I have to tell you that there are two types of plugins:
+1st. we have the general plugins. Those plugins are run to an email before to trigger all the threads for every rcpt. Why is this? Well, it would be dumb to call for example a clamav plugin for every user (in every thread). So for example we can write a plugin that should not care about the Rcpts and/or From, like clamav, since it depends on a general database.
+2nd. besides of general plugins, there are also per user plugins. These plugins are run in every thread. This is the example of a spam plugin, since it depends on a special per user database.</p>
+
+<p>So now I can show you a small general plugin to block a Sender:</p>
+
+<pre><code>/* vim: set sw=4 sts=4 : */
+
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;nqqueue.h&gt;
+
+#define PLUGIN_VERSION "1.0"
+#define PLUGIN_NAME "black"
+#define REJECTED_MESSAGE "Message rejected because of black list"
+
+char *plugin_name()
+{
+    return strdup(PLUGIN_NAME);
+}
+
+char *plugin_version()
+{
+    return strdup(PLUGIN_VERSION);
+}
+
+/* Parameters:
+ * params = a char pointer with parameters used to call the module (in this case, the email address to block).
+ * mail = It's a char pointer to the filename that contains the email.
+ * From = a char pointer with the From email address. (if it matchs the param, the mail would be blocked)
+ * Rcpt = an union that contains space for a char pointer (if user pluing) or a pointer to a PUStruct
+ *        struct (if general plugin).
+ * general = a pointer to a RSStruct struct, which is structure with all the plugins and its return values
+ *           already runned by general plugins
+ * peruser = a pointer to a RSStruct struct, which is structure with all the plugins and its return values
+ *           already runned by per user plugins
+ */
+struct ModReturn *plugin_init(char *params, const char *mail, const char *From, const union Tos Rcpt, \
+                              struct RSStruct *general, struct RSStruct *peruser)
+{
+    struct ModReturn *ret = malloc(sizeof(struct ModReturn));
+
+    ret-&gt;NewFile = NULL;
+    if (!strcmp(params, From)) {
+        ret-&gt;ret = 1;
+        ret-&gt;rejected = 1;
+        ret-&gt;message = strdup(REJECTED_MESSAGE);
+    }
+    else {
+        ret-&gt;ret = 0;
+        ret-&gt;rejected = 0;
+        ret-&gt;message = NULL;
+    }
+    return ret;
+}
+</code></pre>
+
+<p>Looks easy don't you think? So, how do we make NQqueue to load our plugin? Simple: in /var/qmail/control/general.cfb put a line like this:</p>
+
+<pre><code>:black=billgates@microsoft.com
+</code></pre>
+
+<p>That will set the sender billgates@microsoft.com as a blocked server. In fact, this plugin acts just like a black list.
+Now your question might be: And how can I block more? Well, you can call the plugin several times, like this:</p>
+
+<pre><code>:black=billgates@microsoft.com;black=steveballmer@microsoft.com
+</code></pre>
+
+<p>Or you can modify the plugin_init function to allow more than one email (like black=billgates@microsoft.com,steveballmer@microsoft.com) and do some simple parsing with strtok.</p>
+
+<p>As you can see it is very easy to write plugins for NQqueue. I know it stills need a lot of documentation, since at it is now, it's very poor in this aspect. The only documentation in NQqueue so far is a configuration scheme in the NQqueue darcs in case you want to know how to configure it right (it's very easy).</p>
+
+<p>So, those are some of the features in NQqueue there are more of course, but those are enough to mention.
+NQqueue needs a lot of testing, so I'm counting with all of you to run tests. Also documentation is needed, and it will take some time to me to write it, so people wanting to write documentation are welcome. Also people writing plugins, I wrote some which are already in my darcs server (a dspam, clamav, blacklist and quarantine) modules.</p>
+
+<p>You can follow NQqueue's development in my darcs server at: <a href="http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi">http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi</a></p>
+
+<hr width="60%">
+<h3>Hanging up switches and bridges</h3><h6>Posted on: Apr 2008</h6><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
 How this come? Well, very simple, switches and bridges has a small stack (10 bytes per host connected to it) where they save IP and MAC addresses to know where to send a package once the sender and the receiver are known. So, once the first package is sent, a new entry in the stack was made. So now you know the "theory" I'll leave you to think how could this help you to hang it (Let me give you a hint: OVERFLOW).</p>
 
 <p>Anyways, get the code you'll need to produce this overflow from here: <a href="http://nomius.github.io/content/patches/pkinject">http://nomius.github.io/content/patches/pkinject</a></p>
@@ -163,60 +258,60 @@ People say that if this doesn't get in trunk tag editing is off the table. Well 
 
 <p>So, let's take for example the code in the first post in this blog "Checking the network with bash". In this case a wait in the end would fix the problem, but let's just think that we can't modify this script:</p>
 
-<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+<pre><code>#!/usr/bin/env bash
 
-<span class="k">function </span>pinging<span class="o">(){</span>
-    <span class="nv">SUBNET</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
-    <span class="nv">LAST</span><span class="o">=</span><span class="k">${</span><span class="nv">2</span><span class="k">}</span>
-    <span class="nv">PING</span><span class="o">=</span><span class="s2">&quot;$(which ping) -c 1 -W 1&quot;</span>
-    <span class="k">${</span><span class="nv">PING</span><span class="k">}</span> <span class="k">${</span><span class="nv">SUBNET</span><span class="k">}</span>.<span class="k">${</span><span class="nv">LAST</span><span class="k">}</span> &gt; /dev/null 2&gt;&amp;1
-    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">        </span><span class="nb">echo</span> -e <span class="s2">&quot;${SUBNET}.${LAST} is up&quot;</span>
-    <span class="k">fi</span>
-<span class="o">}</span>
+function pinging(){
+    SUBNET=${1}
+    LAST=${2}
+    PING="$(which ping) -c 1 -W 1"
+    ${PING} ${SUBNET}.${LAST} &gt; /dev/null 2&gt;&amp;1
+    if [ $? -eq 0 ]; then
+        echo -e "${SUBNET}.${LAST} is up"
+    fi
+}
 
-<span class="k">if</span> <span class="o">[</span> -z <span class="k">${</span><span class="nv">2</span><span class="k">}</span> <span class="o">]</span>; <span class="k">then</span>
-<span class="k">    for</span><span class="o">((</span><span class="nv">x</span><span class="o">=</span>1;x&lt;255;x++<span class="o">))</span>; <span class="k">do</span>
-        <span class="k">${</span><span class="nv">0</span><span class="k">}</span> <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">x</span><span class="k">}</span> &amp;
-    <span class="k">done</span>
-<span class="k">else</span>
-<span class="k">    </span>pinging <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">2</span><span class="k">}</span>
-<span class="k">fi</span>
-</code></pre></div>
+if [ -z ${2} ]; then
+    for((x=1;x&lt;255;x++)); do
+        ${0} ${1} ${x} &amp;
+    done
+else
+    pinging ${1} ${2}
+fi
+</code></pre>
 
 <p>So, this was the first attempt to control this mess but unfortunately didn't work as expected because this process was in another Process Group ID (avoid comments about controlling the return value of fork and such, since this is an example of something that didn't work):</p>
 
-<div class="codehilite"><pre><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
-    <span class="kt">int</span> <span class="n">status</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">fork</span><span class="p">())</span>
-        <span class="n">waitpid</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">getpgrp</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-    <span class="k">else</span>
-        <span class="n">execlp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>int main(int argc, char *argv[]){
+    int status;
+    if(fork())
+        waitpid(-1*getpgrp(), &amp;status, 0);
+    else
+        execlp(argv[1], argv[1], argv+1, NULL);
+    return 0;
+}
+</code></pre>
 
 <p>So, basically, the idea was that the main C program shown above shouldn't die until all the childrens of the scripts die (that's why I was using using getpgrp(), which didn't work as expected for what I explained above).
 On Linux, running ps axfj, showed me that the small childrens (those one generated by the script) are in the same group, but I couldn't wait for them, as they are not my childrens, but then child of my child process children's.</p>
 
 <p>After dealing a little of time I came up whit this program that control all the childrens, grandchildrens and rest of the "family". The code is very simple to understand and explains on itself:</p>
 
-<div class="codehilite"><pre><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
-    <span class="kt">int</span> <span class="n">status</span><span class="p">;</span>
-    <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">((</span><span class="n">pid</span><span class="o">=</span><span class="n">fork</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-        <span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-        <span class="k">while</span><span class="p">(</span><span class="n">killpg</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">usleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">pid</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
-        <span class="n">setpgid</span><span class="p">(</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">getpid</span><span class="p">());</span>
-        <span class="n">execv</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
+<pre><code>int main(int argc, char *argv[]){
+    int status;
+    pid_t pid;
+    if((pid=fork()) != 0) {
+        sleep(2);
+        waitpid(pid, &amp;status, 0);
+        while(killpg(pid, 0) != -1)
+            usleep(0.1);
+    }
+    else if(pid==0){
+        setpgid(getpid(), getpid());
+        execv(argv[1], argv+1);
+    }
+    return 0;
+}
+</code></pre>
 
 <p>Thanks to Marcel, who actually helped me a lot with some concepts and ideas to find a workaround to this.</p>
 
@@ -251,26 +346,6 @@ He will also take care of the kernel. So this time, getting kernel source to com
 <p>Oh, another interesting things are the fact that kwort is listed in <www.xfce.org/download/distros> as a Xfce distribution and Kwort being used in school (COBAEH - Cuautepec de Hinojosa - Hidalgo - Mexico) with old machines (Pentium MMX 200Mhz with 32MB ram).</p>
 
 <p>Well, that's all for now folks, I will keep bringing Kwort newsflash :)</p>
-
-<hr width="60%">
-<h3>The IT Crowd for download</h3><h6>Posted on: Jul 2007</h6><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
-
-<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
-
-wget http://stage6.divx.com/The-IT-Crowd---Spanish-Subtitled/videos/
-<span class="nv">i</span><span class="o">=</span>1
-<span class="k">for </span>x in <span class="k">$(</span>egrep -i <span class="s2">&quot;The-IT-Crowd---1x0*&quot;</span> index.html | awk -F <span class="s1">&#39;/&#39;</span> <span class="s1">&#39;{ print $4}&#39;</span> | sort -m -u<span class="k">)</span>; <span class="k">do</span>
-<span class="k">   </span>tput setaf 1
-   <span class="nb">echo</span> <span class="s2">&quot;Downloading chapter ${i} (Link: http://divx-226.vo.llnwd.net/stage6vid/${x}.divx)&quot;</span>
-   tput sgr0
-   wget http://divx-226.vo.llnwd.net/stage6vid/<span class="k">${</span><span class="nv">x</span><span class="k">}</span>.divx --output-file<span class="o">=</span><span class="s2">&quot;${i}.avi&quot;</span>
-   <span class="nv">i</span><span class="o">=</span><span class="k">$((</span>i+1<span class="k">))</span>
-<span class="k">done</span>
-</code></pre></div>
-
-<p>I hope someone find it useful.</p>
-
-<p>EDIT: Unfortunately, this doesn't work anymore, since stage6 was closed.</p>
 
 <hr width="60%">
 

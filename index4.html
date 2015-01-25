@@ -40,7 +40,29 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>TTYsnoop fixes</h3><h6>Posted on: Dec 2006</h6><p>I started using ttysnoop (it's like a vnc for consoles) at work but there was so troubles while compiling, so this patch fixes errors, warnings and adds things to Makefile to make it more flexible and able to compile the program itself, read the comments in the patch for a more detailed information.
+                        <br><br><h3>Margins in Openbox</h3><h6>Posted on: Jan 2007</h6><p>Last month I started using openbox to create an easy to use desktop for programmers. Everything was nice, but I wanted to use yabb with adesklets, and then ipager... Everything was nice when I launched those applications/applets, but when I maximize a window, it was over the applet.
+There are some applets where that is ok, like the weather applet, but that wasn't right for a panel (like yabb) or a pager like ipager (this last one should set struts).
+The solution was margins, Xfwm4 has it and other several wm (like metacity and sawfish) has it too. So I wrote a small patch to give to openbox margins.
+I was very happy with it, and gave it to other users to try it (thanks gregf in irc://irc.oftc.net/slackware who tested it for a while, and who stills using it), so I made the submition in openbox's bugzilla. But guess what... The patch was rejected, and the bugzilla entry closed and deleted.
+The answer of the developer was:
+It's up to the pager/panel to set properties called struts. Openbox properly
+respects those and doesn't maximize over them.</p>
+
+<p>Which is great... I mean... Follow standards, that's good... But applets does not set struts, and sometimes the users just wants margins.
+So anyways, the patch is here for everyone who wants to use it. Just has to apply it and set the margins in the configuration file like this:</p>
+
+<pre><code>&lt;margin&gt;
+    &lt;top&gt;px&lt;/top&gt;
+    &lt;bottom&gt;px&lt;/bottom&gt;
+    &lt;left&gt;px&lt;/left&gt;
+    &lt;right&gt;px&lt;/right&gt;
+&lt;/margin&gt;
+</code></pre>
+
+<p>So here's the patch: <a href="http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch">http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch</a></p>
+
+<hr width="60%">
+<h3>TTYsnoop fixes</h3><h6>Posted on: Dec 2006</h6><p>I started using ttysnoop (it's like a vnc for consoles) at work but there was so troubles while compiling, so this patch fixes errors, warnings and adds things to Makefile to make it more flexible and able to compile the program itself, read the comments in the patch for a more detailed information.
 And please, if someone finds Carl Declerck's email (another than carl[@]miskatonic[.]inbe[.]net), send this patch to him or drop a comment here reporting me his real mail, since I couldn't send him the patch because his email address doesn't exists anymore. </p>
 
 <p>If you want to start using it you'll probably want to apply this patch.</p>
@@ -96,8 +118,8 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 
 <p>So, this is what this command:</p>
 
-<div class="codehilite"><pre><code>Xdialog --stdout --extra-button --extra-label <span class="s2">&quot;Extra Button&quot;</span> --inputbox <span class="s2">&quot;Type your input. Hit Extra Button to get 3 as return value&quot;</span> 0 0
-</code></pre></div>
+<pre><code>Xdialog --stdout --extra-button --extra-label "Extra Button" --inputbox "Type your input. Hit Extra Button to get 3 as return value" 0 0
+</code></pre>
 
 <p>will show:</p>
 
@@ -137,42 +159,42 @@ I modify the this patch to make it compatible with both versions (5.1.2 and 5.1.
 <hr width="60%">
 <h3>An easy to do samba scanner</h3><h6>Posted on: Sep 2006</h6><p>I wrote this simple script to find public samba shared resources. Windows by default leave some "open resources" that normally you can access mounting it or with some samba tools. So, the thing is: How do I find public resources in a network? This is what I did:</p>
 
-<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+<pre><code>#!/usr/bin/env bash
 
-<span class="k">function </span>scan<span class="o">(){</span>
-   <span class="nv">SUBNET</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
-   <span class="nv">LAST</span><span class="o">=</span><span class="k">${</span><span class="nv">2</span><span class="k">}</span>
-   <span class="nv">PING</span><span class="o">=</span><span class="s2">&quot;$(which ping) -c 1 -W 1&quot;</span>
-   <span class="k">${</span><span class="nv">PING</span><span class="k">}</span> <span class="k">${</span><span class="nv">SUBNET</span><span class="k">}</span>.<span class="k">${</span><span class="nv">LAST</span><span class="k">}</span> &gt; /dev/null 2&gt;&amp;1
-   <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq 0 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">       </span><span class="nv">SMBRESOURCES</span><span class="o">=</span><span class="k">$(</span>smbclient -N -L <span class="k">${</span><span class="nv">SUBNET</span><span class="k">}</span>.<span class="k">${</span><span class="nv">LAST</span><span class="k">}</span> 2&gt;/dev/null | grep Disk | grep -v <span class="se">\\</span><span class="nv">$)</span>
-       <span class="k">if</span> <span class="o">[</span> ! -z <span class="s2">&quot;${SMBRESOURCES}&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-<span class="k">           </span>tput setaf 2
-           <span class="nb">echo</span> -e <span class="s2">&quot;Public samba resources in ${SUBNET}.${LAST}:&quot;</span>
+function scan(){
+   SUBNET=${1}
+   LAST=${2}
+   PING="$(which ping) -c 1 -W 1"
+   ${PING} ${SUBNET}.${LAST} &gt; /dev/null 2&gt;&amp;1
+   if [ $? -eq 0 ]; then
+       SMBRESOURCES=$(smbclient -N -L ${SUBNET}.${LAST} 2&gt;/dev/null | grep Disk | grep -v \\$)
+       if [ ! -z "${SMBRESOURCES}" ]; then
+           tput setaf 2
+           echo -e "Public samba resources in ${SUBNET}.${LAST}:"
            tput setaf 1
-           <span class="nb">echo</span> <span class="s2">&quot;${SMBRESOURCES}&quot;</span>
-           <span class="nb">echo</span> -e <span class="s2">&quot;------------------------------------------------------\n&quot;</span>
+           echo "${SMBRESOURCES}"
+           echo -e "------------------------------------------------------\n"
            tput sgr0
-       <span class="k">else</span>
-<span class="k">           </span>tput setaf 3
-           <span class="nb">echo</span> <span class="s2">&quot;${SUBNET}.${LAST} is up, but doesn&#39;t have public resources&quot;</span>
-           <span class="nb">echo</span> -e <span class="s2">&quot;------------------------------------------------------\n&quot;</span>
+       else
+           tput setaf 3
+           echo "${SUBNET}.${LAST} is up, but doesn't have public resources"
+           echo -e "------------------------------------------------------\n"
            tput sgr0
-       <span class="k">fi</span>
-<span class="k">   fi</span>
-<span class="o">}</span>
+       fi
+   fi
+}
 
-<span class="k">if</span> <span class="o">[</span> -z <span class="k">${</span><span class="nv">2</span><span class="k">}</span> <span class="o">]</span>; <span class="k">then</span>
-<span class="k">  for</span><span class="o">((</span><span class="nv">x</span><span class="o">=</span>1;x&lt;255;x++<span class="k">)</span><span class="o">)</span>; <span class="k">do</span>
-      <span class="k">${</span><span class="nv">0</span><span class="k">}</span> <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">x</span><span class="k">}</span> &amp;
-  <span class="k">done</span>
-<span class="k">else</span>
-<span class="k">  </span>scan <span class="k">${</span><span class="nv">1</span><span class="k">}</span> <span class="k">${</span><span class="nv">2</span><span class="k">}</span>
-<span class="k">fi</span>
-<span class="nb">wait</span>
+if [ -z ${2} ]; then
+  for((x=1;x&lt;255;x++)); do
+      ${0} ${1} ${x} &amp;
+  done
+else
+  scan ${1} ${2}
+fi
+wait
 
-<span class="c">#EOF</span>
-</code></pre></div>
+#EOF
+</code></pre>
 
 <hr width="60%">
 <h3>Patch to provide features to sqwebmail</h3><h6>Posted on: Aug 2006</h6><p>Recently I've been working with qmail+vpopmail+sqwebmail+courier-imap+...+a lot of things at work.
@@ -184,22 +206,13 @@ Anyway, vacations mode is only implemented through qmailadmin, which is good, bu
 <p><a href="http://nomius.github.io/content/patches/sqwebmail-5.1.2-vacations-mode.patch">http://nomius.github.io/content/patches/sqwebmail-5.1.2-vacations-mode.patch</a></p>
 
 <hr width="60%">
-<h3>My keyboard</h3><h6>Posted on: Aug 2006</h6><p>Yesterday I got this new "old keyboard". Believe or not, this treasure was going to the trash, and my little brother save it because I told him I was looking for one. He came to me with it at 1:30 in the morning.
-I been looking for one of this since 5 years ago. This is a IBM Model M keyboard (latin american) model 1391506. Produced in 1988 is an old school keyboard for people who can appreciate the sound and tact of a real keyboard, this is one of the best (If I don't say the best) keyboard ever made. If IBM knows how to do something is keyboards.
-This is real shit, not for those kiddies with multimedia keyboards, this keyboards if for mans, so kids... Stay out, or I'll punch you with it (real, it weight is 2.5kg :D).</p>
-
-<p><img src="http://plope.com/Members/chrism/bucklingspring_mov.gif" alt="How this keyboards works? See this animation:" /></p>
-
-<p><img src="http://photos1.blogger.com/blogger/7783/3198/1600/DSC01133.0.jpg" alt="My Model-M keyboard" /></p>
-
-<hr width="60%">
 
                     </div>
 
                     <div class="mastfoot">
                         <div class="inner">
                         	<br>
-							<table style="width:100%"><tr><td><a href="index5.html">Previous posts</a></td><td align="right"><a href="index3.html">Next posts</a></td></tr></table><br>
+							<table style="width:100%"><tr><td></td><td align="right"><a href="index3.html">Next posts</a></td></tr></table><br>
                     </div>
                 </div>
             </div>

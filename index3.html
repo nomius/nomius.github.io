@@ -40,49 +40,69 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Knowing the network speed at a given moment</h3><h6>Posted on: Jul 2007</h6><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
+                        <br><br><h3>The IT Crowd for download</h3><h6>Posted on: Jul 2007</h6><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
 
-<div class="codehilite"><pre><code><span class="c">#!/usr/bin/env bash</span>
+<pre><code>#!/usr/bin/env bash
 
-<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;${1}&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Give a network interface&quot;</span>
-   <span class="nb">exit </span>1
-<span class="k">fi</span>
-<span class="nv">DEV</span><span class="o">=</span><span class="k">${</span><span class="nv">1</span><span class="k">}</span>
-/sbin/ifconfig <span class="k">${</span><span class="nv">DEV</span><span class="k">}</span> &gt;/dev/null 2&gt;&amp;1
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne 0 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;Please, do man 8 ifconfig to know what a network interface is&quot;</span>
-   <span class="nb">exit </span>1
-<span class="k">fi</span>
-<span class="nv">LINE_OLD</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
+wget http://stage6.divx.com/The-IT-Crowd---Spanish-Subtitled/videos/
+i=1
+for x in $(egrep -i "The-IT-Crowd---1x0*" index.html | awk -F '/' '{ print $4}' | sort -m -u); do
+   tput setaf 1
+   echo "Downloading chapter ${i} (Link: http://divx-226.vo.llnwd.net/stage6vid/${x}.divx)"
+   tput sgr0
+   wget http://divx-226.vo.llnwd.net/stage6vid/${x}.divx --output-file="${i}.avi"
+   i=$((i+1))
+done
+</code></pre>
+
+<p>I hope someone find it useful.</p>
+
+<p>EDIT: Unfortunately, this doesn't work anymore, since stage6 was closed.</p>
+
+<hr width="60%">
+<h3>Knowing the network speed at a given moment</h3><h6>Posted on: Jul 2007</h6><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
+
+<pre><code>#!/usr/bin/env bash
+
+if [ -z "${1}" ]; then
+   echo "Give a network interface"
+   exit 1
+fi
+DEV=${1}
+/sbin/ifconfig ${DEV} &gt;/dev/null 2&gt;&amp;1
+if [ $? -ne 0 ]; then
+   echo "Please, do man 8 ifconfig to know what a network interface is"
+   exit 1
+fi
+LINE_OLD=$(cat /proc/net/dev | grep ${DEV})
 sleep 1
-<span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
-<span class="k">while</span> <span class="o">[</span> <span class="s2">&quot;${LINE_OLD}&quot;</span> <span class="o">=</span> <span class="s2">&quot;${LINE_NEW}&quot;</span> <span class="o">]</span>; <span class="k">do</span>
-<span class="k">   </span>sleep 0.1
-   <span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev | grep <span class="k">${</span><span class="nv">DEV</span><span class="k">})</span>
-<span class="k">done</span>
-<span class="nv">OLD_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
-<span class="nv">OLD_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
-<span class="nv">NEW_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
-<span class="nv">NEW_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="k">}</span> | awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
-<span class="nv">REST_DOWN</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_DOWN</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_DOWN</span><span class="k">}))</span>
-<span class="nv">REST_UP</span><span class="o">=</span><span class="k">$((${</span><span class="nv">NEW_UP</span><span class="k">}</span> <span class="o">-</span> <span class="k">${</span><span class="nv">OLD_UP</span><span class="k">}))</span>
-<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_DOWN</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
-<span class="k">else</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: ${REST_DOWN}b/s&quot;</span>
-<span class="k">fi</span>
-<span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span> -gt 1024 <span class="o">]</span>; <span class="k">then</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: $(echo &quot;</span><span class="nv">scale</span><span class="o">=</span>2;<span class="k">${</span><span class="nv">REST_UP</span><span class="k">}</span>/1024<span class="s2">&quot; | bc -lq)k/s&quot;</span>
-<span class="k">else</span>
-<span class="k">   </span><span class="nb">echo</span> <span class="s2">&quot;UPLOAD: ${REST_UP}b/s&quot;</span>
-<span class="k">fi</span>
-</code></pre></div>
+LINE_NEW=$(cat /proc/net/dev | grep ${DEV})
+while [ "${LINE_OLD}" = "${LINE_NEW}" ]; do
+   sleep 0.1
+   LINE_NEW=$(cat /proc/net/dev | grep ${DEV})
+done
+OLD_DOWN=$(echo ${LINE_OLD/*:/} | awk -F " " '{ print $1 }')
+OLD_UP=$(echo ${LINE_OLD/*:/} | awk -F " " '{ print $9 }')
+NEW_DOWN=$(echo ${LINE_NEW/*:/} | awk -F " " '{ print $1 }')
+NEW_UP=$(echo ${LINE_NEW/*:/} | awk -F " " '{ print $9 }')
+REST_DOWN=$((${NEW_DOWN} - ${OLD_DOWN}))
+REST_UP=$((${NEW_UP} - ${OLD_UP}))
+if [ ${REST_DOWN} -gt 1024 ]; then
+   echo "DOWNLOAD: $(echo "scale=2;${REST_DOWN}/1024" | bc -lq)k/s"
+else
+   echo "DOWNLOAD: ${REST_DOWN}b/s"
+fi
+if [ ${REST_UP} -gt 1024 ]; then
+   echo "UPLOAD: $(echo "scale=2;${REST_UP}/1024" | bc -lq)k/s"
+else
+   echo "UPLOAD: ${REST_UP}b/s"
+fi
+</code></pre>
 
 <p>You can run it this way for example:</p>
 
-<div class="codehilite"><pre><code><span class="k">while </span><span class="nb">true</span>; <span class="k">do</span> ./netspeed eth0; <span class="k">done</span>
-</code></pre></div>
+<pre><code>while true; do ./netspeed eth0; done
+</code></pre>
 
 <p>I don't think this is really reliable, but anyways, see you guys in the next few days to tell you something new :)</p>
 
@@ -92,13 +112,13 @@ So a new release of openbox was released some weeks ago and yes, as you guess, t
 
 <p>The configuration is made in the same way as before in the rc.xml:</p>
 
-<div class="codehilite"><pre><code><span class="nt">&lt;margin&gt;</span>
-  <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
-  <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
-  <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
-  <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
-<span class="nt">&lt;/margin&gt;</span>
-</code></pre></div>
+<pre><code>&lt;margin&gt;
+  &lt;top&gt;px&lt;/top&gt;
+  &lt;bottom&gt;px&lt;/bottom&gt;
+  &lt;left&gt;px&lt;/left&gt;
+  &lt;right&gt;px&lt;/right&gt;
+&lt;/margin&gt;
+</code></pre>
 
 <p>So, here it is, patch supporting margins in openbox 3.4: <a href="http://nomius.github.io/content/patches/openbox-3.4.0-margins.patch">http://nomius.github.io/content/patches/openbox-3.4.0-margins.patch</a></p>
 
@@ -207,28 +227,6 @@ As I have also fixed some bugs in kpg I released a new version "2.3" which is a 
 So, this is my new vimrc file, there's nothing very weird on it, only a set of templates, some options and options to compile simple projects and full autotools projects.</p>
 
 <p>I hope you enjoy it and of course, take whatever you need from it: <a href="https://github.com/nomius/dotfiles/blob/master/.vimrc">https://github.com/nomius/dotfiles/blob/master/.vimrc</a></p>
-
-<hr width="60%">
-<h3>Margins in Openbox</h3><h6>Posted on: Jan 2007</h6><p>Last month I started using openbox to create an easy to use desktop for programmers. Everything was nice, but I wanted to use yabb with adesklets, and then ipager... Everything was nice when I launched those applications/applets, but when I maximize a window, it was over the applet.
-There are some applets where that is ok, like the weather applet, but that wasn't right for a panel (like yabb) or a pager like ipager (this last one should set struts).
-The solution was margins, Xfwm4 has it and other several wm (like metacity and sawfish) has it too. So I wrote a small patch to give to openbox margins.
-I was very happy with it, and gave it to other users to try it (thanks gregf in irc://irc.oftc.net/slackware who tested it for a while, and who stills using it), so I made the submition in openbox's bugzilla. But guess what... The patch was rejected, and the bugzilla entry closed and deleted.
-The answer of the developer was:
-It's up to the pager/panel to set properties called struts. Openbox properly
-respects those and doesn't maximize over them.</p>
-
-<p>Which is great... I mean... Follow standards, that's good... But applets does not set struts, and sometimes the users just wants margins.
-So anyways, the patch is here for everyone who wants to use it. Just has to apply it and set the margins in the configuration file like this:</p>
-
-<div class="codehilite"><pre><code><span class="nt">&lt;margin&gt;</span>
-    <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
-    <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
-    <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
-    <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
-<span class="nt">&lt;/margin&gt;</span>
-</code></pre></div>
-
-<p>So here's the patch: <a href="http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch">http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch</a></p>
 
 <hr width="60%">
 
