@@ -40,7 +40,79 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>NQqueue? What is that?</h3><h6>Posted on: Jun 2008</h6><p>As some people asked me the last few weeks what I've been doing I've decided to take some time to write this and explain what NQqueue (aka nqq) is all about.
+                        <br><br><h3>NQqueue 0.2</h3><h6>Posted on: Jul 2008</h6><p>Well, I just tagged NQqueue as 0.2. Several changes has been done from 0.1. For those who doesn't know, NQqueue is a threaded queue for qmail with support for plugins. Full details of what nqqueue is can be found here: <a href="http://nomius.blogspot.com/2008/06/nqqueue-what-is-that.html">http://nomius.blogspot.com/2008/06/nqqueue-what-is-that.html</a></p>
+
+<p>Download the latest release version here: <a href="http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.2.tar.gz">http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.2.tar.gz</a></p>
+
+<p>Changelog can be found here: <a href="http://europa.fapyd.unr.edu.ar/darcs/NQqueue/Changelog">http://europa.fapyd.unr.edu.ar/darcs/NQqueue/Changelog</a></p>
+
+<p>If you want to get nightly builds packages. Use this link: <a href="http://europa.fapyd.unr.edu.ar/darcs/NQqueue/NQqueue.tar.gz">http://europa.fapyd.unr.edu.ar/darcs/NQqueue/NQqueue.tar.gz</a></p>
+
+<p>Darcs repository: <a href="http://europa.fapyd.unr.edu.ar/darcs/NQqueue">http://europa.fapyd.unr.edu.ar/darcs/NQqueue</a></p>
+
+<p>NQqueue stills in development, it is stable enough, but there are some things that must be fixed before the next release.</p>
+
+<p>Plugins included:</p>
+
+<ol>
+<li><p>General plugins:</p>
+
+<ul>
+<li><p>black - Parameters:</p>
+
+<ul>
+<li>user@domain - email address to put in the blacklist.</li>
+</ul></li>
+<li><p>clamav - Parameters:</p>
+
+<ul>
+<li>"pass" - will make the email pass even if it contains a virus (used to send it to a quarantine).</li>
+<li>None parameter given will block a containing virus mail.</li>
+</ul></li>
+</ul></li>
+<li><p>User plugins:</p>
+
+<ul>
+<li><p>dspam - Parameters:</p>
+
+<ul>
+<li>"pass" - will make the email pass even if it considered spam (used to send it to a quarantine).</li>
+<li>None parameter given will block a spam considered email.</li>
+</ul></li>
+<li><p>quarantine - Parameters:</p>
+
+<ul>
+<li>"all" - will send to quarantine any email that was considered spam or that contains a virus.</li>
+<li>"dspam" will send to quarantine any email that was considered spam.</li>
+<li>"clamav" - will send to quarantine any email that contains a virus.</li>
+<li>"q=" - allow the administrator to set the quarantine type. Allowed types of quarantines are:</li>
+<li>general - will put the email in /var/qmail/nqqueue/quarantine.</li>
+<li>vquad(VHOME) - will put the email in your vpopmail home (ex: vquad(.Spam), will put your email in Maildir/.Spam/cur). [vpopmail support must be given in configure script]</li>
+</ul></li>
+</ul></li>
+</ol>
+
+<p>Example of common usage:
+This example shown here will block an incoming email from billgates@microsoft.com, put emails containing virus to general quarantine (in /var/qmail/nqqueue/quarantine/domain/user), and deliver spam considered emails in Maildir/.Spam/new (which is the personal user spam directory in his vpopmail home).</p>
+
+<ul>
+<li>/var/qmail/control/general.cfb</li>
+</ul>
+
+<pre><code>:clamav=pass;black=billgates@microsoft.com
+</code></pre>
+
+<ul>
+<li>/var/qmail/control/mydomain.com.cfb</li>
+</ul>
+
+<pre><code>dspam=pass;quarantine=clamav,q=general;quarantine=dspam,q=vquad(.Spam)
+</code></pre>
+
+<p>I hope people start using nqqueue, since it is fast, secure, flexible and very easy to use.</p>
+
+<hr width="60%">
+<h3>NQqueue? What is that?</h3><h6>Posted on: Jun 2008</h6><p>As some people asked me the last few weeks what I've been doing I've decided to take some time to write this and explain what NQqueue (aka nqq) is all about.
 Well, some of you maybe listened (or read) me telling that queues for qmail are bloated. We don't have several choices, there is just plain qmail-queue which is unfeatured, qmail-scanner (aka give me my CPU back) which is the bloatest one, and simscan which is kind of featured, fast, but not extensible at all, both of the last ones are buggy when getting an email with several
 Rcpts (they only analyze one. Which is a big bug).
 So, because of all this, I've been using simscan, I actually extended it from those 2000 lines to 4000 adding features. But it became so big, that it is hard to maintain and to trace errors in it.
@@ -325,27 +397,6 @@ Added to the main launcher are options -v, --version, -h, and --help.You can rea
 <p><img src="http://4.bp.blogspot.com/_7bn3_3YdSWU/Rtsl1uboVhI/AAAAAAAAAFg/50f1opbNKBI/s400/ktsuss.png" alt="ktsuss 1.2" /></p>
 
 <p>Finishing... You guys know, report bugs and all that kind of stuff. ;)</p>
-
-<hr width="60%">
-<h3>Some flashlights of Kwort 2.4</h3><h6>Posted on: Aug 2007</h6><p>Well, me and the rest of the team are working in Kwort 2.4 (2.2.2? I dunno, but I think 2.4 will be alright).</p>
-
-<p>Andreas Schipplock (aka Avaurus) is working on the core system and as far as I know he is making a remarkable work on it.
-One of the most important parts is the lzma compression for the packages, so the final iso will be smaller than the Kwort 2.2 one. He is now working on the installation system, so when he gets done I'll put Kwort desktop on it.</p>
-
-<p>Stijn Segers is working on the new interface for the users admin system (as my mockup looked very bad :-P), so once he finishes with it I will make a Xfce plugin of it and include it in the mcs settings manager.
-He will also take care of the kernel. So this time, getting kernel source to compile drivers won't be needed and as he told me we will include some drivers by default like those free ralink ones. But kernel work stopped until 2.6.23 come out, as that one will be the one for Kwort 2.4.</p>
-
-<p>And it's time to tell what I'm doing... Well, until Andreas and Stijn doesn't finish I'm still maintaining 2.2 serie including and upgrading packages <a href="http://www.kwort.org/?page=MorePackages">http://www.kwort.org/?page=MorePackages</a>.</p>
-
-<p>But until that happens I'm checking projects and taking decisions for the desktop and in core (helping Andreas and Stijn). Today I did some user custom actions for kwort packages:</p>
-
-<p><img src="https://sites.google.com/site/dcortarello/kpkg_install.png" alt="Installing Kwort packages from the file manager" /></p>
-
-<p>For those paranoids (I know you guys are right about this), ktsuss will be included and all those sudo commands will be removed (sudo will still be included, but not used for anything else but xfsm-shutdown-helper). So this custom action showed above use ktsuss in case you ask.</p>
-
-<p>Oh, another interesting things are the fact that kwort is listed in <www.xfce.org/download/distros> as a Xfce distribution and Kwort being used in school (COBAEH - Cuautepec de Hinojosa - Hidalgo - Mexico) with old machines (Pentium MMX 200Mhz with 32MB ram).</p>
-
-<p>Well, that's all for now folks, I will keep bringing Kwort newsflash :)</p>
 
 <hr width="60%">
 

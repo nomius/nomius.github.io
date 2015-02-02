@@ -40,7 +40,28 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>The IT Crowd for download</h3><h6>Posted on: Jul 2007</h6><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
+                        <br><br><h3>Some flashlights of Kwort 2.4</h3><h6>Posted on: Aug 2007</h6><p>Well, me and the rest of the team are working in Kwort 2.4 (2.2.2? I dunno, but I think 2.4 will be alright).</p>
+
+<p>Andreas Schipplock (aka Avaurus) is working on the core system and as far as I know he is making a remarkable work on it.
+One of the most important parts is the lzma compression for the packages, so the final iso will be smaller than the Kwort 2.2 one. He is now working on the installation system, so when he gets done I'll put Kwort desktop on it.</p>
+
+<p>Stijn Segers is working on the new interface for the users admin system (as my mockup looked very bad :-P), so once he finishes with it I will make a Xfce plugin of it and include it in the mcs settings manager.
+He will also take care of the kernel. So this time, getting kernel source to compile drivers won't be needed and as he told me we will include some drivers by default like those free ralink ones. But kernel work stopped until 2.6.23 come out, as that one will be the one for Kwort 2.4.</p>
+
+<p>And it's time to tell what I'm doing... Well, until Andreas and Stijn doesn't finish I'm still maintaining 2.2 serie including and upgrading packages <a href="http://www.kwort.org/?page=MorePackages">http://www.kwort.org/?page=MorePackages</a>.</p>
+
+<p>But until that happens I'm checking projects and taking decisions for the desktop and in core (helping Andreas and Stijn). Today I did some user custom actions for kwort packages:</p>
+
+<p><img src="https://sites.google.com/site/dcortarello/kpkg_install.png" alt="Installing Kwort packages from the file manager" /></p>
+
+<p>For those paranoids (I know you guys are right about this), ktsuss will be included and all those sudo commands will be removed (sudo will still be included, but not used for anything else but xfsm-shutdown-helper). So this custom action showed above use ktsuss in case you ask.</p>
+
+<p>Oh, another interesting things are the fact that kwort is listed in <www.xfce.org/download/distros> as a Xfce distribution and Kwort being used in school (COBAEH - Cuautepec de Hinojosa - Hidalgo - Mexico) with old machines (Pentium MMX 200Mhz with 32MB ram).</p>
+
+<p>Well, that's all for now folks, I will keep bringing Kwort newsflash :)</p>
+
+<hr width="60%">
+<h3>The IT Crowd for download</h3><h6>Posted on: Jul 2007</h6><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
 
 <pre><code>#!/usr/bin/env bash
 
@@ -209,24 +230,6 @@ I would have liked to have more logos from which to choose, not because Fabricio
 <img src="http://kwort.org/pub/skins/ssofb.co.uk_joomla_rhuk/kworty.png" alt="Kwort logo" /></p>
 
 <p>In other news, Andreas Schipplock is making a new site with several languages support (I'm not sure, but I think he finished the languages support code today) for those who instead of help come with criticism and complainings about this issue (you guys know who you are, and I only feel shame for you).</p>
-
-<hr width="60%">
-<h3>What would programmers do when they are bored?</h3><h6>Posted on: Jan 2007</h6><p>Well, nothing much to do these days since I spent all my vacation doing other things.
-I actually started to code a C API for kpkg, which will be finished in an unknown future. :P
-As I have also fixed some bugs in kpg I released a new version "2.3" which is a bug fix release.</p>
-
-<p>See the release notes here: <a href="https://developer.berlios.de/project/shownotes.php?group_id=7171&amp;release_id=12012">Releas notes</a></p>
-
-<p>And get the package here: <a href="https://developer.berlios.de/project/showfiles.php?group_id=7171&amp;release_id=12012">Download kpkg 2.3 at berlios.de</a></p>
-
-<p>To come back to the original question... Well, this is very tricky, since we should do things normal people normally do. In this case "no computer related things". But, ok, people know, programmers are very weird, so when we are boring we do the opposite, which in this case would be "computer related things". :P</p>
-
-<p>So... What have I done? I improved my "IDE", and it is quoted because it's actually vim only. So, how can someone improve vim? Simple! By just reading some of these books: <a href="http://iccf-holland.org/click5.html">http://iccf-holland.org/click5.html</a></p>
-
-<p>Or if you don't want to spend your money on that, you can actually learn vim with :help inside of vim.
-So, this is my new vimrc file, there's nothing very weird on it, only a set of templates, some options and options to compile simple projects and full autotools projects.</p>
-
-<p>I hope you enjoy it and of course, take whatever you need from it: <a href="https://github.com/nomius/dotfiles/blob/master/.vimrc">https://github.com/nomius/dotfiles/blob/master/.vimrc</a></p>
 
 <hr width="60%">
 
