@@ -29,8 +29,10 @@ class Blog:
 
             with open(post, "r") as pst:
                 print "    .·-> Parsing post: " + post
+                spost = os.path.splitext(os.path.basename(post))[0]
                 date_posted = post.replace(POSTS_LOCATION, '').split('/')
-                self.parsed_content += "<h3>" + os.path.splitext(os.path.basename(post))[0] + "</h3>"
+                self.parsed_content += '<br><a id="' + spost + '"><br></a>'
+                self.parsed_content += '<a href="#' + spost + '"><h3>' + spost + "</h3></a>"
                 self.parsed_content += "<h6>Posted on: " + calendar.month_abbr[int(date_posted[2])] + ' ' + date_posted[1] + "</h6>"
                 self.parsed_content += FullParse(pst.read())
                 self.parsed_content += '\n' + BLOG_POST_SEPARATOR + '\n'
