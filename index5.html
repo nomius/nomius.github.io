@@ -40,7 +40,47 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>Patch to provide features to sqwebmail</h3><h6>Posted on: Aug 2006</h6><p>Recently I've been working with qmail+vpopmail+sqwebmail+courier-imap+...+a lot of things at work.
+                        <br><br><br><a id="An easy to do samba scanner"><br></a><a href="#An easy to do samba scanner"><h3>An easy to do samba scanner</h3></a><h6>Posted on: Sep 2006</h6><p>I wrote this simple script to find public samba shared resources. Windows by default leave some "open resources" that normally you can access mounting it or with some samba tools. So, the thing is: How do I find public resources in a network? This is what I did:</p>
+
+<pre><code>#!/usr/bin/env bash
+
+function scan(){
+   SUBNET=${1}
+   LAST=${2}
+   PING="$(which ping) -c 1 -W 1"
+   ${PING} ${SUBNET}.${LAST} &gt; /dev/null 2&gt;&amp;1
+   if [ $? -eq 0 ]; then
+       SMBRESOURCES=$(smbclient -N -L ${SUBNET}.${LAST} 2&gt;/dev/null | grep Disk | grep -v \\$)
+       if [ ! -z "${SMBRESOURCES}" ]; then
+           tput setaf 2
+           echo -e "Public samba resources in ${SUBNET}.${LAST}:"
+           tput setaf 1
+           echo "${SMBRESOURCES}"
+           echo -e "------------------------------------------------------\n"
+           tput sgr0
+       else
+           tput setaf 3
+           echo "${SUBNET}.${LAST} is up, but doesn't have public resources"
+           echo -e "------------------------------------------------------\n"
+           tput sgr0
+       fi
+   fi
+}
+
+if [ -z ${2} ]; then
+  for((x=1;x&lt;255;x++)); do
+      ${0} ${1} ${x} &amp;
+  done
+else
+  scan ${1} ${2}
+fi
+wait
+
+#EOF
+</code></pre>
+
+<hr width="60%">
+<br><a id="Patch to provide features to sqwebmail"><br></a><a href="#Patch to provide features to sqwebmail"><h3>Patch to provide features to sqwebmail</h3></a><h6>Posted on: Aug 2006</h6><p>Recently I've been working with qmail+vpopmail+sqwebmail+courier-imap+...+a lot of things at work.
 Sqwebmail has a nice code style, but unfortunally it isn't docummented at all, so for all of us that don't belong to the project itself is very painful. In addition, the way they've done some things can really piss off someone. Not to mention that it's extremely un-extensible. So adding a new feature involves understanding and modifying the whole source code.
 Anyway, vacations mode is only implemented through qmailadmin, which is good, but users should use only one web interface, and that interface should be sqwebmail.</p>
 
@@ -49,7 +89,7 @@ Anyway, vacations mode is only implemented through qmailadmin, which is good, bu
 <p><a href="http://nomius.github.io/content/patches/sqwebmail-5.1.2-vacations-mode.patch">http://nomius.github.io/content/patches/sqwebmail-5.1.2-vacations-mode.patch</a></p>
 
 <hr width="60%">
-<h3>My keyboard</h3><h6>Posted on: Aug 2006</h6><p>Yesterday I got this new "old keyboard". Believe or not, this treasure was going to the trash, and my little brother save it because I told him I was looking for one. He came to me with it at 1:30 in the morning.
+<br><a id="My keyboard"><br></a><a href="#My keyboard"><h3>My keyboard</h3></a><h6>Posted on: Aug 2006</h6><p>Yesterday I got this new "old keyboard". Believe or not, this treasure was going to the trash, and my little brother save it because I told him I was looking for one. He came to me with it at 1:30 in the morning.
 I been looking for one of this since 5 years ago. This is a IBM Model M keyboard (latin american) model 1391506. Produced in 1988 is an old school keyboard for people who can appreciate the sound and tact of a real keyboard, this is one of the best (If I don't say the best) keyboard ever made. If IBM knows how to do something is keyboards.
 This is real shit, not for those kiddies with multimedia keyboards, this keyboards if for mans, so kids... Stay out, or I'll punch you with it (real, it weight is 2.5kg :D).</p>
 

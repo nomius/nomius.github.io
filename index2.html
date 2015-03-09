@@ -40,7 +40,21 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>NQqueue 0.2</h3><h6>Posted on: Jul 2008</h6><p>Well, I just tagged NQqueue as 0.2. Several changes has been done from 0.1. For those who doesn't know, NQqueue is a threaded queue for qmail with support for plugins. Full details of what nqqueue is can be found here: <a href="http://nomius.blogspot.com/2008/06/nqqueue-what-is-that.html">http://nomius.blogspot.com/2008/06/nqqueue-what-is-that.html</a></p>
+                        <br><br><br><a id="ktsuss 1.4 released"><br></a><a href="#ktsuss 1.4 released"><h3>ktsuss 1.4 released</h3></a><h6>Posted on: Jul 2008</h6><p>Well, the people of wicd asked me for some modifications in ktsuss so they could support it as they do with gksu.
+These modifications were made in the weekend; also bug fixes has been done, and as it looks very stable I'm writing a post release announce here. :-)</p>
+
+<p>Changelog can be found <a href="http://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14839">here</a></p>
+
+<p>Also, you can follow ktsuss development in my darcs server <a href="http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi?r=ktsuss;a=summary">here</a></p>
+
+<p>Latest ktsuss download link <a href="http://download.berlios.de/ktsuss/ktsuss-1.4.tar.gz">here</a></p>
+
+<p>Bugs and feature requests are always welcome :-)</p>
+
+<p>Cheers!</p>
+
+<hr width="60%">
+<br><a id="NQqueue 0.2"><br></a><a href="#NQqueue 0.2"><h3>NQqueue 0.2</h3></a><h6>Posted on: Jul 2008</h6><p>Well, I just tagged NQqueue as 0.2. Several changes has been done from 0.1. For those who doesn't know, NQqueue is a threaded queue for qmail with support for plugins. Full details of what nqqueue is can be found here: <a href="http://nomius.blogspot.com/2008/06/nqqueue-what-is-that.html">http://nomius.blogspot.com/2008/06/nqqueue-what-is-that.html</a></p>
 
 <p>Download the latest release version here: <a href="http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.2.tar.gz">http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.2.tar.gz</a></p>
 
@@ -112,7 +126,7 @@ This example shown here will block an incoming email from billgates@microsoft.co
 <p>I hope people start using nqqueue, since it is fast, secure, flexible and very easy to use.</p>
 
 <hr width="60%">
-<h3>NQqueue? What is that?</h3><h6>Posted on: Jun 2008</h6><p>As some people asked me the last few weeks what I've been doing I've decided to take some time to write this and explain what NQqueue (aka nqq) is all about.
+<br><a id="NQqueue? What is that?"><br></a><a href="#NQqueue? What is that?"><h3>NQqueue? What is that?</h3></a><h6>Posted on: Jun 2008</h6><p>As some people asked me the last few weeks what I've been doing I've decided to take some time to write this and explain what NQqueue (aka nqq) is all about.
 Well, some of you maybe listened (or read) me telling that queues for qmail are bloated. We don't have several choices, there is just plain qmail-queue which is unfeatured, qmail-scanner (aka give me my CPU back) which is the bloatest one, and simscan which is kind of featured, fast, but not extensible at all, both of the last ones are buggy when getting an email with several
 Rcpts (they only analyze one. Which is a big bug).
 So, because of all this, I've been using simscan, I actually extended it from those 2000 lines to 4000 adding features. But it became so big, that it is hard to maintain and to trace errors in it.
@@ -207,7 +221,7 @@ NQqueue needs a lot of testing, so I'm counting with all of you to run tests. Al
 <p>You can follow NQqueue's development in my darcs server at: <a href="http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi">http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi</a></p>
 
 <hr width="60%">
-<h3>Hanging up switches and bridges</h3><h6>Posted on: Apr 2008</h6><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
+<br><a id="Hanging up switches and bridges"><br></a><a href="#Hanging up switches and bridges"><h3>Hanging up switches and bridges</h3></a><h6>Posted on: Apr 2008</h6><p>This issue came up today with some people and I did affirmed that you can hang up your switch with some funny code...
 How this come? Well, very simple, switches and bridges has a small stack (10 bytes per host connected to it) where they save IP and MAC addresses to know where to send a package once the sender and the receiver are known. So, once the first package is sent, a new entry in the stack was made. So now you know the "theory" I'll leave you to think how could this help you to hang it (Let me give you a hint: OVERFLOW).</p>
 
 <p>Anyways, get the code you'll need to produce this overflow from here: <a href="http://nomius.github.io/content/patches/pkinject">http://nomius.github.io/content/patches/pkinject</a></p>
@@ -218,14 +232,14 @@ See also that I did this 3 years ago with bash, not even C code, so it shows how
 <p>Have fun.</p>
 
 <hr width="60%">
-<h3>Nice picture</h3><h6>Posted on: Mar 2008</h6><p>Well, not much to say these days...</p>
+<br><a id="Nice picture"><br></a><a href="#Nice picture"><h3>Nice picture</h3></a><h6>Posted on: Mar 2008</h6><p>Well, not much to say these days...</p>
 
 <p><img src="http://4.bp.blogspot.com/_7bn3_3YdSWU/R8zGzB7Bw2I/AAAAAAAAAIc/8_urwRHbh6A/s400/Einstein.jpg" alt="Einstein" /></p>
 
 <p>Sometimes we have to find a reason to laugh, even a little bit... I found this picture very funny. :)</p>
 
 <hr width="60%">
-<h3>Kwort 2.4 released</h3><h6>Posted on: Mar 2008</h6><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
+<br><a id="Kwort 2.4 released"><br></a><a href="#Kwort 2.4 released"><h3>Kwort 2.4 released</h3></a><h6>Posted on: Mar 2008</h6><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
 
 <p>The core system is based on Slackware and provides a rock solid system, and it's also a great place to start making a full featured and usable desktop environment using Xfce.
 This version includes several changes from 2.2 from a new toolchain to a completely new base system. The inclusion of hal provides a great way to communicate the hardware with the desktop making the system a lot more user friendly.</p>
@@ -259,7 +273,7 @@ Finally, but not less important a very big THANKS to Patrick Volkerding for Slac
 <p>As usual, if you need support, help, or you just feel like talking about Kwort (or anything else), or you just want to meet the people who is behind Kwort, you can join us on IRC: irc://irc.oftc.net/Kwort</p>
 
 <hr width="60%">
-<h3>ktsuss 1.3... Finally</h3><h6>Posted on: Feb 2008</h6><p>Well, today I'm releasing the new ktsuss.
+<br><a id="ktsuss 1.3... Finally"><br></a><a href="#ktsuss 1.3... Finally"><h3>ktsuss 1.3... Finally</h3></a><h6>Posted on: Feb 2008</h6><p>Well, today I'm releasing the new ktsuss.
 It toke quite some time, not because it was too much work, but because I didn't the enough time to finish it.
 This new version includes the new authentication backend, and the new interface, which I have to say it's quite better than the old one. The main setuid program has a better comand line parser, not for the user, but if someone wants to understand it, is quite easy.</p>
 
@@ -272,7 +286,7 @@ This new version includes the new authentication backend, and the new interface,
 <p>Download link: <a href="http://prdownload.berlios.de/ktsuss/ktsuss-1.3.tar.gz">here</a></p>
 
 <hr width="60%">
-<h3>Why ktsuss use setuid</h3><h6>Posted on: Feb 2008</h6><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
+<br><a id="Why ktsuss use setuid"><br></a><a href="#Why ktsuss use setuid"><h3>Why ktsuss use setuid</h3></a><h6>Posted on: Feb 2008</h6><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
 
 <p>Using pam would requiere setuid too (since pam_unix2 doesn't have it's own wrapper), which doesn't bother me as long as I program in a secure way... What really does, is that not every distribution out there use pam, slackware is the most important it comes to my mind now.
 Using su, well, there might be a problem there, gksu does it in a very unportable way waiting for the string " Authentication failure" which is a very bad idea, look this example:</p>
@@ -300,7 +314,7 @@ I should see that like something in a long distant future... But I think it coul
 <p>So since ktsuss have its own implementation of authentication backend, that's why it needs setuid.</p>
 
 <hr width="60%">
-<h3>MPD: What's missing?</h3><h6>Posted on: Jan 2008</h6><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
+<br><a id="MPD: What's missing?"><br></a><a href="#MPD: What's missing?"><h3>MPD: What's missing?</h3></a><h6>Posted on: Jan 2008</h6><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
 Well, I started working on gmpc to add support for tag editing when I stopped with the following issue: The fact that mpd doesn't support tag editing was the reason for gmpc to not support it (which makes sense), because mpd is run on a different machine so gmpc does not have access to these files.
 Some of you will tell me "Dude! Sonata supports tag editing even when mpd doesn't", and I know, but what sonata does is actually a very like a "half done work" with that, as you can only edit tags if mpd runs on the same machine sonata is running, which normally doesn't happen (that's the idea of a client-server structure).
 So, now, my approach to resolve the problem was completely different as I had to include a new command in the mpd protocol so I could add tag editing support.
@@ -324,7 +338,7 @@ People say that if this doesn't get in trunk tag editing is off the table. Well 
 <p>Anyways, Kwort 2.4 will use mpd+libmpd+gmpc with tag editing support. :-)</p>
 
 <hr width="60%">
-<h3>The childs of my son are my enemies... What about their childs</h3><h6>Posted on: Nov 2007</h6><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
+<br><a id="The childs of my son are my enemies... What about their childs"><br></a><a href="#The childs of my son are my enemies... What about their childs"><h3>The childs of my son are my enemies... What about their childs</h3></a><h6>Posted on: Nov 2007</h6><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
 
 <p>I was trying to run a process, this process forks itself and ran some bash scripts. So far there's nothing bad on it, the problem is that those shell scripts create some childs, and it is more than sure that the parent (the main script) die before the childs, so I'll get some orphans process. And the main C program shouldn't die before all the childs die.</p>
 
@@ -386,17 +400,6 @@ On Linux, running ps axfj, showed me that the small childrens (those one generat
 </code></pre>
 
 <p>Thanks to Marcel, who actually helped me a lot with some concepts and ideas to find a workaround to this.</p>
-
-<hr width="60%">
-<h3>ktsuss 1.2 released</h3><h6>Posted on: Sep 2007</h6><p>I just released ktsuss 1.2. There's not much to say about this new version. The most important changes were made to the GUI which now uses a native gtk dialog instead of a custom window. (Thanks to Christian Dywan for the patch).
-Ktsuss now allows running applications as any user instead of root only. The code was in the authentication backend, now it is used in the GUI.
-Added to the main launcher are options -v, --version, -h, and --help.You can read the full changelog and download the new version here: <a href="http://developer.berlios.de/projects/ktsuss">http://developer.berlios.de/projects/ktsuss</a></p>
-
-<p>Screenshot as usual:</p>
-
-<p><img src="http://4.bp.blogspot.com/_7bn3_3YdSWU/Rtsl1uboVhI/AAAAAAAAAFg/50f1opbNKBI/s400/ktsuss.png" alt="ktsuss 1.2" /></p>
-
-<p>Finishing... You guys know, report bugs and all that kind of stuff. ;)</p>
 
 <hr width="60%">
 

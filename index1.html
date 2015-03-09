@@ -40,7 +40,107 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><h3>The kpkg issues</h3><h6>Posted on: Dec 2009</h6><p>Hello everybody... Today I'm going to speak about kpkg.
+                        <br><br><br><a id="Using the ZTE MF 110 with 3g Movistar (Argentina on Linux"><br></a><a href="#Using the ZTE MF 110 with 3g Movistar (Argentina on Linux"><h3>Using the ZTE MF 110 with 3g Movistar (Argentina on Linux</h3></a><h6>Posted on: Jan 2010</h6><p>Hello all,
+Today I'm going to explain how to do something really simple. As some of you might already know, I got this year a EEE PC netbook (1000HA). I have to admit that this baby is going great, I'm running the latest Kwort on it and it's really resource saving if you know how to set it up correctly.
+If I add this netbook a 3g connection, I can say that I'm online everywhere almost all of the time. Well, this is what happened... As most of you already know, I've been working for Accenture for over a year now and they provided me (and some of my co-workers) a 3g modem with internet connection, which is pretty nice.
+So, on january 1st after all the people who came my home to celebrate the new year left I sitted on the computer to figure out how to make it work.
+This is a ZTE MF 110, and I found some people who made it work (kinda) or those who plugged it in at ubuntu and said that it works OoTB. Well, this is true kind of, but I hate when you don't really know how things works. Also, I found some people who made it parcially work with wvdial, which is a nice tool also.
+So, my quest was to make it work with plain pppd. And this isn't really hard to do if you know a little how to play with the AT commands.</p>
+
+<p>Ok, let's put the hands in the mud, first of all, I'm one of those people who likes to have a latest kernel tuned for my device, so this implies that yeah, I compile my own kernel with almost every release... In this case we are compiling 2.6.32.2.
+So, for this you'll need the usb mass storage system in order to be able to switch from it to the modem mode.</p>
+
+<pre><code>Device Drivers -&gt; USB Support -&gt; (Select your usb version, ehci, uhci or ohci) USB Mass Storage support
+</code></pre>
+
+<p>Now, this GSM modem (as several others) needs the serial support... Well, actually, this is a serial GSM modem that you want to jack into the USB bus. So you need:</p>
+
+<pre><code>Device Drivers -&gt; USB Support -&gt; USB Serial Converter support
+</code></pre>
+
+<p>This will create the usbserial module. And now, you need the GSM modem support. So for this, you have to select:</p>
+
+<pre><code>Device Drivers -&gt; USB Support -&gt; USB Serial Converter support -&gt; USB driver for GSM and CDMA modems
+</code></pre>
+
+<p>I would recommend you to compile them as modules (M) instead of built in, as this isn't a feature that you will be running all the time, so you can unload modules and free some memory (not too much, but everything counts nowadays).</p>
+
+<p>I'm assumming that you already have the PPP support, if not, it's in the device drivers and Network Devices. But if you're reading this, you might already know.</p>
+
+<p>Now, everything is ready for us to set it up.</p>
+
+<p>We need <a href="http://www.draisberghof.de/usb_modeswitch/">usb<em>modeswitch</a>, this tool will allow us to switch from the "ZeroCD" mode to the modem mode in order to allow us to call our provider. Basically we need this config (/etc/usb</em>modeswitch.conf):</p>
+
+<pre><code>DefaultVendor=0x19d2
+DefaultProduct=0x2000
+
+TargetVendor=0x19d2
+TargetProduct=0x0031
+
+MessageEndpoint=0x1
+MessageContent="55534243b8fe6681000000000000061b000000020000000000000000000000"
+</code></pre>
+
+<p>This config file will make the usb<em>modeswtich to swtich the device 0x2000, of the vendor 0x19d2, to 0x0031 sending the message pointed by MessageContent. If the usb</em>storage module is loaded and you run:</p>
+
+<pre><code>usb_modeswtich -c /etc/usb_modeswitch.conf
+</code></pre>
+
+<p>And then you run lsusb you'll see the product id changed from 2000 to 0031.</p>
+
+<p>If you got here, now it comes to nice part.
+In order for us to not use wvdial, we need a call script (also called chat script). I'm going to show you you the script I wrote (/etc/ppp/peers/chats/movistar):</p>
+
+<pre><code>ABORT BUSY ABORT 'NO CARRIER'
+ABORT VOICE ABORT 'NO DIALTONE'
+ABORT 'NO DIAL TONE' ABORT 'NO ANSWER'
+ABORT DELAYED
+'' ATZ
+OK ATQ0\sV1\sE1\sS0=0\s&amp;C1\s&amp;D2\s+FCLASS=0
+OK AT+CGDCONT=1,"IP","internet"
+OK-AT-OK ATX3DT*99#
+CONNECT \d\c
+</code></pre>
+
+<p>This basically it reads like this: abort in any of the conditions above (no carrier, no dialtone, etc...), then reset the modem waiting for nothing, initialize the modem, find out the CID for an APN GPRS, dial and connect. There's information about Hayes AT commands all over the web, so if you're interested you can google it yourself. :-)</p>
+
+<p>Well, now we have to set up our user and password:</p>
+
+<pre><code>echo -e "internet\t*\tinternet" &gt;&gt; /etc/ppp/chap-secrets
+</code></pre>
+
+<p>And finally, the ppp configuration itself (/etc/ppp/peers/movistar):</p>
+
+<pre><code>lock
+hide-password
+noauth
+connect "/usr/sbin/chat -v -f /etc/ppp/peers/chats/movistar"
+/dev/ttyUSB2
+460800
+defaultroute
+noipdefault
+user "internet"
+mtu 1492
+ipparam movistar
+</code></pre>
+
+<p>Most of this options are self explanatory, but the importants one are the connect line and the "/dev/ttyUSB2" one. The first one tells pppd to use the chat program to connect the other point and the chat script that will be used (/etc/ppp/peers/chats/movistar, that we created before), if, for example, you set up a pptp connection you'll see this line pointing to the pptp client
+program. The second one tells pppd the modem device, maybe you have to play a little bit with this one trying /dev/ttyUSB2 or /dev/ttyUSB3 (if you don't wan't to try you can use minicom to find out, good luck with that :-P).</p>
+
+<p>Well, now everything is ready to connect, you just need to run:</p>
+
+<pre><code>pppd call movistar
+</code></pre>
+
+<p>From now one, if you restart your laptop/netbook or normal PC, all you have to do is:</p>
+
+<pre><code>usb_modeswitch
+sleep 1  # Let the device sync with the switch
+pppd call movistar
+</code></pre>
+
+<hr width="60%">
+<br><a id="The kpkg issues"><br></a><a href="#The kpkg issues"><h3>The kpkg issues</h3></a><h6>Posted on: Dec 2009</h6><p>Hello everybody... Today I'm going to speak about kpkg.
 Well, I wrote 4 package managers before I started kpkg, there was kwt-get, kum, kget and another one I can't remember.
 With every package manager I wrote things where from a very simple start, allowing to install, search and remove packages to a more complex usage allowing several mirrors, dependencies resolution out of the box, and finally the idea of third party packages (this last idea appeared in kpkg), package series, etc.
 Let's analyze those 4 functionalities:
@@ -72,7 +172,7 @@ party packages was also dropped since the new approach is more consistent. What 
 <p>Cheers!</p>
 
 <hr width="60%">
-<h3>New Kpkg hosting</h3><h6>Posted on: Dec 2009</h6><p>Well, the C version of kpkg is now hosted at: <a href="http://code.google.com/p/kpkg">http://code.google.com/p/kpkg</a>. It would be cool if people start checking it out.</p>
+<br><a id="New Kpkg hosting"><br></a><a href="#New Kpkg hosting"><h3>New Kpkg hosting</h3></a><h6>Posted on: Dec 2009</h6><p>Well, the C version of kpkg is now hosted at: <a href="http://code.google.com/p/kpkg">http://code.google.com/p/kpkg</a>. It would be cool if people start checking it out.</p>
 
 <p>Upgrade support is working partially, as only one package at the time can be upgrated, I will try to finish the whole upgrade support soon.</p>
 
@@ -85,7 +185,7 @@ party packages was also dropped since the new approach is more consistent. What 
 <p>Cheers!</p>
 
 <hr width="60%">
-<h3>Vim bug using ctags</h3><h6>Posted on: Oct 2009</h6><p>Well, lot of people know that I'm a vim fan and that I use it everyday, to me is like the killer app that everyone should know how to use in Unix.
+<br><a id="Vim bug using ctags"><br></a><a href="#Vim bug using ctags"><h3>Vim bug using ctags</h3></a><h6>Posted on: Oct 2009</h6><p>Well, lot of people know that I'm a vim fan and that I use it everyday, to me is like the killer app that everyone should know how to use in Unix.
 Even at work, I'm a programmer (doing C on Unix now), and some of my fellows were using Eclipse and after I show them Vim, they was like "woooo, I can use this editor as an IDE and still can use my machine for do something else while programming" (I was like, blame the one who introduced you to Eclipse :-P).</p>
 
 <p>Anyways, I like using tags, allows me to browse the code really fast (for those using Eclipse, I think is like if you press F3 over a function name). But I found this weird behavior using ctags+vim. See the above code:</p>
@@ -116,7 +216,7 @@ There's a "workaround" to this behavior, using --excmd=number while running ctag
 <p>Thanks.</p>
 
 <hr width="60%">
-<h3>Kwort 3... The big change</h3><h6>Posted on: Sep 2009</h6><p>Hello everybody. This is just a flashlight of what Kwort 3 will be.
+<br><a id="Kwort 3... The big change"><br></a><a href="#Kwort 3... The big change"><h3>Kwort 3... The big change</h3></a><h6>Posted on: Sep 2009</h6><p>Hello everybody. This is just a flashlight of what Kwort 3 will be.
 Kwort 3 brings a whole new era of Kwort Linux, Kwort public might change now, I'm not focusing anymore in inexperienced users, but on intermediate-advanced users and up.</p>
 
 <p>Why is that?
@@ -138,7 +238,7 @@ Also the init system has changed and the way it is configured too. Don't worry a
 <p>Cheers.</p>
 
 <hr width="60%">
-<h3>Thunar and hard drive partitions</h3><h6>Posted on: Jul 2009</h6><p>Hello everybody, It's been so long since my last post here.
+<br><a id="Thunar and hard drive partitions"><br></a><a href="#Thunar and hard drive partitions"><h3>Thunar and hard drive partitions</h3></a><h6>Posted on: Jul 2009</h6><p>Hello everybody, It's been so long since my last post here.
 There's so much to talk about, but today I'm going to talk about Thunar. As some of you might know, thunar is the file manager used in Xfce, written by Benedikt Meurer, and nowadays maintained by Jannis Pohlmann.
 I really like thunar, but the fact that hard drive partitions are left to the distribution itself when hal can manage them and because of that the file manager also can, isn't really nice, as you can browse your partitions in newer versions of GTK's (with Gvfs) GtkFileChooser.
 An ugly workaround would be to mount them and add some gtk bookmarks, but you would like to set an emblem to differentiate them from normal bookmarks, and emblems are not part of the gtk library, so you wouldn't see emblems in a GtkFileChooser. Another issue would be that isn't dynamic, so if someone change partitions that would be a total mess.
@@ -153,7 +253,7 @@ So IMHO the best solution to this is: Hard Drive partitions managed by hal (Devi
 <p>Enjoy!</p>
 
 <hr width="60%">
-<h3>Kwort Linux 2.4.1 released</h3><h6>Posted on: Apr 2009</h6><p>I'm happy to announce that Kwort 2.4.1 final is here!</p>
+<br><a id="Kwort Linux 2.4.1 released"><br></a><a href="#Kwort Linux 2.4.1 released"><h3>Kwort Linux 2.4.1 released</h3></a><h6>Posted on: Apr 2009</h6><p>I'm happy to announce that Kwort 2.4.1 final is here!</p>
 
 <p>This version took a year to develop and provides a lot of changes from 2.4 release, including a new, more cleaned up than usual, base system, whole new tool chain, new configuration tools and lots of new things.</p>
 
@@ -193,7 +293,7 @@ The people who develop every project Kwort includes. I hope I didn't forget anyo
 <p>Google Group: <a href="http://groups.google.com/group/kwort-linux">http://groups.google.com/group/kwort-linux</a></p>
 
 <hr width="60%">
-<h3>Lots of stuff going on</h3><h6>Posted on: Feb 2009</h6><p>Well, it's been 3 months since my last post, and I've been doing a lot...</p>
+<br><a id="Lots of stuff going on"><br></a><a href="#Lots of stuff going on"><h3>Lots of stuff going on</h3></a><h6>Posted on: Feb 2009</h6><p>Well, it's been 3 months since my last post, and I've been doing a lot...</p>
 
 <p>Let's start with Kwort. Well we're just there from the release, lots of new improvements are being done around it, and something really interesting is the new network manager and the new user manager I wrote from scratch with a completely new design using gtkdialog.</p>
 
@@ -227,7 +327,7 @@ this.</p>
 <p>We'll, this post is already becoming large so I'm off to bed now. Have a nice week and see you around guys.</p>
 
 <hr width="60%">
-<h3>Updates!</h3><h6>Posted on: Nov 2008</h6><p>Well, it's been a long time in the road since my last post here. This weblog isn't over, but I been doing a lot of things and didn't got the time to write something.</p>
+<br><a id="Updates!"><br></a><a href="#Updates!"><h3>Updates!</h3></a><h6>Posted on: Nov 2008</h6><p>Well, it's been a long time in the road since my last post here. This weblog isn't over, but I been doing a lot of things and didn't got the time to write something.</p>
 
 <p>Ok, things I've been doing:
 * I wrote a new network manager for Kwort 2.4.2 (I'm already working on a new Kwort version), screenshots are coming
@@ -243,26 +343,12 @@ this.</p>
 <p>Btw, I took a position at iProgrammers and I'm working at Accenture now as a Senior Programmer.</p>
 
 <hr width="60%">
-<h3>NQqueue 0.3b</h3><h6>Posted on: Aug 2008</h6><p>I'm just releasing NQqueue 0.3 beta.
+<br><a id="NQqueue 0.3b"><br></a><a href="#NQqueue 0.3b"><h3>NQqueue 0.3b</h3></a><h6>Posted on: Aug 2008</h6><p>I'm just releasing NQqueue 0.3 beta.
 This is just a bug fix release and it is beta because of the new spamassassin plugin; I wrote this one on sunday, but since I don't use spamassassin (I have servers running dspam), I can't test it.</p>
 
 <p>This is just a release asking for people to flood my inbox with feedback on the spamassassin plugin, the configuration parameters are the same used with the dspam plugin, so only "pass" parameter is allowed, or empty.</p>
 
 <p>So, get latest NQqueue release here: <a href="http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.3b.tar.gz">http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.3b.tar.gz</a></p>
-
-<hr width="60%">
-<h3>ktsuss 1.4 released</h3><h6>Posted on: Jul 2008</h6><p>Well, the people of wicd asked me for some modifications in ktsuss so they could support it as they do with gksu.
-These modifications were made in the weekend; also bug fixes has been done, and as it looks very stable I'm writing a post release announce here. :-)</p>
-
-<p>Changelog can be found <a href="http://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14839">here</a></p>
-
-<p>Also, you can follow ktsuss development in my darcs server <a href="http://europa.fapyd.unr.edu.ar/cgi-bin/darcsweb.cgi?r=ktsuss;a=summary">here</a></p>
-
-<p>Latest ktsuss download link <a href="http://download.berlios.de/ktsuss/ktsuss-1.4.tar.gz">here</a></p>
-
-<p>Bugs and feature requests are always welcome :-)</p>
-
-<p>Cheers!</p>
 
 <hr width="60%">
 
