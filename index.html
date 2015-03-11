@@ -40,7 +40,53 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Links to posts and some other things"><br></a><a href="#Links to posts and some other things"><h3>Links to posts and some other things</h3></a><h6>Posted on: Mar 2015</h6><p>Hi folks, two weeks ago it was requested on github to implement links to posts. Today I implemented this feature with id's.</p>
+                        <br><br><br><a id="GPG encryption made easy"><br></a><a href="#GPG encryption made easy"><h3>GPG encryption made easy</h3></a><h6>Posted on: Mar 2015</h6><p>So as I said before I started to play more with GPG and made some really quick bash functions to encrypt and decrypt data. Here we go:</p>
+
+<p>Encrypt:</p>
+
+<div class="codehilite"><pre><code>encrypt<span class="o">()</span>
+<span class="o">{</span>
+    <span class="k">if</span> <span class="o">[</span> -e <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">.crypt&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        tput setaf 1
+        <span class="nb">echo</span> <span class="s2">&quot;* ERROR * </span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">.crypt already exists. Exiting...&quot;</span>
+        tput sgr0
+        <span class="k">return</span> 1
+    <span class="k">fi</span>
+
+    <span class="nv">i</span><span class="o">=</span>0
+    <span class="k">while</span> <span class="nb">read </span>line<span class="p">;</span> <span class="k">do</span>
+    items+<span class="o">=(</span><span class="s2">&quot;</span><span class="nv">$i</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="o">)</span>
+        <span class="nv">i</span><span class="o">=</span><span class="k">$((</span><span class="nv">$i</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+    <span class="k">done</span> &lt; &lt;<span class="o">(</span>gpg --list-keys <span class="p">|</span> grep @ <span class="p">|</span> sed -e <span class="s1">&#39;s/uid[ ]*\[.*\] //g&#39;</span><span class="o">)</span>
+    <span class="nv">i</span><span class="o">=</span><span class="k">$(</span><span class="nv">LC_ALL</span><span class="o">=</span>en_US dialog --stdout --backtitle <span class="s2">&quot;Encryption made easy&quot;</span> <span class="se">\</span>
+        --title Encrypt --menu <span class="s2">&quot;Pick the recipient&quot;</span> <span class="k">$((</span><span class="nv">$i</span> <span class="o">+</span> <span class="m">7</span><span class="k">))</span> <span class="m">76</span> <span class="nv">$i</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">items</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="k">)</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="k">return</span> 0
+    <span class="k">fi</span>
+    <span class="nv">recp</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">items</span><span class="p">[</span><span class="k">$((</span><span class="nv">$i</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">|</span> awk -F <span class="s1">&#39;[&lt;&gt;]&#39;</span> <span class="s1">&#39;{print $(NF-1)}&#39;</span><span class="k">)</span>
+
+    gpg --output <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">.crypt&quot;</span> --encrypt --recipient <span class="si">${</span><span class="nv">recp</span><span class="si">}</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>Decrypt:</p>
+
+<div class="codehilite"><pre><code>decrypt<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nv">out</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> .crypt<span class="k">)</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">out</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nv">out</span><span class="o">=</span><span class="k">$(</span><span class="nv">LC_ALL</span><span class="o">=</span>en_US dialog --stdout --backtitle <span class="s2">&quot;Encryption made easy&quot;</span> <span class="se">\</span>
+            --title Decrypt --inputbox <span class="s2">&quot;Type the output filename&quot;</span> <span class="m">8</span> 40<span class="k">)</span>
+        <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> -o -z <span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+            <span class="k">return</span> 0
+        <span class="k">fi</span>
+    <span class="k">fi</span>
+    gpg --output <span class="s2">&quot;</span><span class="si">${</span><span class="nv">out</span><span class="si">}</span><span class="s2">&quot;</span> --decrypt <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<hr width="60%">
+<br><a id="Created links to posts and some other things"><br></a><a href="#Created links to posts and some other things"><h3>Created links to posts and some other things</h3></a><h6>Posted on: Mar 2015</h6><p>Hi folks, two weeks ago it was requested on github to implement links to posts. Today I implemented this feature with id's.</p>
 
 <p>In the last couple of days I've been playing with gpg (I was always using openssl's enc/dec/sign(dgst) instead). I want to start using a Keyserver, but I want a reliable one outside the US and UK, so MIT's kinda out of the table. Anyone knows any? I'm thinking in <a href="http://keys.connectical.com">http://keys.connectical.com</a>, which looks like be running in France (<em>I don't trust too much in France anyways</em>) as I like what the Connectical guys had created. I'm open to comments and ideas.</p>
 
@@ -206,77 +252,6 @@ So I wrote a patch to provide a fix and sent it to Jorgen Thomsen. He answered m
 <p>Anyways, I leave the patch here: <a href="http://nomius.github.io/content/patches/gnu-pop3d-0.9.12-fix_passwd_login.patch">gnu-pop3d-0.9.12-fix<em>passwd</em>login.patch</a></p>
 
 <p>Cheers!</p>
-
-<hr width="60%">
-<br><a id="Hidding messages in ICMP packets"><br></a><a href="#Hidding messages in ICMP packets"><h3>Hidding messages in ICMP packets</h3></a><h6>Posted on: Feb 2010</h6><p>Hello everybody. A new month, a new article (I wish I could do this so periodically).</p>
-
-<p>Today I'm going to show you something that I've been playing with. As you probably know (if you don't, I'm just telling you now :-)), the ICMP packets provides an arbitrary data space right after the ICMP header. Normally, no one use it, since ICMP is a control protocol that has all its usage right inside of it, leaving this data space useless.</p>
-
-<p>A few days ago, I saw someone connected on Cinetix and he was just connected, but not on the IRC server and I didn't know who he or she was. So an idea started to flow around my head "What about if I could send messages with ICMP packets".</p>
-
-<p>So actually this is what I did... I wrote a tool to put a message in the data space and send it using the ICMP type 7 which is unassigned (for example, ping is the type 8). The problem is that the kernel just drop type 7 (as we all assume) and the data space is also dropped in any icmp packet. So I wrote a kernel patch that print the message in the output of dmesg or
-/var/log/message if you have set KERN_NOTICE to be displayed (I think klogd -c 6 does).</p>
-
-<p>With this, you can send to a friend a message of the kind "Hey. This is David, I'm online on irc (jabber or whatever), jump in!" and it will be displayed in the system logs as a kernel notice.</p>
-
-<p>Please, take note that this is not a chat system, but an "emergency system", so don't start using it as an everyday conversation protocol. This also isn't a patch that should be in the kernel mainstream, since ICMP packets of type 7 is unassigned, and NOT a communication protocol.</p>
-
-<h5>What about security?</h5>
-
-<p>Well, you might start asking yourself this "What if someone from the outside starts flooding my logs with dumb messages?". Right, well, the answer to this is netfilter; use iptables to drop these kind of package. Something like this:</p>
-
-<pre><code>iptables -A INPUT -p icmp --icmp-type 7 -j DROP
-</code></pre>
-
-<p>As you might know or guess, you can also block only one IP address or accept from a certain network like this:</p>
-
-<pre><code>iptables -A INPUT -p icmp --icmp-type 7 \! -s 10.0.0.1/24 -j DROP
-</code></pre>
-
-<p>Use more complex rules creating policies like "if someone exceed the number of 5 ICMP type 7 packets in a minute, drop any packet from the IP address".</p>
-
-<h5>Enough with the talking... How do I use it?</h5>
-
-<p>Great, right to the point. So the steps:</p>
-
-<ol>
-<li>First of all, patch and compile your kernel.</li>
-</ol>
-
-<pre><code>cd linux-2.6.31 &amp;&amp; patch -p1 &lt; patch_icmp_type_7_messages.diff
-</code></pre>
-
-<p>And compile and install your new kernel using the way you normally do (make config/menuconfig, etc...)</p>
-
-<ol>
-<li>Then compile the icmp_send.c program:</li>
-</ol>
-
-<pre><code>gcc icmp_send.c -o icmp_send
-</code></pre>
-
-<ol>
-<li>Send a test message:</li>
-</ol>
-
-<pre><code>./icmp_send 127.0.0.1 "Hello world"
-</code></pre>
-
-<ol>
-<li>Check out the dmesg output:</li>
-</ol>
-
-<pre><code>./dmesg | grep "ICMP 7 Message"
-</code></pre>
-
-<p>Get it!
-Anyways, this is a really nice thing to play with and I hope people find it useful. You can get the kernel patch and the ICMP message program from the links below.</p>
-
-<p><a href="http://nomius.github.io/content/patches/patch_icmp_type_7_messages.diff">patch_icmp_type_7_messages.diff</a></p>
-
-<p><a href="http://nomius.github.io/content/patches/icmp_send.c">icmp_send.c</a></p>
-
-<p>Have fun.</p>
 
 <hr width="60%">
 

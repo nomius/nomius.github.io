@@ -40,7 +40,15 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="ktsuss 1.4 released"><br></a><a href="#ktsuss 1.4 released"><h3>ktsuss 1.4 released</h3></a><h6>Posted on: Jul 2008</h6><p>Well, the people of wicd asked me for some modifications in ktsuss so they could support it as they do with gksu.
+                        <br><br><br><a id="NQqueue 0.3b"><br></a><a href="#NQqueue 0.3b"><h3>NQqueue 0.3b</h3></a><h6>Posted on: Aug 2008</h6><p>I'm just releasing NQqueue 0.3 beta.
+This is just a bug fix release and it is beta because of the new spamassassin plugin; I wrote this one on sunday, but since I don't use spamassassin (I have servers running dspam), I can't test it.</p>
+
+<p>This is just a release asking for people to flood my inbox with feedback on the spamassassin plugin, the configuration parameters are the same used with the dspam plugin, so only "pass" parameter is allowed, or empty.</p>
+
+<p>So, get latest NQqueue release here: <a href="http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.3b.tar.gz">http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.3b.tar.gz</a></p>
+
+<hr width="60%">
+<br><a id="ktsuss 1.4 released"><br></a><a href="#ktsuss 1.4 released"><h3>ktsuss 1.4 released</h3></a><h6>Posted on: Jul 2008</h6><p>Well, the people of wicd asked me for some modifications in ktsuss so they could support it as they do with gksu.
 These modifications were made in the weekend; also bug fixes has been done, and as it looks very stable I'm writing a post release announce here. :-)</p>
 
 <p>Changelog can be found <a href="http://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14839">here</a></p>
@@ -148,57 +156,57 @@ This situation drove me nuts the last year so I decided "Why I don't just write 
 
 <p>So now I can show you a small general plugin to block a Sender:</p>
 
-<pre><code>/* vim: set sw=4 sts=4 : */
+<div class="codehilite"><pre><code><span class="cm">/* vim: set sw=4 sts=4 : */</span>
 
-#include &lt;string.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;nqqueue.h&gt;
+<span class="cp">#include &lt;string.h&gt;</span>
+<span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+<span class="cp">#include &lt;nqqueue.h&gt;</span>
 
-#define PLUGIN_VERSION "1.0"
-#define PLUGIN_NAME "black"
-#define REJECTED_MESSAGE "Message rejected because of black list"
+<span class="cp">#define PLUGIN_VERSION &quot;1.0&quot;</span>
+<span class="cp">#define PLUGIN_NAME &quot;black&quot;</span>
+<span class="cp">#define REJECTED_MESSAGE &quot;Message rejected because of black list&quot;</span>
 
-char *plugin_name()
-{
-    return strdup(PLUGIN_NAME);
-}
+<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_name</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_NAME</span><span class="p">);</span>
+<span class="p">}</span>
 
-char *plugin_version()
-{
-    return strdup(PLUGIN_VERSION);
-}
+<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_version</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_VERSION</span><span class="p">);</span>
+<span class="p">}</span>
 
-/* Parameters:
- * params = a char pointer with parameters used to call the module (in this case, the email address to block).
- * mail = It's a char pointer to the filename that contains the email.
- * From = a char pointer with the From email address. (if it matchs the param, the mail would be blocked)
- * Rcpt = an union that contains space for a char pointer (if user pluing) or a pointer to a PUStruct
- *        struct (if general plugin).
- * general = a pointer to a RSStruct struct, which is structure with all the plugins and its return values
- *           already runned by general plugins
- * peruser = a pointer to a RSStruct struct, which is structure with all the plugins and its return values
- *           already runned by per user plugins
- */
-struct ModReturn *plugin_init(char *params, const char *mail, const char *From, const union Tos Rcpt, \
-                              struct RSStruct *general, struct RSStruct *peruser)
-{
-    struct ModReturn *ret = malloc(sizeof(struct ModReturn));
+<span class="cm">/* Parameters:</span>
+<span class="cm"> * params = a char pointer with parameters used to call the module (in this case, the email address to block).</span>
+<span class="cm"> * mail = It&#39;s a char pointer to the filename that contains the email.</span>
+<span class="cm"> * From = a char pointer with the From email address. (if it matchs the param, the mail would be blocked)</span>
+<span class="cm"> * Rcpt = an union that contains space for a char pointer (if user pluing) or a pointer to a PUStruct</span>
+<span class="cm"> *        struct (if general plugin).</span>
+<span class="cm"> * general = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
+<span class="cm"> *           already runned by general plugins</span>
+<span class="cm"> * peruser = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
+<span class="cm"> *           already runned by per user plugins</span>
+<span class="cm"> */</span>
+<span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="nf">plugin_init</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">mail</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">From</span><span class="p">,</span> <span class="k">const</span> <span class="k">union</span> <span class="n">Tos</span> <span class="n">Rcpt</span><span class="p">,</span> \
+                              <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">general</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">peruser</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="n">ret</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">ModReturn</span><span class="p">));</span>
 
-    ret-&gt;NewFile = NULL;
-    if (!strcmp(params, From)) {
-        ret-&gt;ret = 1;
-        ret-&gt;rejected = 1;
-        ret-&gt;message = strdup(REJECTED_MESSAGE);
-    }
-    else {
-        ret-&gt;ret = 0;
-        ret-&gt;rejected = 0;
-        ret-&gt;message = NULL;
-    }
-    return ret;
-}
-</code></pre>
+    <span class="n">ret</span><span class="o">-&gt;</span><span class="n">NewFile</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">From</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="n">REJECTED_MESSAGE</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
 <p>Looks easy don't you think? So, how do we make NQqueue to load our plugin? Simple: in /var/qmail/control/general.cfb put a line like this:</p>
 
@@ -336,70 +344,6 @@ like "a must have".</p>
 People say that if this doesn't get in trunk tag editing is off the table. Well guys, if that happens, bad luck.</p>
 
 <p>Anyways, Kwort 2.4 will use mpd+libmpd+gmpc with tag editing support. :-)</p>
-
-<hr width="60%">
-<br><a id="The childs of my son are my enemies... What about their childs"><br></a><a href="#The childs of my son are my enemies... What about their childs"><h3>The childs of my son are my enemies... What about their childs</h3></a><h6>Posted on: Nov 2007</h6><p>I had to deal with this problem related to process sincronization some months ago, and since Kwort 2.4 core edition is waiting for Linux 2.6.24, I will show you what my problem was and how I dealed with it.</p>
-
-<p>I was trying to run a process, this process forks itself and ran some bash scripts. So far there's nothing bad on it, the problem is that those shell scripts create some childs, and it is more than sure that the parent (the main script) die before the childs, so I'll get some orphans process. And the main C program shouldn't die before all the childs die.</p>
-
-<p>So, let's take for example the code in the first post in this blog "Checking the network with bash". In this case a wait in the end would fix the problem, but let's just think that we can't modify this script:</p>
-
-<pre><code>#!/usr/bin/env bash
-
-function pinging(){
-    SUBNET=${1}
-    LAST=${2}
-    PING="$(which ping) -c 1 -W 1"
-    ${PING} ${SUBNET}.${LAST} &gt; /dev/null 2&gt;&amp;1
-    if [ $? -eq 0 ]; then
-        echo -e "${SUBNET}.${LAST} is up"
-    fi
-}
-
-if [ -z ${2} ]; then
-    for((x=1;x&lt;255;x++)); do
-        ${0} ${1} ${x} &amp;
-    done
-else
-    pinging ${1} ${2}
-fi
-</code></pre>
-
-<p>So, this was the first attempt to control this mess but unfortunately didn't work as expected because this process was in another Process Group ID (avoid comments about controlling the return value of fork and such, since this is an example of something that didn't work):</p>
-
-<pre><code>int main(int argc, char *argv[]){
-    int status;
-    if(fork())
-        waitpid(-1*getpgrp(), &amp;status, 0);
-    else
-        execlp(argv[1], argv[1], argv+1, NULL);
-    return 0;
-}
-</code></pre>
-
-<p>So, basically, the idea was that the main C program shown above shouldn't die until all the childrens of the scripts die (that's why I was using using getpgrp(), which didn't work as expected for what I explained above).
-On Linux, running ps axfj, showed me that the small childrens (those one generated by the script) are in the same group, but I couldn't wait for them, as they are not my childrens, but then child of my child process children's.</p>
-
-<p>After dealing a little of time I came up whit this program that control all the childrens, grandchildrens and rest of the "family". The code is very simple to understand and explains on itself:</p>
-
-<pre><code>int main(int argc, char *argv[]){
-    int status;
-    pid_t pid;
-    if((pid=fork()) != 0) {
-        sleep(2);
-        waitpid(pid, &amp;status, 0);
-        while(killpg(pid, 0) != -1)
-            usleep(0.1);
-    }
-    else if(pid==0){
-        setpgid(getpid(), getpid());
-        execv(argv[1], argv+1);
-    }
-    return 0;
-}
-</code></pre>
-
-<p>Thanks to Marcel, who actually helped me a lot with some concepts and ideas to find a workaround to this.</p>
 
 <hr width="60%">
 

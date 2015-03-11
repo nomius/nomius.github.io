@@ -40,7 +40,78 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Using the ZTE MF 110 with 3g Movistar (Argentina on Linux"><br></a><a href="#Using the ZTE MF 110 with 3g Movistar (Argentina on Linux"><h3>Using the ZTE MF 110 with 3g Movistar (Argentina on Linux</h3></a><h6>Posted on: Jan 2010</h6><p>Hello all,
+                        <br><br><br><a id="Hidding messages in ICMP packets"><br></a><a href="#Hidding messages in ICMP packets"><h3>Hidding messages in ICMP packets</h3></a><h6>Posted on: Feb 2010</h6><p>Hello everybody. A new month, a new article (I wish I could do this so periodically).</p>
+
+<p>Today I'm going to show you something that I've been playing with. As you probably know (if you don't, I'm just telling you now :-)), the ICMP packets provides an arbitrary data space right after the ICMP header. Normally, no one use it, since ICMP is a control protocol that has all its usage right inside of it, leaving this data space useless.</p>
+
+<p>A few days ago, I saw someone connected on Cinetix and he was just connected, but not on the IRC server and I didn't know who he or she was. So an idea started to flow around my head "What about if I could send messages with ICMP packets".</p>
+
+<p>So actually this is what I did... I wrote a tool to put a message in the data space and send it using the ICMP type 7 which is unassigned (for example, ping is the type 8). The problem is that the kernel just drop type 7 (as we all assume) and the data space is also dropped in any icmp packet. So I wrote a kernel patch that print the message in the output of dmesg or
+/var/log/message if you have set KERN_NOTICE to be displayed (I think klogd -c 6 does).</p>
+
+<p>With this, you can send to a friend a message of the kind "Hey. This is David, I'm online on irc (jabber or whatever), jump in!" and it will be displayed in the system logs as a kernel notice.</p>
+
+<p>Please, take note that this is not a chat system, but an "emergency system", so don't start using it as an everyday conversation protocol. This also isn't a patch that should be in the kernel mainstream, since ICMP packets of type 7 is unassigned, and NOT a communication protocol.</p>
+
+<h5>What about security?</h5>
+
+<p>Well, you might start asking yourself this "What if someone from the outside starts flooding my logs with dumb messages?". Right, well, the answer to this is netfilter; use iptables to drop these kind of package. Something like this:</p>
+
+<pre><code>iptables -A INPUT -p icmp --icmp-type 7 -j DROP
+</code></pre>
+
+<p>As you might know or guess, you can also block only one IP address or accept from a certain network like this:</p>
+
+<pre><code>iptables -A INPUT -p icmp --icmp-type 7 \! -s 10.0.0.1/24 -j DROP
+</code></pre>
+
+<p>Use more complex rules creating policies like "if someone exceed the number of 5 ICMP type 7 packets in a minute, drop any packet from the IP address".</p>
+
+<h5>Enough with the talking... How do I use it?</h5>
+
+<p>Great, right to the point. So the steps:</p>
+
+<ol>
+<li>First of all, patch and compile your kernel.</li>
+</ol>
+
+<pre><code>cd linux-2.6.31 &amp;&amp; patch -p1 &lt; patch_icmp_type_7_messages.diff
+</code></pre>
+
+<p>And compile and install your new kernel using the way you normally do (make config/menuconfig, etc...)</p>
+
+<ol>
+<li>Then compile the icmp_send.c program:</li>
+</ol>
+
+<pre><code>gcc icmp_send.c -o icmp_send
+</code></pre>
+
+<ol>
+<li>Send a test message:</li>
+</ol>
+
+<pre><code>./icmp_send 127.0.0.1 "Hello world"
+</code></pre>
+
+<ol>
+<li>Check out the dmesg output:</li>
+</ol>
+
+<pre><code>./dmesg | grep "ICMP 7 Message"
+</code></pre>
+
+<p>Get it!
+Anyways, this is a really nice thing to play with and I hope people find it useful. You can get the kernel patch and the ICMP message program from the links below.</p>
+
+<p><a href="http://nomius.github.io/content/patches/patch_icmp_type_7_messages.diff">patch_icmp_type_7_messages.diff</a></p>
+
+<p><a href="http://nomius.github.io/content/patches/icmp_send.c">icmp_send.c</a></p>
+
+<p>Have fun.</p>
+
+<hr width="60%">
+<br><a id="Using the ZTE MF 110 with 3g Movistar (Argentina on Linux"><br></a><a href="#Using the ZTE MF 110 with 3g Movistar (Argentina on Linux"><h3>Using the ZTE MF 110 with 3g Movistar (Argentina on Linux</h3></a><h6>Posted on: Jan 2010</h6><p>Hello all,
 Today I'm going to explain how to do something really simple. As some of you might already know, I got this year a EEE PC netbook (1000HA). I have to admit that this baby is going great, I'm running the latest Kwort on it and it's really resource saving if you know how to set it up correctly.
 If I add this netbook a 3g connection, I can say that I'm online everywhere almost all of the time. Well, this is what happened... As most of you already know, I've been working for Accenture for over a year now and they provided me (and some of my co-workers) a 3g modem with internet connection, which is pretty nice.
 So, on january 1st after all the people who came my home to celebrate the new year left I sitted on the computer to figure out how to make it work.
@@ -190,23 +261,23 @@ Even at work, I'm a programmer (doing C on Unix now), and some of my fellows wer
 
 <p>Anyways, I like using tags, allows me to browse the code really fast (for those using Eclipse, I think is like if you press F3 over a function name). But I found this weird behavior using ctags+vim. See the above code:</p>
 
-<pre><code>  1 #include &lt;stdio.h&gt;
-  2
-  3 int asd(int s,
-  4         char a);
-  5
-  6 int main(int argc, char *argv[])
-  7 {
-  8     asd(1, 's');
-  9     return 0;
- 10 }
- 11
- 12 int asd(int s,
- 13         char a)
- 14 {
- 15     return s;
- 16 }
-</code></pre>
+<div class="codehilite"><pre><code>  <span class="mi">1</span> <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
+  <span class="mi">2</span>
+  <span class="mi">3</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+  <span class="mi">4</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">);</span>
+  <span class="mi">5</span>
+  <span class="mi">6</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+  <span class="mi">7</span> <span class="p">{</span>
+  <span class="mi">8</span>     <span class="n">asd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="sc">&#39;s&#39;</span><span class="p">);</span>
+  <span class="mi">9</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="mi">10</span> <span class="p">}</span>
+ <span class="mi">11</span>
+ <span class="mi">12</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+ <span class="mi">13</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">)</span>
+ <span class="mi">14</span> <span class="p">{</span>
+ <span class="mi">15</span>     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+ <span class="mi">16</span> <span class="p">}</span>
+</code></pre></div>
 
 <p>When I press ctrl+] over asd in line 8, it takes you to the 3rd line instead to the 12th...
 There's a "workaround" to this behavior, using --excmd=number while running ctags put the line numbers in the tags file (without this option ctags puts just an 'f' identifier to tell the editor that it is on that file). But it is just a visualization workaround, because you can't put any new line (or remove) in those files or your tags file will screw the tags file.</p>
@@ -341,14 +412,6 @@ this.</p>
 <p><a href="http://blog.as.tl/2008/11/01/online-video-lectures/">Online video lectures</a></p>
 
 <p>Btw, I took a position at iProgrammers and I'm working at Accenture now as a Senior Programmer.</p>
-
-<hr width="60%">
-<br><a id="NQqueue 0.3b"><br></a><a href="#NQqueue 0.3b"><h3>NQqueue 0.3b</h3></a><h6>Posted on: Aug 2008</h6><p>I'm just releasing NQqueue 0.3 beta.
-This is just a bug fix release and it is beta because of the new spamassassin plugin; I wrote this one on sunday, but since I don't use spamassassin (I have servers running dspam), I can't test it.</p>
-
-<p>This is just a release asking for people to flood my inbox with feedback on the spamassassin plugin, the configuration parameters are the same used with the dspam plugin, so only "pass" parameter is allowed, or empty.</p>
-
-<p>So, get latest NQqueue release here: <a href="http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.3b.tar.gz">http://europa.fapyd.unr.edu.ar/releases/NQqueue-0.3b.tar.gz</a></p>
 
 <hr width="60%">
 

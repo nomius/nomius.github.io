@@ -40,7 +40,23 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Kwort Linux new logo"><br></a><a href="#Kwort Linux new logo"><h3>Kwort Linux new logo</h3></a><h6>Posted on: Feb 2007</h6><p>Not really programming, unix and/or math, this is like <em>off-topic</em> for this weblog, but Kwort's related, so for transition, Unix related. :D</p>
+                        <br><br><br><a id="Kwort network manager 2.0 released"><br></a><a href="#Kwort network manager 2.0 released"><h3>Kwort network manager 2.0 released</h3></a><h6>Posted on: Feb 2007</h6><p>Has been like a lifetime since I wrote something here, sorry folks, I been studying and working a lot.</p>
+
+<p>I just released knm 2.0, I tried to do this for the last two weeks, but there was some problems with releases at berlios (unless that happened when I tried to release this new version of knm).
+No many improvements made, several bug fixes and some information dialogs.</p>
+
+<p>You can see the release notes with the changelog here: <a href="http://developer.berlios.de/project/shownotes.php?group_id=8115&amp;release_id=12311">Changelog and release notes</a></p>
+
+<p>And you can download this new release at here: <a href="http://prdownload.berlios.de/knm/knm-2.0.tar.gz">Download</a></p>
+
+<p>In other news, Kwort 2.2rc2 have been released, check Kwort site at my right or <a href="http://www.kwort.org/">here</a> (Thanks to Josep Subils Rigau who keep both the domains (.com and .org) registered). Please, if you're gonna download the iso, use Andreas's (aka avarus) mirror, as it is faster.</p>
+
+<p>Finally, I'm working in a patch for wavemon (<a href="http://www.janmorgenstern.de/projects-software.html">http://www.janmorgenstern.de/projects-software.html</a>), I already fixed any gcc incompatibilities but I'm still working trying to fix the ap list feature, because as it says in the source code it should be changed to the new 2.6 kernel api.</p>
+
+<p>That's all for today... Stay tuned. ;)</p>
+
+<hr width="60%">
+<br><a id="Kwort Linux new logo"><br></a><a href="#Kwort Linux new logo"><h3>Kwort Linux new logo</h3></a><h6>Posted on: Feb 2007</h6><p>Not really programming, unix and/or math, this is like <em>off-topic</em> for this weblog, but Kwort's related, so for transition, Unix related. :D</p>
 
 <p>I'm happy to announce that Kwort Linux has now a new logo.
 Some weeks ago, Julio Cesar Puigpinos wrote to a mailing list the idea of create a new logo for Kwort.
@@ -82,13 +98,13 @@ respects those and doesn't maximize over them.</p>
 <p>Which is great... I mean... Follow standards, that's good... But applets does not set struts, and sometimes the users just wants margins.
 So anyways, the patch is here for everyone who wants to use it. Just has to apply it and set the margins in the configuration file like this:</p>
 
-<pre><code>&lt;margin&gt;
-    &lt;top&gt;px&lt;/top&gt;
-    &lt;bottom&gt;px&lt;/bottom&gt;
-    &lt;left&gt;px&lt;/left&gt;
-    &lt;right&gt;px&lt;/right&gt;
-&lt;/margin&gt;
-</code></pre>
+<div class="codehilite"><pre><code><span class="nt">&lt;margin&gt;</span>
+    <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
+    <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
+    <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
+    <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
+<span class="nt">&lt;/margin&gt;</span>
+</code></pre></div>
 
 <p>So here's the patch: <a href="http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch">http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch</a></p>
 
@@ -149,8 +165,8 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 
 <p>So, this is what this command:</p>
 
-<pre><code>Xdialog --stdout --extra-button --extra-label "Extra Button" --inputbox "Type your input. Hit Extra Button to get 3 as return value" 0 0
-</code></pre>
+<div class="codehilite"><pre><code>Xdialog --stdout --extra-button --extra-label <span class="s2">&quot;Extra Button&quot;</span> --inputbox <span class="s2">&quot;Type your input. Hit Extra Button to get 3 as return value&quot;</span> <span class="m">0</span> 0
+</code></pre></div>
 
 <p>will show:</p>
 
@@ -177,15 +193,6 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
   
   <p>After replacing all the original monkeys, none of the remaining monkeys have ever been sprayed with cold water. Nevertheless, no monkey ever again approaches the stairs to try for the banana. Why not? Because as far as they know, that's the way it's always been done around here.</p>
 </blockquote>
-
-<hr width="60%">
-<br><a id="Here we go again with sqwebmail"><br></a><a href="#Here we go again with sqwebmail"><h3>Here we go again with sqwebmail</h3></a><h6>Posted on: Sep 2006</h6><p>I really hate when this happens. I released a sqwebmail vacations mode patch just two weeks ago... And guess what... Today browsing the net I found a new sqwebmail version.
-Fortunally no big changes in the code so I adapted the patch in a few minutes.
-I modify the this patch to make it compatible with both versions (5.1.2 and 5.1.3), I don't know if it works in older versions.</p>
-
-<p>Ok, here I leave you the patch:</p>
-
-<p><a href="http://nomius.github.io/content/patches/sqwebmail-5.1.3-vacations-mode.patch">http://nomius.github.io/content/patches/sqwebmail-5.1.3-vacations-mode.patch</a></p>
 
 <hr width="60%">
 
