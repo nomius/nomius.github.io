@@ -9,7 +9,7 @@ NAVBAR = [ 'Home|blog',
                  'dmemory|https://github.com/nomius/dmemory',
                  'nqqueue|https://github.com/nomius/nqqueue',
                  'mttools|https://github.com/nomius/mttools',
-                 'Kwort|http://www.kworg.org' ] ],
+                 'Kwort|http://www.kwort.org' ] ],
            'Links|links.html' ]
 
 TITLE = "David's Website"
