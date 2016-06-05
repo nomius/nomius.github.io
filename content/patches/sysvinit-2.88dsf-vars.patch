@@ -1,0 +1,156 @@
+diff -Naur sysvinit-2.88dsf.old/src/init.c sysvinit-2.88dsf/src/init.c
+--- sysvinit-2.88dsf.old/src/init.c	2010-04-13 09:48:54.000000000 +0000
++++ sysvinit-2.88dsf/src/init.c	2016-06-05 20:18:10.276980093 +0000
+@@ -107,6 +107,15 @@
+ CHILD *family = NULL;		/* The linked list of all entries */
+ CHILD *newFamily = NULL;	/* The list after inittab re-read */
+ 
++struct vars {
++	char *name;
++	char *data;
++	struct vars *next;
++};
++
++struct vars variables = { NULL, NULL, NULL };
++int new_conf_envs;
++
+ CHILD ch_emerg = {		/* Emergency shell */
+ 	WAITING, 0, 0, 0, 0,
+ 	"~~",
+@@ -263,6 +272,34 @@
+ }
+ 
+ 
++void free_variables()
++{
++	struct vars *ptr = NULL, *next = NULL;
++
++	for (ptr = variables.next; ptr; ptr = next) {
++		if (ptr->name)
++			free(ptr->name);
++		if (ptr->data)
++			free(ptr->data);
++		next = ptr->next;
++		free(ptr);
++	}
++	variables.next = NULL;
++	new_conf_envs = 0;
++}
++
++
++void add_variable(char *name, char *data)
++{
++	struct vars *ptr = (struct vars *)imalloc(sizeof(struct vars));
++	ptr->name = strdup(name);
++	ptr->data = strdup(data);
++	ptr->next = variables.next;
++	variables.next = ptr;
++	new_conf_envs +=1;
++}
++
++
+ /*
+  *	Send the state info of the previous running init to
+  *	the new one, in a version-independant way.
+@@ -874,10 +911,12 @@
+ 	char		i_shell[] = "SHELL=" SHELL;
+ 	char		**e;
+ 	int		n, i;
++	char        *str = NULL;
++	struct vars *ptr = NULL;
+ 
+ 	for (n = 0; environ[n]; n++)
+ 		;
+-	n += NR_EXTRA_ENV;
++	n += NR_EXTRA_ENV + new_conf_envs;
+ 	if (child)
+ 		n += 8;
+ 	e = calloc(n, sizeof(char *));
+@@ -890,6 +929,12 @@
+ 			e[n++] = istrdup(extra_env[i]);
+ 	}
+ 
++	for (ptr = variables.next; ptr; ptr = ptr->next) {
++		str = (char *)imalloc(strlen(ptr->name) + 1 + strlen(ptr->data) + 1);
++		sprintf(str, "%s=%s", ptr->name, ptr->data);
++		e[n++] = str;
++	}
++
+ 	if (child) {
+ 		snprintf(i_cons, sizeof(i_cons), "CONSOLE=%s", console_dev);
+ 		i_lvl[9]   = thislevel;
+@@ -1259,6 +1304,7 @@
+   }
+   INITDBG(L_VB, "Reading inittab");
+ #endif
++  free_variables();
+ 
+   /*
+    *	Open INITTAB and real line by line.
+@@ -1308,7 +1354,7 @@
+ 	if (!process)    strcpy(err, "missing process field");
+ 	if (!action || !*action)
+ 			strcpy(err, "missing action field");
+-	if (id && strlen(id) > sizeof(utproto.ut_id))
++	if (id && strlen(id) > sizeof(utproto.ut_id) && *id != '+' && process && *process != '+')
+ 		sprintf(err, "id field too long (max %d characters)",
+ 			(int)sizeof(utproto.ut_id));
+ 	if (rlevel && strlen(rlevel) > 11)
+@@ -1324,6 +1370,14 @@
+ 	}
+   
+ 	/*
++	 * Check if this is a configuration variable
++	 */
++	if (*id == '+') {
++		add_variable(id + 1, action);
++		continue;
++	}
++
++	/*
+ 	 *	Decode the "action" field
+ 	 */
+ 	actionNo = -1;
+diff -Naur sysvinit-2.88dsf.old/src/init.h sysvinit-2.88dsf/src/init.h
+--- sysvinit-2.88dsf.old/src/init.h	2009-11-24 10:03:19.000000000 +0000
++++ sysvinit-2.88dsf/src/init.h	2016-06-05 01:31:39.451075067 +0000
+@@ -86,7 +86,7 @@
+   int pid;			/* Pid of this process */
+   time_t tm;			/* When respawned last */
+   int count;			/* Times respawned in the last 2 minutes */
+-  char id[8];			/* Inittab id (must be unique) */
++  char id[32];			/* Inittab id (must be unique) */
+   char rlevel[12];		/* run levels */
+   int action;			/* what to do (see list below) */
+   char process[128];		/* The command line */
+diff -Naur sysvinit-2.88dsf.old/src/shutdown.c sysvinit-2.88dsf/src/shutdown.c
+--- sysvinit-2.88dsf.old/src/shutdown.c	2010-03-23 14:37:01.000000000 +0000
++++ sysvinit-2.88dsf/src/shutdown.c	2016-06-05 01:32:31.957075786 +0000
+@@ -482,7 +482,6 @@
+ 	struct stat		st;
+ 	struct utmp		*ut;
+ 	time_t			t;
+-	uid_t			realuid;
+ 	char			*halttype;
+ 	char			*downusers[32];
+ 	char			buf[128];
+@@ -498,7 +497,6 @@
+ 	int			user_ok = 0;
+ 
+ 	/* We can be installed setuid root (executable for a special group) */
+-	realuid = getuid();
+ 	setuid(geteuid());
+ 
+ 	if (getuid() != 0) {
+diff -Naur sysvinit-2.88dsf.old/src/wall.c sysvinit-2.88dsf/src/wall.c
+--- sysvinit-2.88dsf.old/src/wall.c	2009-11-22 22:05:53.000000000 +0000
++++ sysvinit-2.88dsf/src/wall.c	2016-06-05 01:33:10.090076308 +0000
+@@ -110,7 +110,7 @@
+ 
+   openlog("wall", LOG_PID, LOG_USER);
+   syslog(LOG_INFO, "wall: user %s broadcasted %d lines (%d chars)",
+-	whoami, i, strlen(buf));
++	whoami, i, (int)strlen(buf));
+   closelog();
+ 
+   unsetenv("TZ");
