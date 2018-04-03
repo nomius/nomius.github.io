@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: iso-8859-1 -*-
 
 from conf import *
@@ -28,7 +28,7 @@ class Blog:
         for post in self.file_posts:
 
             with open(post, "r") as pst:
-                print "    .·-> Parsing post: " + post
+                print("    .·-> Parsing post: " + post)
                 spost = os.path.splitext(os.path.basename(post))[0]
                 date_posted = post.replace(POSTS_LOCATION, '').split('/')
                 self.parsed_content += '<br><a id="' + spost + '"><br></a>'
@@ -75,7 +75,7 @@ class Blog:
         prev_next = '<table style="width:100%"><tr><td>' + pprev + '</td><td align="right">' + pnext + '</td></tr></table><br>'
 
         with open(fname, 'w') as page_file:
-            print '   Writing file: ' + fname
+            print('   Writing file: ' + fname)
             pw = Writters(page_file, '<br><br>' + self.parsed_content)
             pw.WriteHTMLHead()
             pw.WriteNavBar(self.blog_name)
@@ -155,18 +155,18 @@ def main(argv):
             outfname = item.split('|')[1]
             cfile = CONTENT_LOCATION + '/' + name + '.md'
             if outfname == 'blog':
-                print "Creating a weblog in: " + name
+                print("Creating a weblog in: " + name)
                 b = Blog(name).CreateBlogPages()
             elif os.path.isfile(cfile):
                 Page(name, outfname)
-                print "Generating: " + outfname
+                print("Generating: " + outfname)
         elif type(item) is list:
             for iitem in item[1]:
                 name = iitem.split('|')[0]
                 outfname = iitem.split('|')[1]
                 cfile = CONTENT_LOCATION + '/' + name + '.md'
                 if os.path.isfile(cfile):
-                    print "Generating: " + outfname
+                    print("Generating: " + outfname)
                     Page(name, outfname)
 
 if __name__ == "__main__":
