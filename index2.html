@@ -30,7 +30,7 @@
 <li><a href="https://github.com/nomius/dmemory">dmemory</a></li>
 <li><a href="https://github.com/nomius/nqqueue">nqqueue</a></li>
 <li><a href="https://github.com/nomius/mttools">mttools</a></li>
-<li><a href="http://www.kworg.org">Kwort</a></li>
+<li><a href="http://www.kwort.org">Kwort</a></li>
 </ul></li>
 <li><a href="links.html">Links</a></li>
 
@@ -40,7 +40,23 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="NQqueue 0.3b"><br></a><a href="#NQqueue 0.3b"><h3>NQqueue 0.3b</h3></a><h6>Posted on: Aug 2008</h6><p>I'm just releasing NQqueue 0.3 beta.
+                        <br><br><br><a id="Updates!"><br></a><a href="#Updates!"><h3>Updates!</h3></a><h6>Posted on: Nov 2008</h6><p>Well, it's been a long time in the road since my last post here. This weblog isn't over, but I been doing a lot of things and didn't got the time to write something.</p>
+
+<p>Ok, things I've been doing:
+* I wrote a new network manager for Kwort 2.4.2 (I'm already working on a new Kwort version), screenshots are coming
+* I also wrote a new user manager for next Kwort also. Screenshots are ON the way. :-D
+* A friend of mine (Jp) is working on a new init system which is very cool, so Kwort will use it.
+* Bought a pretty cool (4 cores) new computer (Desktop). I would like to thank to the aircable.net people who helped me to buy my new computer with a donation. (A BIG THANKS TO YOU GUYS)
+* Working... :-)</p>
+
+<p>Anyways, I want here to point this link from my good old friend Andreas Schipplock, he made a small list of interesting links to read and/or hear.</p>
+
+<p><a href="http://blog.as.tl/2008/11/01/online-video-lectures/">Online video lectures</a></p>
+
+<p>Btw, I took a position at iProgrammers and I'm working at Accenture now as a Senior Programmer.</p>
+
+<hr width="60%">
+<br><a id="NQqueue 0.3b"><br></a><a href="#NQqueue 0.3b"><h3>NQqueue 0.3b</h3></a><h6>Posted on: Aug 2008</h6><p>I'm just releasing NQqueue 0.3 beta.
 This is just a bug fix release and it is beta because of the new spamassassin plugin; I wrote this one on sunday, but since I don't use spamassassin (I have servers running dspam), I can't test it.</p>
 
 <p>This is just a release asking for people to flood my inbox with feedback on the spamassassin plugin, the configuration parameters are the same used with the dspam plugin, so only "pass" parameter is allowed, or empty.</p>
@@ -156,57 +172,57 @@ This situation drove me nuts the last year so I decided "Why I don't just write 
 
 <p>So now I can show you a small general plugin to block a Sender:</p>
 
-<div class="codehilite"><pre><code><span class="cm">/* vim: set sw=4 sts=4 : */</span>
+<pre><code>/* vim: set sw=4 sts=4 : */
 
-<span class="cp">#include &lt;string.h&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-<span class="cp">#include &lt;stdlib.h&gt;</span>
-<span class="cp">#include &lt;nqqueue.h&gt;</span>
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;nqqueue.h&gt;
 
-<span class="cp">#define PLUGIN_VERSION &quot;1.0&quot;</span>
-<span class="cp">#define PLUGIN_NAME &quot;black&quot;</span>
-<span class="cp">#define REJECTED_MESSAGE &quot;Message rejected because of black list&quot;</span>
+#define PLUGIN_VERSION "1.0"
+#define PLUGIN_NAME "black"
+#define REJECTED_MESSAGE "Message rejected because of black list"
 
-<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_name</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_NAME</span><span class="p">);</span>
-<span class="p">}</span>
+char *plugin_name()
+{
+    return strdup(PLUGIN_NAME);
+}
 
-<span class="kt">char</span> <span class="o">*</span><span class="nf">plugin_version</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">strdup</span><span class="p">(</span><span class="n">PLUGIN_VERSION</span><span class="p">);</span>
-<span class="p">}</span>
+char *plugin_version()
+{
+    return strdup(PLUGIN_VERSION);
+}
 
-<span class="cm">/* Parameters:</span>
-<span class="cm"> * params = a char pointer with parameters used to call the module (in this case, the email address to block).</span>
-<span class="cm"> * mail = It&#39;s a char pointer to the filename that contains the email.</span>
-<span class="cm"> * From = a char pointer with the From email address. (if it matchs the param, the mail would be blocked)</span>
-<span class="cm"> * Rcpt = an union that contains space for a char pointer (if user pluing) or a pointer to a PUStruct</span>
-<span class="cm"> *        struct (if general plugin).</span>
-<span class="cm"> * general = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
-<span class="cm"> *           already runned by general plugins</span>
-<span class="cm"> * peruser = a pointer to a RSStruct struct, which is structure with all the plugins and its return values</span>
-<span class="cm"> *           already runned by per user plugins</span>
-<span class="cm"> */</span>
-<span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="nf">plugin_init</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">mail</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">From</span><span class="p">,</span> <span class="k">const</span> <span class="k">union</span> <span class="n">Tos</span> <span class="n">Rcpt</span><span class="p">,</span> \
-                              <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">general</span><span class="p">,</span> <span class="k">struct</span> <span class="n">RSStruct</span> <span class="o">*</span><span class="n">peruser</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">struct</span> <span class="n">ModReturn</span> <span class="o">*</span><span class="n">ret</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">ModReturn</span><span class="p">));</span>
+/* Parameters:
+ * params = a char pointer with parameters used to call the module (in this case, the email address to block).
+ * mail = It's a char pointer to the filename that contains the email.
+ * From = a char pointer with the From email address. (if it matchs the param, the mail would be blocked)
+ * Rcpt = an union that contains space for a char pointer (if user pluing) or a pointer to a PUStruct
+ *        struct (if general plugin).
+ * general = a pointer to a RSStruct struct, which is structure with all the plugins and its return values
+ *           already runned by general plugins
+ * peruser = a pointer to a RSStruct struct, which is structure with all the plugins and its return values
+ *           already runned by per user plugins
+ */
+struct ModReturn *plugin_init(char *params, const char *mail, const char *From, const union Tos Rcpt, \
+                              struct RSStruct *general, struct RSStruct *peruser)
+{
+    struct ModReturn *ret = malloc(sizeof(struct ModReturn));
 
-    <span class="n">ret</span><span class="o">-&gt;</span><span class="n">NewFile</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">From</span><span class="p">))</span> <span class="p">{</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="n">REJECTED_MESSAGE</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">rejected</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">ret</span><span class="o">-&gt;</span><span class="n">message</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
+    ret-&gt;NewFile = NULL;
+    if (!strcmp(params, From)) {
+        ret-&gt;ret = 1;
+        ret-&gt;rejected = 1;
+        ret-&gt;message = strdup(REJECTED_MESSAGE);
+    }
+    else {
+        ret-&gt;ret = 0;
+        ret-&gt;rejected = 0;
+        ret-&gt;message = NULL;
+    }
+    return ret;
+}
+</code></pre>
 
 <p>Looks easy don't you think? So, how do we make NQqueue to load our plugin? Simple: in /var/qmail/control/general.cfb put a line like this:</p>
 
@@ -320,30 +336,6 @@ None of above shown implementations gives " Authentication failure". I guess tha
 I should see that like something in a long distant future... But I think it could be a way to avoid the paranoid.</p>
 
 <p>So since ktsuss have its own implementation of authentication backend, that's why it needs setuid.</p>
-
-<hr width="60%">
-<br><a id="MPD: What's missing?"><br></a><a href="#MPD: What's missing?"><h3>MPD: What's missing?</h3></a><h6>Posted on: Jan 2008</h6><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
-Well, I started working on gmpc to add support for tag editing when I stopped with the following issue: The fact that mpd doesn't support tag editing was the reason for gmpc to not support it (which makes sense), because mpd is run on a different machine so gmpc does not have access to these files.
-Some of you will tell me "Dude! Sonata supports tag editing even when mpd doesn't", and I know, but what sonata does is actually a very like a "half done work" with that, as you can only edit tags if mpd runs on the same machine sonata is running, which normally doesn't happen (that's the idea of a client-server structure).
-So, now, my approach to resolve the problem was completely different as I had to include a new command in the mpd protocol so I could add tag editing support.
-Well, I did include the command, I did gave support to tag edition and I even gave a command to check if the file can be edited or not. Finally, I gave support to libmpd and gmpc, so now, gmpc can "full edit" tags. :-)</p>
-
-<p>So here are the patches (descriptions on how to use the commads can be found in mpd's patch, and descriptions on how to use the new functions libraries can be found in libmpd's patch):
-MPD (stable version, by now 0.13.0): <a href="http://nomius.github.io/content/patches/mpd-0.13.0-tag_edit_support.patch">mpd-0.13.0-tag<em>edit</em>support.patch</a></p>
-
-<p>LIBMPD (stable version, by now 0.15.0): <a href="http://nomius.github.io/content/patches/libmpd-0.15.0-tag_edit_support.patch">libmpd-0.15.0-tag<em>edit</em>support.patch</a></p>
-
-<p>GMPC (stable version, by now 0.15.0): <a href="http://nomius.github.io/content/patches/gmpc-0.15.5.0-tag_edit_support.patch">gmpc-0.15.5.0-tag<em>edit</em>support.patch</a></p>
-
-<p>Now, the main problem wasn't the code itself, I mean, I had to spend some time investigating the code to finally hint the right keys. But the problem is now in what mpd developers want to do with this patch. Some developers like it (specially client's developers and users, like Qball Cow and Scott Horowitz), but others disagree. I really understand both sides (I have to admit I
-like more mine's, that's why I developed this patch).
-Some argues that the patch will add more code to maintain, but actually, the mpd's patch is not more than 300 lines (so that excuse looks more like a joke), others say that mpd is just a music player with a client-server architecture, and not a tag editing software, and I really understand this philosophy. But IMHO I think that if mpd wants to take care of the music this is
-like "a must have".</p>
-
-<p>Since this made very people a little uncomfortably, I see this like something good, not because of the internal fight/war, but because it helps to discuss the development. The fact that is being considered means the project is still alive and defining issues while the time is going on.
-People say that if this doesn't get in trunk tag editing is off the table. Well guys, if that happens, bad luck.</p>
-
-<p>Anyways, Kwort 2.4 will use mpd+libmpd+gmpc with tag editing support. :-)</p>
 
 <hr width="60%">
 

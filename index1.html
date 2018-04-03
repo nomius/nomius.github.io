@@ -30,7 +30,7 @@
 <li><a href="https://github.com/nomius/dmemory">dmemory</a></li>
 <li><a href="https://github.com/nomius/nqqueue">nqqueue</a></li>
 <li><a href="https://github.com/nomius/mttools">mttools</a></li>
-<li><a href="http://www.kworg.org">Kwort</a></li>
+<li><a href="http://www.kwort.org">Kwort</a></li>
 </ul></li>
 <li><a href="links.html">Links</a></li>
 
@@ -40,7 +40,18 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Hidding messages in ICMP packets"><br></a><a href="#Hidding messages in ICMP packets"><h3>Hidding messages in ICMP packets</h3></a><h6>Posted on: Feb 2010</h6><p>Hello everybody. A new month, a new article (I wish I could do this so periodically).</p>
+                        <br><br><br><a id="GNU pop3d fix"><br></a><a href="#GNU pop3d fix"><h3>GNU pop3d fix</h3></a><h6>Posted on: Nov 2010</h6><p>Wooooo, kinda a lot without saying something here! Well, I took some sabbatical months of blogging ;-) </p>
+
+<p>Recently I've been working on a mail server, and those who know me, knows that I'm pretty minimalistic. So I started with exim and gnu-pop3d (no imap for this) with stunnel to provide ssl support.
+I use Unix users for authentication, but gnu-pop3d had a (pretty small) bug which made it reject any authentication whether it is right or wrong.
+So I wrote a patch to provide a fix and sent it to Jorgen Thomsen. He answered me on Wednesday telling me that the patch was accepted.</p>
+
+<p>Anyways, I leave the patch here: <a href="http://nomius.github.io/content/patches/gnu-pop3d-0.9.12-fix_passwd_login.patch">gnu-pop3d-0.9.12-fix<em>passwd</em>login.patch</a></p>
+
+<p>Cheers!</p>
+
+<hr width="60%">
+<br><a id="Hidding messages in ICMP packets"><br></a><a href="#Hidding messages in ICMP packets"><h3>Hidding messages in ICMP packets</h3></a><h6>Posted on: Feb 2010</h6><p>Hello everybody. A new month, a new article (I wish I could do this so periodically).</p>
 
 <p>Today I'm going to show you something that I've been playing with. As you probably know (if you don't, I'm just telling you now :-)), the ICMP packets provides an arbitrary data space right after the ICMP header. Normally, no one use it, since ICMP is a control protocol that has all its usage right inside of it, leaving this data space useless.</p>
 
@@ -261,23 +272,23 @@ Even at work, I'm a programmer (doing C on Unix now), and some of my fellows wer
 
 <p>Anyways, I like using tags, allows me to browse the code really fast (for those using Eclipse, I think is like if you press F3 over a function name). But I found this weird behavior using ctags+vim. See the above code:</p>
 
-<div class="codehilite"><pre><code>  <span class="mi">1</span> <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
-  <span class="mi">2</span>
-  <span class="mi">3</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
-  <span class="mi">4</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">);</span>
-  <span class="mi">5</span>
-  <span class="mi">6</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-  <span class="mi">7</span> <span class="p">{</span>
-  <span class="mi">8</span>     <span class="n">asd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="sc">&#39;s&#39;</span><span class="p">);</span>
-  <span class="mi">9</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
- <span class="mi">10</span> <span class="p">}</span>
- <span class="mi">11</span>
- <span class="mi">12</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
- <span class="mi">13</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">)</span>
- <span class="mi">14</span> <span class="p">{</span>
- <span class="mi">15</span>     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
- <span class="mi">16</span> <span class="p">}</span>
-</code></pre></div>
+<pre><code>  1 #include &lt;stdio.h&gt;
+  2
+  3 int asd(int s,
+  4         char a);
+  5
+  6 int main(int argc, char *argv[])
+  7 {
+  8     asd(1, 's');
+  9     return 0;
+ 10 }
+ 11
+ 12 int asd(int s,
+ 13         char a)
+ 14 {
+ 15     return s;
+ 16 }
+</code></pre>
 
 <p>When I press ctrl+] over asd in line 8, it takes you to the 3rd line instead to the 12th...
 There's a "workaround" to this behavior, using --excmd=number while running ctags put the line numbers in the tags file (without this option ctags puts just an 'f' identifier to tell the editor that it is on that file). But it is just a visualization workaround, because you can't put any new line (or remove) in those files or your tags file will screw the tags file.</p>
@@ -396,22 +407,6 @@ this.</p>
 <p>Please, if you have any ideas for Kwort or any of the tools/applications I write, please write me, it would be nice to hear (read) about you and your ideas, and also, I don't know... help maybe? :-)</p>
 
 <p>We'll, this post is already becoming large so I'm off to bed now. Have a nice week and see you around guys.</p>
-
-<hr width="60%">
-<br><a id="Updates!"><br></a><a href="#Updates!"><h3>Updates!</h3></a><h6>Posted on: Nov 2008</h6><p>Well, it's been a long time in the road since my last post here. This weblog isn't over, but I been doing a lot of things and didn't got the time to write something.</p>
-
-<p>Ok, things I've been doing:
-* I wrote a new network manager for Kwort 2.4.2 (I'm already working on a new Kwort version), screenshots are coming
-* I also wrote a new user manager for next Kwort also. Screenshots are ON the way. :-D
-* A friend of mine (Jp) is working on a new init system which is very cool, so Kwort will use it.
-* Bought a pretty cool (4 cores) new computer (Desktop). I would like to thank to the aircable.net people who helped me to buy my new computer with a donation. (A BIG THANKS TO YOU GUYS)
-* Working... :-)</p>
-
-<p>Anyways, I want here to point this link from my good old friend Andreas Schipplock, he made a small list of interesting links to read and/or hear.</p>
-
-<p><a href="http://blog.as.tl/2008/11/01/online-video-lectures/">Online video lectures</a></p>
-
-<p>Btw, I took a position at iProgrammers and I'm working at Accenture now as a Senior Programmer.</p>
 
 <hr width="60%">
 

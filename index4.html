@@ -30,7 +30,7 @@
 <li><a href="https://github.com/nomius/dmemory">dmemory</a></li>
 <li><a href="https://github.com/nomius/nqqueue">nqqueue</a></li>
 <li><a href="https://github.com/nomius/mttools">mttools</a></li>
-<li><a href="http://www.kworg.org">Kwort</a></li>
+<li><a href="http://www.kwort.org">Kwort</a></li>
 </ul></li>
 <li><a href="links.html">Links</a></li>
 
@@ -40,7 +40,16 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Kwort network manager 2.0 released"><br></a><a href="#Kwort network manager 2.0 released"><h3>Kwort network manager 2.0 released</h3></a><h6>Posted on: Feb 2007</h6><p>Has been like a lifetime since I wrote something here, sorry folks, I been studying and working a lot.</p>
+                        <br><br><br><a id="Kwort Linux (to be released) and Kpkg (released)"><br></a><a href="#Kwort Linux (to be released) and Kpkg (released)"><h3>Kwort Linux (to be released) and Kpkg (released)</h3></a><h6>Posted on: Mar 2007</h6><p>Kpkg 2.4 was released some minutes ago, you can download it from here: <a href="http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz">http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz</a></p>
+
+<p>This version is a bug fix release, now PKG<em>GOOD and PKG</em>FAIL works with upgrade as it should and I fixed a weird issue due to a scope problem in bash functions.</p>
+
+<p>As usual, release notes and Changelog can be found <a href="https://developer.berlios.de/project/shownotes.php?group_id=7171&amp;release_id=12417">here</a></p>
+
+<p>That's about Kpkg. Now, let's go to the important business. Kwort 2.2 final version will be released in the next couple of hours as some bugs (I hope no more appear) were fixed. The most important upgrades of this final version are kpkg and dialog. Not important upgrades were aaa_base and freedesktop packages that were modified to avoid annoying messages during the install.</p>
+
+<hr width="60%">
+<br><a id="Kwort network manager 2.0 released"><br></a><a href="#Kwort network manager 2.0 released"><h3>Kwort network manager 2.0 released</h3></a><h6>Posted on: Feb 2007</h6><p>Has been like a lifetime since I wrote something here, sorry folks, I been studying and working a lot.</p>
 
 <p>I just released knm 2.0, I tried to do this for the last two weeks, but there was some problems with releases at berlios (unless that happened when I tried to release this new version of knm).
 No many improvements made, several bug fixes and some information dialogs.</p>
@@ -98,13 +107,13 @@ respects those and doesn't maximize over them.</p>
 <p>Which is great... I mean... Follow standards, that's good... But applets does not set struts, and sometimes the users just wants margins.
 So anyways, the patch is here for everyone who wants to use it. Just has to apply it and set the margins in the configuration file like this:</p>
 
-<div class="codehilite"><pre><code><span class="nt">&lt;margin&gt;</span>
-    <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
-    <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
-    <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
-    <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
-<span class="nt">&lt;/margin&gt;</span>
-</code></pre></div>
+<pre><code>&lt;margin&gt;
+    &lt;top&gt;px&lt;/top&gt;
+    &lt;bottom&gt;px&lt;/bottom&gt;
+    &lt;left&gt;px&lt;/left&gt;
+    &lt;right&gt;px&lt;/right&gt;
+&lt;/margin&gt;
+</code></pre>
 
 <p>So here's the patch: <a href="http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch">http://nomius.github.io/content/patches/openbox-3.3.1-margins.patch</a></p>
 
@@ -165,8 +174,8 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 
 <p>So, this is what this command:</p>
 
-<div class="codehilite"><pre><code>Xdialog --stdout --extra-button --extra-label <span class="s2">&quot;Extra Button&quot;</span> --inputbox <span class="s2">&quot;Type your input. Hit Extra Button to get 3 as return value&quot;</span> <span class="m">0</span> 0
-</code></pre></div>
+<pre><code>Xdialog --stdout --extra-button --extra-label "Extra Button" --inputbox "Type your input. Hit Extra Button to get 3 as return value" 0 0
+</code></pre>
 
 <p>will show:</p>
 
@@ -175,24 +184,6 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 <p>So... Here's the patch, I hope someone finds it useful like me:</p>
 
 <p><a href="http://nomius.github.io/content/patches/Xdialog-2.3.1-patch-extra-button.patch">http://nomius.github.io/content/patches/Xdialog-2.3.1-patch-extra-button.patch</a></p>
-
-<hr width="60%">
-<br><a id="Something interesting"><br></a><a href="#Something interesting"><h3>Something interesting</h3></a><h6>Posted on: Sep 2006</h6><p>This is kind of "off topic" but I see this interesting:</p>
-
-<blockquote>
-  <p>Start with a cage containing five monkeys. Inside the cage, hang a banana over a set of stairs. Before long, a monkey will go to the stairs and climb toward the banana. As soon as he touches the stairs, spray the other monkeys with cold water.</p>
-  
-  <p>After a while, another monkey makes an attempt with the same result--the other monkeys are sprayed with cold water. Pretty soon, when any monkey tries to climb the stairs, the other monkeys will try to prevent it.</p>
-  
-  <p>Now, put away the cold water. Remove one monkey from the cage and replace him with a new one. The new monkey sees the banana and wants to climb the stairs. To the monkey's surprise, all the other monkeys attack him. After another attempt and attack, he knows that if he tries to climb the stairs, he'll be assaulted.</p>
-  
-  <p>Next, remove another of the original five monkeys and replace him with a new one. The new comer goes to the stairs and is attacked. The previous new comer takes part in the punishment with enthusiasm! Likewise, replace a third original monkey with a new one, then a fourth, then the fifth. Every time the newest monkey takes to the stairs, he is attacked.
-  Advertisement</p>
-  
-  <p>Most of the monkeys that are beating him have no idea why they weren't permitted to climb the stairs or why they're participating in the beating of the newest monkey.</p>
-  
-  <p>After replacing all the original monkeys, none of the remaining monkeys have ever been sprayed with cold water. Nevertheless, no monkey ever again approaches the stairs to try for the banana. Why not? Because as far as they know, that's the way it's always been done around here.</p>
-</blockquote>
 
 <hr width="60%">
 
