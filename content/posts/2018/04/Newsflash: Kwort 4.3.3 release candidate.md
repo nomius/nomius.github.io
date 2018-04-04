@@ -13,4 +13,6 @@ So Kwort 4.3.3 is almost out and here's some highlights to share:
 If people is looking on running Google Chrome instead of Chromium, a script named `chrome_packaging.sh` is available in the ISO in boot/tools that will package Google Chrome from the latest version available (this one requires libcups available in the repository).
 Additionally, if you need kernel headers, a script named `gen-kernel-headers-tarball.sh` is available in the ISO in boot/tools. I would advice you to run it against the kernel version distributed by Kwort, as normally kernel headers needed are the same used when compiled the libc.
 
+Where to download the first release candidate? [kwort-4.3.3rc1.iso](http://kwort.org/downloads/kwort-4.3.3rc1.iso) [md5sum](http://kwort.org/downloads/kwort-4.3.3rc1.iso.md5) [sha1sum](http://kwort.org/downloads/kwort-4.3.3rc1.iso.sha1)
+
 Cheers!
