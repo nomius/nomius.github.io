@@ -40,7 +40,35 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="MPD: What's missing?"><br></a><a href="#MPD: What's missing?"><h3>MPD: What's missing?</h3></a><h6>Posted on: Jan 2008</h6><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
+                        <br><br><br><a id="Why ktsuss use setuid"><br></a><a href="#Why ktsuss use setuid"><h3>Why ktsuss use setuid</h3></a><h6>Posted on: Feb 2008</h6><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
+
+<p>Using pam would requiere setuid too (since pam_unix2 doesn't have it's own wrapper), which doesn't bother me as long as I program in a secure way... What really does, is that not every distribution out there use pam, slackware is the most important it comes to my mind now.
+Using su, well, there might be a problem there, gksu does it in a very unportable way waiting for the string " Authentication failure" which is a very bad idea, look this example:</p>
+
+<pre><code>Fedora "su" command:
+-sh-3.1$ su
+Password:
+su: incorrect password
+-sh-3.1$
+Slackware (Kwort) "su" command:
+nomius@Neptune:~$ su
+Password:
+Sorry.
+nomius@Neptune:~$
+</code></pre>
+
+<p>As you can see in gksu, different versions of su would really break things up.
+None of above shown implementations gives " Authentication failure". I guess that message is given by pam with strerror(), so once again, it's not portable.</p>
+
+<p>The actual ktsuss code is very clean and simple (which is the whole idea behind ktsuss), I always gave security with the authentication backend, maybe a feature bug (like the PATH thing in 1.1), but not security issues.</p>
+
+<p>There might be a way using su better than what gksu does, something like doing "su -c exit" (pepping the password of course) getting the exit status with WEXITSTATUS(), waiting for 0 (password ok and then run su command with the same password) or 1 (wrong password). But would be kind of messy...
+I should see that like something in a long distant future... But I think it could be a way to avoid the paranoid.</p>
+
+<p>So since ktsuss have its own implementation of authentication backend, that's why it needs setuid.</p>
+
+<hr width="60%">
+<br><a id="MPD: What's missing?"><br></a><a href="#MPD: What's missing?"><h3>MPD: What's missing?</h3></a><h6>Posted on: Jan 2008</h6><p>I been using mpd+gmpc now for a while, I really like the combination, but what I missed on it was the ability to modify tags, which normally all players can do.
 Well, I started working on gmpc to add support for tag editing when I stopped with the following issue: The fact that mpd doesn't support tag editing was the reason for gmpc to not support it (which makes sense), because mpd is run on a different machine so gmpc does not have access to these files.
 Some of you will tell me "Dude! Sonata supports tag editing even when mpd doesn't", and I know, but what sonata does is actually a very like a "half done work" with that, as you can only edit tags if mpd runs on the same machine sonata is running, which normally doesn't happen (that's the idea of a client-server structure).
 So, now, my approach to resolve the problem was completely different as I had to include a new command in the mpd protocol so I could add tag editing support.
@@ -266,31 +294,6 @@ As I know you guys love screenshots, this is how the program looks like:</p>
 <p>Anyways, I would like to get feedback on this, so please, let me know if it fails or anything is or goes wrong on it.</p>
 
 <p>Get the program from here: <a href="http://dcortarello.googlepages.com/ktsuss-1.0.tar.gz">http://dcortarello.googlepages.com/ktsuss-1.0.tar.gz</a></p>
-
-<hr width="60%">
-<br><a id="A month latter... Finally, patch for wavemon"><br></a><a href="#A month latter... Finally, patch for wavemon"><h3>A month latter... Finally, patch for wavemon</h3></a><h6>Posted on: Apr 2007</h6><p>It's been quite a while since my last post here...</p>
-
-<p>Some things happened like the release of Kwort 2.2 (not as great as I would like, but still good). New knm will be released in the next few days, this will be just a bug fix release (too many thanks to the people from tuxmachines, who thanks to them I saw some bugs).</p>
-
-<p>I've been developing on clip at work, which is an interesting and exciting thing, since this is my first time working on compilers (I started last year when I wrote some patches for compatibilities and bug fixes).</p>
-
-<p>Well, now on to businesses and the important stuff. As I said like a month ago I was working on a patch for wavemon, which is a software that I consider very good, with a nice and clean code. I would have released it before, but I was studying and working a lot, so I only have the weekends, and as I been working on Kwort I couldn't work on this before.</p>
-
-<p>So, as it says in the patch, the following bug fixes and features:</p>
-
-<ul>
-<li><p>Fixed errors compilation in gcc 3.x due to default label missing.</p></li>
-<li><p>Fixed some warnings due to the lvalue casts deprecated on gcc 3.x.</p></li>
-<li><p>Changed ap list functions, so now it use the new iw api (this is the most important thing).</p></li>
-</ul>
-
-<p>The last change is the most important, as it made the code simpler, now it works with all cards because the new wireless tools extensions are up to date.</p>
-
-<p>Get the patch from here: <a href="http://nomius.github.io/content/patches/wavemon-0.4.0b-comp-fix-new-ap.patch">http://nomius.github.io/content/patches/wavemon-0.4.0b-comp-fix-new-ap.patch</a></p>
-
-<p>And for those that don't know wavemon, you can get the source code from here: <a href="http://www.janmorgenstern.de/wavemon-current.tar.gz">http://www.janmorgenstern.de/wavemon-current.tar.gz</a></p>
-
-<p>I hope you guys find it useful like I do. :)</p>
 
 <hr width="60%">
 

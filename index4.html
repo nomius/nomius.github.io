@@ -40,7 +40,32 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Kwort Linux (to be released) and Kpkg (released)"><br></a><a href="#Kwort Linux (to be released) and Kpkg (released)"><h3>Kwort Linux (to be released) and Kpkg (released)</h3></a><h6>Posted on: Mar 2007</h6><p>Kpkg 2.4 was released some minutes ago, you can download it from here: <a href="http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz">http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz</a></p>
+                        <br><br><br><a id="A month latter... Finally, patch for wavemon"><br></a><a href="#A month latter... Finally, patch for wavemon"><h3>A month latter... Finally, patch for wavemon</h3></a><h6>Posted on: Apr 2007</h6><p>It's been quite a while since my last post here...</p>
+
+<p>Some things happened like the release of Kwort 2.2 (not as great as I would like, but still good). New knm will be released in the next few days, this will be just a bug fix release (too many thanks to the people from tuxmachines, who thanks to them I saw some bugs).</p>
+
+<p>I've been developing on clip at work, which is an interesting and exciting thing, since this is my first time working on compilers (I started last year when I wrote some patches for compatibilities and bug fixes).</p>
+
+<p>Well, now on to businesses and the important stuff. As I said like a month ago I was working on a patch for wavemon, which is a software that I consider very good, with a nice and clean code. I would have released it before, but I was studying and working a lot, so I only have the weekends, and as I been working on Kwort I couldn't work on this before.</p>
+
+<p>So, as it says in the patch, the following bug fixes and features:</p>
+
+<ul>
+<li><p>Fixed errors compilation in gcc 3.x due to default label missing.</p></li>
+<li><p>Fixed some warnings due to the lvalue casts deprecated on gcc 3.x.</p></li>
+<li><p>Changed ap list functions, so now it use the new iw api (this is the most important thing).</p></li>
+</ul>
+
+<p>The last change is the most important, as it made the code simpler, now it works with all cards because the new wireless tools extensions are up to date.</p>
+
+<p>Get the patch from here: <a href="http://nomius.github.io/content/patches/wavemon-0.4.0b-comp-fix-new-ap.patch">http://nomius.github.io/content/patches/wavemon-0.4.0b-comp-fix-new-ap.patch</a></p>
+
+<p>And for those that don't know wavemon, you can get the source code from here: <a href="http://www.janmorgenstern.de/wavemon-current.tar.gz">http://www.janmorgenstern.de/wavemon-current.tar.gz</a></p>
+
+<p>I hope you guys find it useful like I do. :)</p>
+
+<hr width="60%">
+<br><a id="Kwort Linux (to be released) and Kpkg (released)"><br></a><a href="#Kwort Linux (to be released) and Kpkg (released)"><h3>Kwort Linux (to be released) and Kpkg (released)</h3></a><h6>Posted on: Mar 2007</h6><p>Kpkg 2.4 was released some minutes ago, you can download it from here: <a href="http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz">http://prdownload.berlios.de/kpkg/kpkg-2.4.tar.gz</a></p>
 
 <p>This version is a bug fix release, now PKG<em>GOOD and PKG</em>FAIL works with upgrade as it should and I fixed a weird issue due to a scope problem in bash functions.</p>
 
@@ -160,30 +185,6 @@ I know they use it to fit the gnome's look &amp; feel, but use canvas just for a
 
 <p>Anyways, I leave you the patch:
 <a href="http://nomius.github.io/content/patches/zenity-no-canvas.patch">http://nomius.github.io/content/patches/zenity-no-canvas.patch</a></p>
-
-<hr width="60%">
-<br><a id="Patch for Xdialog (Yes! Made in Brasil)"><br></a><a href="#Patch for Xdialog (Yes! Made in Brasil)"><h3>Patch for Xdialog (Yes! Made in Brasil)</h3></a><h6>Posted on: Oct 2006</h6><p>Ok, ok, ok... I know I was in vacations, but the day wasn't very pretty, and I felt like taking a coding time. :D</p>
-
-<p>Some weeks ago I wrote a small plugin for Xfce to configure the network in Kwort Linux; I was going to use Zenity, but then I saw again Xdialog and surprise... GTK2 based interface!</p>
-
-<p>Well... Nowadays a program which keeps being maintained using gtk1 is something very weird. So I decided to use Xdialog. The problem was when I needed an extra button... Dialog provides that feature, but Xdialog didn't and I really needed it.</p>
-
-<p>So I mailed Thierry Godefroy asking him if he didn't had a patch which provides that feature... I guess he was very, very occupied, because he didn't even answered.</p>
-
-<p>When I saw the code the first time some weeks ago I said "This will be hard to understand to implement it by myself", and today when I started to look at the code it wasn't that hard. So some hours latter I understanded the code and started to write some things...</p>
-
-<p>So, this is what this command:</p>
-
-<pre><code>Xdialog --stdout --extra-button --extra-label "Extra Button" --inputbox "Type your input. Hit Extra Button to get 3 as return value" 0 0
-</code></pre>
-
-<p>will show:</p>
-
-<p><img src="http://photos1.blogger.com/blogger2/288/3652/400/xdialog-button-extra-patch.png" alt="Xdialog extra button" /></p>
-
-<p>So... Here's the patch, I hope someone finds it useful like me:</p>
-
-<p><a href="http://nomius.github.io/content/patches/Xdialog-2.3.1-patch-extra-button.patch">http://nomius.github.io/content/patches/Xdialog-2.3.1-patch-extra-button.patch</a></p>
 
 <hr width="60%">
 

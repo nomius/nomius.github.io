@@ -40,7 +40,41 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Updates!"><br></a><a href="#Updates!"><h3>Updates!</h3></a><h6>Posted on: Nov 2008</h6><p>Well, it's been a long time in the road since my last post here. This weblog isn't over, but I been doing a lot of things and didn't got the time to write something.</p>
+                        <br><br><br><a id="Lots of stuff going on"><br></a><a href="#Lots of stuff going on"><h3>Lots of stuff going on</h3></a><h6>Posted on: Feb 2009</h6><p>Well, it's been 3 months since my last post, and I've been doing a lot...</p>
+
+<p>Let's start with Kwort. Well we're just there from the release, lots of new improvements are being done around it, and something really interesting is the new network manager and the new user manager I wrote from scratch with a completely new design using gtkdialog.</p>
+
+<p>The new network manager allows you to configure your ethernet and wireless network, supporting static and dhcp, for wireless network, support for several encryption mode are available, from wep to wpa2:</p>
+
+<p><img src="http://lh3.ggpht.com/_7bn3_3YdSWU/SZCvNk3odHI/AAAAAAAAANM/6m-TJD-_8Cw/knm.png" alt="Network manager" /></p>
+
+<p>The user manager stills very simple but with a very simple and smooth interface:</p>
+
+<p><img src="http://lh5.ggpht.com/_7bn3_3YdSWU/SZCvNl6KKtI/AAAAAAAAANU/Q7Lh7X_hYTA/kum.png" alt="User manager" /></p>
+
+<p>So, as you can see we have almost everything, since looking at the screenshot the Xfce settings manager is in it, so Xfce is kinda there, so you might be questioning "What are you waiting for a release?" Well, Xfce 4.6 is in release candidate time, so when they release it final we'll see how's the Mozilla people going with Firefox 3.1, since it would be really cool to ship it
+with Kwort 2.4.1. I wouldn't matter to ship a beta 3 with 2.4.1, but we'll see, since beta 3 should be released already according to <a href="https://wiki.mozilla.org/Firefox3.1/Schedule">Mozilla's Firefox schedule</a>, and their delivery meeting is schedule to the end of the month (February 25th), which is just around the corner.</p>
+
+<p>Resuming, lots of improvements are going on and I'm trying to make it pretty cool and easy for the end user.</p>
+
+<p>That's just for Kwort, now... Some friends saw I was migrating to git, and yeah, I did, since in the past I used git with <a href="http://www.gitorious.org/">gitorious.org</a> which didn't convinced me, I came back to darcs. But now, I discovered <a href="https://www.github.com/">GitHub</a> which is really cool, fast and easy to use and with lots of guides around, so you can see and follow my work
+at: <a href="http://github.com/nomius">http://github.com/nomius</a>.</p>
+
+<p>I have to admit here that I was influenced at work by warlock, which is the author of the <a href="http://www.warlockshome.com.ar/">wbar</a>, to move from darcs to git, so I found a darcs2git python script and it was like charm.</p>
+
+<p>Also, I implemented lots of cool new features for kpkg, and I merged kpkg with the kwort network manager and user manager making a "big" project called <a href="http://github.com/nomius/kwtools/tree/master">kwtools</a>. Looking right now at the master tree page, you'll see this: "Implemented kpkg search /all with csv support" and you might be asking "What the hell is this guy making with kpkg implementing stuff like this?", well, I hope this feature is just enough, but basically, it is because a friend, x-ip, and I we are writing a graphical interface for kpkg, at the moment the interface is pretty rough but does show the idea, of course, icons and all that stuff is going to be implemented with also a more eye-candy interface, so you can see a preview of the application here:</p>
+
+<p><img src="http://lh5.ggpht.com/_7bn3_3YdSWU/SZCvNhGOhsI/AAAAAAAAANc/SV4rvaIufCg/galgo.png" alt="kpkg graphical" /></p>
+
+<p>As I said before and as you can see, the interface looks pretty rough, but give us some time and you'll see how cool it looks. I doubt we get in time to include this new tool in Kwort 2.4.1, we'll try, but I really doubt it since I'm just learning python, which is the language we use to write this, and x-ip is just learning wxPython with me, which is the framework we use for
+this.</p>
+
+<p>Please, if you have any ideas for Kwort or any of the tools/applications I write, please write me, it would be nice to hear (read) about you and your ideas, and also, I don't know... help maybe? :-)</p>
+
+<p>We'll, this post is already becoming large so I'm off to bed now. Have a nice week and see you around guys.</p>
+
+<hr width="60%">
+<br><a id="Updates!"><br></a><a href="#Updates!"><h3>Updates!</h3></a><h6>Posted on: Nov 2008</h6><p>Well, it's been a long time in the road since my last post here. This weblog isn't over, but I been doing a lot of things and didn't got the time to write something.</p>
 
 <p>Ok, things I've been doing:
 * I wrote a new network manager for Kwort 2.4.2 (I'm already working on a new Kwort version), screenshots are coming
@@ -308,34 +342,6 @@ This new version includes the new authentication backend, and the new interface,
 <p>Changelog: <a href="https://developer.berlios.de/project/shownotes.php?group_id=8800&amp;release_id=14175">here</a></p>
 
 <p>Download link: <a href="http://prdownload.berlios.de/ktsuss/ktsuss-1.3.tar.gz">here</a></p>
-
-<hr width="60%">
-<br><a id="Why ktsuss use setuid"><br></a><a href="#Why ktsuss use setuid"><h3>Why ktsuss use setuid</h3></a><h6>Posted on: Feb 2008</h6><p>Well, this was the question made by one of the debian packagers. I see a good thing the fact that they ask this, since including a program setuid without asking the reasons would be kind of dumb. They ask why not using pam or su in the way gksu does, so I will try to answer these questions.</p>
-
-<p>Using pam would requiere setuid too (since pam_unix2 doesn't have it's own wrapper), which doesn't bother me as long as I program in a secure way... What really does, is that not every distribution out there use pam, slackware is the most important it comes to my mind now.
-Using su, well, there might be a problem there, gksu does it in a very unportable way waiting for the string " Authentication failure" which is a very bad idea, look this example:</p>
-
-<pre><code>Fedora "su" command:
--sh-3.1$ su
-Password:
-su: incorrect password
--sh-3.1$
-Slackware (Kwort) "su" command:
-nomius@Neptune:~$ su
-Password:
-Sorry.
-nomius@Neptune:~$
-</code></pre>
-
-<p>As you can see in gksu, different versions of su would really break things up.
-None of above shown implementations gives " Authentication failure". I guess that message is given by pam with strerror(), so once again, it's not portable.</p>
-
-<p>The actual ktsuss code is very clean and simple (which is the whole idea behind ktsuss), I always gave security with the authentication backend, maybe a feature bug (like the PATH thing in 1.1), but not security issues.</p>
-
-<p>There might be a way using su better than what gksu does, something like doing "su -c exit" (pepping the password of course) getting the exit status with WEXITSTATUS(), waiting for 0 (password ok and then run su command with the same password) or 1 (wrong password). But would be kind of messy...
-I should see that like something in a long distant future... But I think it could be a way to avoid the paranoid.</p>
-
-<p>So since ktsuss have its own implementation of authentication backend, that's why it needs setuid.</p>
 
 <hr width="60%">
 
