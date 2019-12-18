@@ -83,46 +83,46 @@ Additionally, if you need kernel headers, a script named <code>gen-kernel-header
 
 <p>Encrypt:</p>
 
-<pre><code>encrypt()
-{
-    if [ -e "${1}.crypt" ]; then
-        tput setaf 1
-        echo "* ERROR * ${1}.crypt already exists. Exiting..."
+<div class="codehilite"><pre><span></span><code>encrypt<span class="o">()</span>
+<span class="o">{</span>
+    <span class="k">if</span> <span class="o">[</span> -e <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">.crypt&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        tput setaf <span class="m">1</span>
+        <span class="nb">echo</span> <span class="s2">&quot;* ERROR * </span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">.crypt already exists. Exiting...&quot;</span>
         tput sgr0
-        return 1
-    fi
+        <span class="k">return</span> <span class="m">1</span>
+    <span class="k">fi</span>
 
-    i=0
-    while read line; do
-    items+=("$i" "$line")
-        i=$(($i + 1))
-    done &lt; &lt;(gpg --list-keys | grep @ | sed -e 's/uid[ ]*\[.*\] //g')
-    i=$(LC_ALL=en_US dialog --stdout --backtitle "Encryption made easy" \
-        --title Encrypt --menu "Pick the recipient" $(($i + 7)) 76 $i "${items[@]}")
-    if [ $? -ne 0 ]; then
-        return 0
-    fi
-    recp=$(echo "${items[$(($i + 1))]}" | awk -F '[&lt;&gt;]' '{print $(NF-1)}')
+    <span class="nv">i</span><span class="o">=</span><span class="m">0</span>
+    <span class="k">while</span> <span class="nb">read</span> line<span class="p">;</span> <span class="k">do</span>
+    <span class="nv">items</span><span class="o">+=(</span><span class="s2">&quot;</span><span class="nv">$i</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$line</span><span class="s2">&quot;</span><span class="o">)</span>
+        <span class="nv">i</span><span class="o">=</span><span class="k">$((</span><span class="nv">$i</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+    <span class="k">done</span> &lt; &lt;<span class="o">(</span>gpg --list-keys <span class="p">|</span> grep @ <span class="p">|</span> sed -e <span class="s1">&#39;s/uid[ ]*\[.*\] //g&#39;</span><span class="o">)</span>
+    <span class="nv">i</span><span class="o">=</span><span class="k">$(</span><span class="nv">LC_ALL</span><span class="o">=</span>en_US dialog --stdout --backtitle <span class="s2">&quot;Encryption made easy&quot;</span> <span class="se">\</span>
+        --title Encrypt --menu <span class="s2">&quot;Pick the recipient&quot;</span> <span class="k">$((</span><span class="nv">$i</span> <span class="o">+</span> <span class="m">7</span><span class="k">))</span> <span class="m">76</span> <span class="nv">$i</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">items</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="k">)</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="k">return</span> <span class="m">0</span>
+    <span class="k">fi</span>
+    <span class="nv">recp</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">items</span><span class="p">[</span><span class="k">$((</span><span class="nv">$i</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">|</span> awk -F <span class="s1">&#39;[&lt;&gt;]&#39;</span> <span class="s1">&#39;{print $(NF-1)}&#39;</span><span class="k">)</span>
 
-    gpg --output "${1}.crypt" --encrypt --recipient ${recp} "${1}"
-}
-</code></pre>
+    gpg --output <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">.crypt&quot;</span> --encrypt --recipient <span class="si">${</span><span class="nv">recp</span><span class="si">}</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
 
 <p>Decrypt:</p>
 
-<pre><code>decrypt()
-{
-    out=$(basename "$1" .crypt)
-    if [ "${out}" = "$1" ]; then
-        out=$(LC_ALL=en_US dialog --stdout --backtitle "Encryption made easy" \
-            --title Decrypt --inputbox "Type the output filename" 8 40)
-        if [ $? -ne 0 -o -z "$out" ]; then
-            return 0
-        fi
-    fi
-    gpg --output "${out}" --decrypt "${1}"
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code>decrypt<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nv">out</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> .crypt<span class="k">)</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">out</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nv">out</span><span class="o">=</span><span class="k">$(</span><span class="nv">LC_ALL</span><span class="o">=</span>en_US dialog --stdout --backtitle <span class="s2">&quot;Encryption made easy&quot;</span> <span class="se">\</span>
+            --title Decrypt --inputbox <span class="s2">&quot;Type the output filename&quot;</span> <span class="m">8</span> <span class="m">40</span><span class="k">)</span>
+        <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> -o -z <span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+            <span class="k">return</span> <span class="m">0</span>
+        <span class="k">fi</span>
+    <span class="k">fi</span>
+    gpg --output <span class="s2">&quot;</span><span class="si">${</span><span class="nv">out</span><span class="si">}</span><span class="s2">&quot;</span> --decrypt <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
 
 <hr width="60%">
 <br><a id="Created links to posts and some other things"><br></a><a href="#Created links to posts and some other things"><h3>Created links to posts and some other things</h3></a><h6>Posted on: Mar 2015</h6><p>Hi folks, two weeks ago it was requested on github to implement links to posts. Today I implemented this feature with id's.</p>

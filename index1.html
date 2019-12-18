@@ -293,23 +293,23 @@ Even at work, I'm a programmer (doing C on Unix now), and some of my fellows wer
 
 <p>Anyways, I like using tags, allows me to browse the code really fast (for those using Eclipse, I think is like if you press F3 over a function name). But I found this weird behavior using ctags+vim. See the above code:</p>
 
-<pre><code>  1 #include &lt;stdio.h&gt;
-  2
-  3 int asd(int s,
-  4         char a);
-  5
-  6 int main(int argc, char *argv[])
-  7 {
-  8     asd(1, 's');
-  9     return 0;
- 10 }
- 11
- 12 int asd(int s,
- 13         char a)
- 14 {
- 15     return s;
- 16 }
-</code></pre>
+<div class="codehilite"><pre><span></span><code>  <span class="mi">1</span> <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
+  <span class="mi">2</span>
+  <span class="mi">3</span> <span class="kt">int</span> <span class="n">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+  <span class="mi">4</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">);</span>
+  <span class="mi">5</span>
+  <span class="mi">6</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+  <span class="mi">7</span> <span class="p">{</span>
+  <span class="mi">8</span>     <span class="n">asd</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="sc">&#39;s&#39;</span><span class="p">);</span>
+  <span class="mi">9</span>     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="mi">10</span> <span class="p">}</span>
+ <span class="mi">11</span>
+ <span class="mi">12</span> <span class="kt">int</span> <span class="nf">asd</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">,</span>
+ <span class="mi">13</span>         <span class="kt">char</span> <span class="n">a</span><span class="p">)</span>
+ <span class="mi">14</span> <span class="p">{</span>
+ <span class="mi">15</span>     <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+ <span class="mi">16</span> <span class="p">}</span>
+</code></pre></div>
 
 <p>When I press ctrl+] over asd in line 8, it takes you to the 3rd line instead to the 12th...
 There's a "workaround" to this behavior, using --excmd=number while running ctags put the line numbers in the tags file (without this option ctags puts just an 'f' identifier to tell the editor that it is on that file). But it is just a visualization workaround, because you can't put any new line (or remove) in those files or your tags file will screw the tags file.</p>

@@ -98,60 +98,60 @@ People say that if this doesn't get in trunk tag editing is off the table. Well 
 
 <p>So, let's take for example the code in the first post in this blog "Checking the network with bash". In this case a wait in the end would fix the problem, but let's just think that we can't modify this script:</p>
 
-<pre><code>#!/usr/bin/env bash
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 
-function pinging(){
-    SUBNET=${1}
-    LAST=${2}
-    PING="$(which ping) -c 1 -W 1"
-    ${PING} ${SUBNET}.${LAST} &gt; /dev/null 2&gt;&amp;1
-    if [ $? -eq 0 ]; then
-        echo -e "${SUBNET}.${LAST} is up"
-    fi
-}
+<span class="k">function</span> pinging<span class="o">(){</span>
+    <span class="nv">SUBNET</span><span class="o">=</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span>
+    <span class="nv">LAST</span><span class="o">=</span><span class="si">${</span><span class="nv">2</span><span class="si">}</span>
+    <span class="nv">PING</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>which ping<span class="k">)</span><span class="s2"> -c 1 -W 1&quot;</span>
+    <span class="si">${</span><span class="nv">PING</span><span class="si">}</span> <span class="si">${</span><span class="nv">SUBNET</span><span class="si">}</span>.<span class="si">${</span><span class="nv">LAST</span><span class="si">}</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> -e <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SUBNET</span><span class="si">}</span><span class="s2">.</span><span class="si">${</span><span class="nv">LAST</span><span class="si">}</span><span class="s2"> is up&quot;</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
 
-if [ -z ${2} ]; then
-    for((x=1;x&lt;255;x++)); do
-        ${0} ${1} ${x} &amp;
-    done
-else
-    pinging ${1} ${2}
-fi
-</code></pre>
+<span class="k">if</span> <span class="o">[</span> -z <span class="si">${</span><span class="nv">2</span><span class="si">}</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="k">for</span><span class="o">((</span><span class="nv">x</span><span class="o">=</span><span class="m">1</span><span class="p">;</span>x&lt;<span class="m">255</span><span class="p">;</span>x++<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+        <span class="si">${</span><span class="nv">0</span><span class="si">}</span> <span class="si">${</span><span class="nv">1</span><span class="si">}</span> <span class="si">${</span><span class="nv">x</span><span class="si">}</span> <span class="p">&amp;</span>
+    <span class="k">done</span>
+<span class="k">else</span>
+    pinging <span class="si">${</span><span class="nv">1</span><span class="si">}</span> <span class="si">${</span><span class="nv">2</span><span class="si">}</span>
+<span class="k">fi</span>
+</code></pre></div>
 
 <p>So, this was the first attempt to control this mess but unfortunately didn't work as expected because this process was in another Process Group ID (avoid comments about controlling the return value of fork and such, since this is an example of something that didn't work):</p>
 
-<pre><code>int main(int argc, char *argv[]){
-    int status;
-    if(fork())
-        waitpid(-1*getpgrp(), &amp;status, 0);
-    else
-        execlp(argv[1], argv[1], argv+1, NULL);
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
+    <span class="kt">int</span> <span class="n">status</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">fork</span><span class="p">())</span>
+        <span class="n">waitpid</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">getpgrp</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="n">execlp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
 <p>So, basically, the idea was that the main C program shown above shouldn't die until all the childrens of the scripts die (that's why I was using using getpgrp(), which didn't work as expected for what I explained above).
 On Linux, running ps axfj, showed me that the small childrens (those one generated by the script) are in the same group, but I couldn't wait for them, as they are not my childrens, but then child of my child process children's.</p>
 
 <p>After dealing a little of time I came up whit this program that control all the childrens, grandchildrens and rest of the "family". The code is very simple to understand and explains on itself:</p>
 
-<pre><code>int main(int argc, char *argv[]){
-    int status;
-    pid_t pid;
-    if((pid=fork()) != 0) {
-        sleep(2);
-        waitpid(pid, &amp;status, 0);
-        while(killpg(pid, 0) != -1)
-            usleep(0.1);
-    }
-    else if(pid==0){
-        setpgid(getpid(), getpid());
-        execv(argv[1], argv+1);
-    }
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[]){</span>
+    <span class="kt">int</span> <span class="n">status</span><span class="p">;</span>
+    <span class="kt">pid_t</span> <span class="n">pid</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">((</span><span class="n">pid</span><span class="o">=</span><span class="n">fork</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+        <span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">killpg</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">usleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">pid</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+        <span class="n">setpgid</span><span class="p">(</span><span class="n">getpid</span><span class="p">(),</span> <span class="n">getpid</span><span class="p">());</span>
+        <span class="n">execv</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">argv</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
 <p>Thanks to Marcel, who actually helped me a lot with some concepts and ideas to find a workaround to this.</p>
 
@@ -190,18 +190,18 @@ He will also take care of the kernel. So this time, getting kernel source to com
 <hr width="60%">
 <br><a id="The IT Crowd for download"><br></a><a href="#The IT Crowd for download"><h3>The IT Crowd for download</h3></a><h6>Posted on: Jul 2007</h6><p>The last week I started to see a tv serie called "The IT Crowd" on Sony, it's a funny geek serie about an IT team in a british company. Anyways, a friend of mine (Manu) wanted to download all the chapters from a site, so I wrote this simple script for him:</p>
 
-<pre><code>#!/usr/bin/env bash
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 
 wget http://stage6.divx.com/The-IT-Crowd---Spanish-Subtitled/videos/
-i=1
-for x in $(egrep -i "The-IT-Crowd---1x0*" index.html | awk -F '/' '{ print $4}' | sort -m -u); do
-   tput setaf 1
-   echo "Downloading chapter ${i} (Link: http://divx-226.vo.llnwd.net/stage6vid/${x}.divx)"
+<span class="nv">i</span><span class="o">=</span><span class="m">1</span>
+<span class="k">for</span> x in <span class="k">$(</span>egrep -i <span class="s2">&quot;The-IT-Crowd---1x0*&quot;</span> index.html <span class="p">|</span> awk -F <span class="s1">&#39;/&#39;</span> <span class="s1">&#39;{ print $4}&#39;</span> <span class="p">|</span> sort -m -u<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+   tput setaf <span class="m">1</span>
+   <span class="nb">echo</span> <span class="s2">&quot;Downloading chapter </span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2"> (Link: http://divx-226.vo.llnwd.net/stage6vid/</span><span class="si">${</span><span class="nv">x</span><span class="si">}</span><span class="s2">.divx)&quot;</span>
    tput sgr0
-   wget http://divx-226.vo.llnwd.net/stage6vid/${x}.divx --output-file="${i}.avi"
-   i=$((i+1))
-done
-</code></pre>
+   wget http://divx-226.vo.llnwd.net/stage6vid/<span class="si">${</span><span class="nv">x</span><span class="si">}</span>.divx --output-file<span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">.avi&quot;</span>
+   <span class="nv">i</span><span class="o">=</span><span class="k">$((</span>i+1<span class="k">))</span>
+<span class="k">done</span>
+</code></pre></div>
 
 <p>I hope someone find it useful.</p>
 
@@ -210,47 +210,47 @@ done
 <hr width="60%">
 <br><a id="Knowing the network speed at a given moment"><br></a><a href="#Knowing the network speed at a given moment"><h3>Knowing the network speed at a given moment</h3></a><h6>Posted on: Jul 2007</h6><p>Well, a friend of mine asked me for this, and it was very interesting to understand what was in /proc/net/dev.</p>
 
-<pre><code>#!/usr/bin/env bash
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 
-if [ -z "${1}" ]; then
-   echo "Give a network interface"
-   exit 1
-fi
-DEV=${1}
-/sbin/ifconfig ${DEV} &gt;/dev/null 2&gt;&amp;1
-if [ $? -ne 0 ]; then
-   echo "Please, do man 8 ifconfig to know what a network interface is"
-   exit 1
-fi
-LINE_OLD=$(cat /proc/net/dev | grep ${DEV})
-sleep 1
-LINE_NEW=$(cat /proc/net/dev | grep ${DEV})
-while [ "${LINE_OLD}" = "${LINE_NEW}" ]; do
-   sleep 0.1
-   LINE_NEW=$(cat /proc/net/dev | grep ${DEV})
-done
-OLD_DOWN=$(echo ${LINE_OLD/*:/} | awk -F " " '{ print $1 }')
-OLD_UP=$(echo ${LINE_OLD/*:/} | awk -F " " '{ print $9 }')
-NEW_DOWN=$(echo ${LINE_NEW/*:/} | awk -F " " '{ print $1 }')
-NEW_UP=$(echo ${LINE_NEW/*:/} | awk -F " " '{ print $9 }')
-REST_DOWN=$((${NEW_DOWN} - ${OLD_DOWN}))
-REST_UP=$((${NEW_UP} - ${OLD_UP}))
-if [ ${REST_DOWN} -gt 1024 ]; then
-   echo "DOWNLOAD: $(echo "scale=2;${REST_DOWN}/1024" | bc -lq)k/s"
-else
-   echo "DOWNLOAD: ${REST_DOWN}b/s"
-fi
-if [ ${REST_UP} -gt 1024 ]; then
-   echo "UPLOAD: $(echo "scale=2;${REST_UP}/1024" | bc -lq)k/s"
-else
-   echo "UPLOAD: ${REST_UP}b/s"
-fi
-</code></pre>
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+   <span class="nb">echo</span> <span class="s2">&quot;Give a network interface&quot;</span>
+   <span class="nb">exit</span> <span class="m">1</span>
+<span class="k">fi</span>
+<span class="nv">DEV</span><span class="o">=</span><span class="si">${</span><span class="nv">1</span><span class="si">}</span>
+/sbin/ifconfig <span class="si">${</span><span class="nv">DEV</span><span class="si">}</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+   <span class="nb">echo</span> <span class="s2">&quot;Please, do man 8 ifconfig to know what a network interface is&quot;</span>
+   <span class="nb">exit</span> <span class="m">1</span>
+<span class="k">fi</span>
+<span class="nv">LINE_OLD</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev <span class="p">|</span> grep <span class="si">${</span><span class="nv">DEV</span><span class="si">}</span><span class="k">)</span>
+sleep <span class="m">1</span>
+<span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev <span class="p">|</span> grep <span class="si">${</span><span class="nv">DEV</span><span class="si">}</span><span class="k">)</span>
+<span class="k">while</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">LINE_OLD</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">LINE_NEW</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">do</span>
+   sleep <span class="m">0</span>.1
+   <span class="nv">LINE_NEW</span><span class="o">=</span><span class="k">$(</span>cat /proc/net/dev <span class="p">|</span> grep <span class="si">${</span><span class="nv">DEV</span><span class="si">}</span><span class="k">)</span>
+<span class="k">done</span>
+<span class="nv">OLD_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="si">}</span> <span class="p">|</span> awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+<span class="nv">OLD_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">LINE_OLD</span><span class="p">/*:/</span><span class="si">}</span> <span class="p">|</span> awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
+<span class="nv">NEW_DOWN</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="si">}</span> <span class="p">|</span> awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $1 }&#39;</span><span class="k">)</span>
+<span class="nv">NEW_UP</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="si">${</span><span class="nv">LINE_NEW</span><span class="p">/*:/</span><span class="si">}</span> <span class="p">|</span> awk -F <span class="s2">&quot; &quot;</span> <span class="s1">&#39;{ print $9 }&#39;</span><span class="k">)</span>
+<span class="nv">REST_DOWN</span><span class="o">=</span><span class="k">$((</span><span class="si">${</span><span class="nv">NEW_DOWN</span><span class="si">}</span> <span class="o">-</span> <span class="si">${</span><span class="nv">OLD_DOWN</span><span class="si">}</span><span class="k">))</span>
+<span class="nv">REST_UP</span><span class="o">=</span><span class="k">$((</span><span class="si">${</span><span class="nv">NEW_UP</span><span class="si">}</span> <span class="o">-</span> <span class="si">${</span><span class="nv">OLD_UP</span><span class="si">}</span><span class="k">))</span>
+<span class="k">if</span> <span class="o">[</span> <span class="si">${</span><span class="nv">REST_DOWN</span><span class="si">}</span> -gt <span class="m">1024</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+   <span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: </span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;scale=2;</span><span class="si">${</span><span class="nv">REST_DOWN</span><span class="si">}</span><span class="s2">/1024&quot;</span> <span class="p">|</span> bc -lq<span class="k">)</span><span class="s2">k/s&quot;</span>
+<span class="k">else</span>
+   <span class="nb">echo</span> <span class="s2">&quot;DOWNLOAD: </span><span class="si">${</span><span class="nv">REST_DOWN</span><span class="si">}</span><span class="s2">b/s&quot;</span>
+<span class="k">fi</span>
+<span class="k">if</span> <span class="o">[</span> <span class="si">${</span><span class="nv">REST_UP</span><span class="si">}</span> -gt <span class="m">1024</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+   <span class="nb">echo</span> <span class="s2">&quot;UPLOAD: </span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;scale=2;</span><span class="si">${</span><span class="nv">REST_UP</span><span class="si">}</span><span class="s2">/1024&quot;</span> <span class="p">|</span> bc -lq<span class="k">)</span><span class="s2">k/s&quot;</span>
+<span class="k">else</span>
+   <span class="nb">echo</span> <span class="s2">&quot;UPLOAD: </span><span class="si">${</span><span class="nv">REST_UP</span><span class="si">}</span><span class="s2">b/s&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
 
 <p>You can run it this way for example:</p>
 
-<pre><code>while true; do ./netspeed eth0; done
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span> true<span class="p">;</span> <span class="k">do</span> ./netspeed eth0<span class="p">;</span> <span class="k">done</span>
+</code></pre></div>
 
 <p>I don't think this is really reliable, but anyways, see you guys in the next few days to tell you something new :)</p>
 
@@ -260,13 +260,13 @@ So a new release of openbox was released some weeks ago and yes, as you guess, t
 
 <p>The configuration is made in the same way as before in the rc.xml:</p>
 
-<pre><code>&lt;margin&gt;
-  &lt;top&gt;px&lt;/top&gt;
-  &lt;bottom&gt;px&lt;/bottom&gt;
-  &lt;left&gt;px&lt;/left&gt;
-  &lt;right&gt;px&lt;/right&gt;
-&lt;/margin&gt;
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="nt">&lt;margin&gt;</span>
+  <span class="nt">&lt;top&gt;</span>px<span class="nt">&lt;/top&gt;</span>
+  <span class="nt">&lt;bottom&gt;</span>px<span class="nt">&lt;/bottom&gt;</span>
+  <span class="nt">&lt;left&gt;</span>px<span class="nt">&lt;/left&gt;</span>
+  <span class="nt">&lt;right&gt;</span>px<span class="nt">&lt;/right&gt;</span>
+<span class="nt">&lt;/margin&gt;</span>
+</code></pre></div>
 
 <p>So, here it is, patch supporting margins in openbox 3.4: <a href="http://nomius.github.io/content/patches/openbox-3.4.0-margins.patch">http://nomius.github.io/content/patches/openbox-3.4.0-margins.patch</a></p>
 
