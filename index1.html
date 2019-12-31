@@ -40,7 +40,25 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Something that I was waiting for..."><br></a><a href="#Something that I was waiting for..."><h3>Something that I was waiting for...</h3></a><h6>Posted on: Feb 2011</h6><p>I want to share something with you guys...
+                        <br><br><br><a id="Goodbye lout... Hello troff!"><br></a><a href="#Goodbye lout... Hello troff!"><h3>Goodbye lout... Hello troff!</h3></a><h6>Posted on: Mar 2011</h6><p>Five years ago I went to a dissertation on LaTeX given by Guido Macci, I left that dissertation telling myself "Yes, that's the way to go" and I liked formatting systems, by then I only knew LaTeX, but after seeing that in Slackware it was like 100mb in packages I said like "Ooook, wait a second... Is it that big?", it turned out it really was, and not only big, but a real mess under the hood, so I was kinda disappointed and desisted on the idea of using LaTex. Those who know me knows that I'm pretty minimalist, and having a formatting system of 100mb that was a mess was pretty much out of the table, but I still though it was the way to go.</p>
+
+<p>So I spoke to a friend (Emiliano Gavilan) who always liked that stuff and told my "problem" with LaTeX... So Emiliano recommended me to take a look at lout.</p>
+
+<p>That was in the beginning of 2006, so it's been like 5 years now with lout. Nowadays lout is kinda unmaintained, it has some bugs, the output generated is not as professional as LaTeX, and (I bet this is because I'm too lazy to learn them) there are some things that I never wasn't able to do.</p>
+
+<p>So last week I gave a chance to troff, and I keep myself reading the whole weekend, and I really liked, it's stable, small, well tested (almost 40 years :-D), and it is on every Unix out there (this is a BIG plus). I had some troubles inserting with code, but after digging I found vgrind (which I heard is unmaintained so we'll have to check in the future how it goes) which does
+the job pretty good.</p>
+
+<p>There are tons of books out there written with troff some pretty well known like "Advanced Programming in the UNIX Environment", "The C programming Language" or "The Design and Implementation of the 4.4BSD Operating System", there's a big list <a href="http://troff.org/pubs.html">here</a></p>
+
+<p>If you're interested in learning troff, you can read this book: <a href="http://groff.ffii.org/groff/contrib/documentation/utp/utp-1.0.pdf">Dale Dougherty &amp; Tim O'Reilly - Unix Text Processing</a>.</p>
+
+<p>I hope this turns out good.</p>
+
+<p>Cheers.</p>
+
+<hr width="60%">
+<br><a id="Something that I was waiting for..."><br></a><a href="#Something that I was waiting for..."><h3>Something that I was waiting for...</h3></a><h6>Posted on: Feb 2011</h6><p>I want to share something with you guys...
 Last week (sorry for the delay) I got an email from Jorgen Thomsen telling me that gnu-pop3d was released:</p>
 
 <blockquote>
@@ -354,46 +372,6 @@ So IMHO the best solution to this is: Hard Drive partitions managed by hal (Devi
 <p>And finally, the patch: <a href="http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff">http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff</a></p>
 
 <p>Enjoy!</p>
-
-<hr width="60%">
-<br><a id="Kwort Linux 2.4.1 released"><br></a><a href="#Kwort Linux 2.4.1 released"><h3>Kwort Linux 2.4.1 released</h3></a><h6>Posted on: Apr 2009</h6><p>I'm happy to announce that Kwort 2.4.1 final is here!</p>
-
-<p>This version took a year to develop and provides a lot of changes from 2.4 release, including a new, more cleaned up than usual, base system, whole new tool chain, new configuration tools and lots of new things.</p>
-
-<p>Good things in this new version:</p>
-
-<ul>
-<li>Kwort's init system: From 2.4, the init system has evolved keeping its simplicity but providing some new features.</li>
-<li>Linux 2.6.28.7: A lot of hardware support was included since the kernel included in Kwort 2.4.</li>
-<li>Kpkg: The new version of kpkg include several new features as the adoption of multi-mirror support.</li>
-<li>Kwort User Manager: Re-written from scratch it Provides a simple way to create and remove users with a new interface.</li>
-<li>Kwort Network Manager: Also re-written from scratch, allows you to configure your network (wired and wireless), as manage your dns and hostname system. It also allows you to switch wireless drivers.</li>
-<li>Xfce: This new version brings a lot of changes under the hood making the desktop more extensible.</li>
-<li>Audacious: This is the default music player since Kwort 2.4.1 allowing you to play your music in a very simple way.</li>
-<li>Our new Google group <a href="http://groups.google.com/group/kwort-linux">http://groups.google.com/group/kwort-linux</a>: Ok, this has nothing to do with something included in the release, but it allows the developers behind Kwort to communicate between them and also with the users (who are what Kwort is all about).</li>
-</ul>
-
-<p>As in every old version now comes the things that I look forward to improving:</p>
-
-<ul>
-<li>Thunderbird: It's kind of sad, but thunderbird isn't yet full "xulrunnized", so starting firefox+thundebird brings two copies of xulrunner up to memory, which as we all know, is kinda in the chubby side.</li>
-<li>Audacious: Although audacious is pretty good doing its job, I think a jukebox is more needed these days, as people needs more information while playing their music. It is known that using gstreamer would take out some of the features audacious brings, but we have a full-featured media-handling components and using those frameworks would allow the Linux desktop to improve, communicate between applications and to remain simple.</li>
-</ul>
-
-<p>People who I would like to thank:
-Andreas Schipplock as always for making and maintaining the website, mirroring the Kwort iso image, and kind of playing a role of resources manager that allows me to develop easily Kwort.
-Sebastian Reisse for writing the kpkg manpage, and for taking a lot of his time testing every release candidate, if it wasn't for him, this release would come with several bugs.
-The Aircable people for their donations as they helped me to buy some hardware I was needing for develop Kwort.
-The mirror providers as usual, the people from PGHosting and Ricardo Brisighelli for the package mirror in the UNR.
-Finally, but not less important a very big THANKS to Patrick Volkerding for Slackware Linux, the system Kwort is based on.
-The Xfce developers (core and goodies) who made 4.6 a lot more simple to configure for distributions and provided help when needed.
-The people who develop every project Kwort includes. I hope I didn't forget anyone.</p>
-
-<p>As usual, if you need support, help, or you just feel like talking about Kwort (or anything else), or you just want to meet the people who is behind Kwort, you can join us on IRC or our Google group:</p>
-
-<p>IRC: irc://irc.oftc.net/Kwort</p>
-
-<p>Google Group: <a href="http://groups.google.com/group/kwort-linux">http://groups.google.com/group/kwort-linux</a></p>
 
 <hr width="60%">
 

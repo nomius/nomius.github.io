@@ -40,7 +40,26 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Kwort 4.3.3 released"><br></a><a href="#Kwort 4.3.3 released"><h3>Kwort 4.3.3 released</h3></a><h6>Posted on: Jun 2018</h6><p>Kwort 4.3.3 is out</p>
+                        <br><br><br><a id="2019 Clossing Thoughts"><br></a><a href="#2019 Clossing Thoughts"><h3>2019 Clossing Thoughts</h3></a><h6>Posted on: Dec 2019</h6><p>This has been quite a year for me. In my personal and profesional life and in the open source projects I maintain.</p>
+
+<p>I'm not gonna gonna get into details of my personal and profesional life but on the open source projects, and the one I'm focused mainly is Kwort as it is the one I use every day.</p>
+
+<p>Kwort 4.3.3 (released on 2018 and now considered legacy) and 4.3.4 (released on 2019) has been a releases I've been very proud of in terms of stability and security. For these two patches coming out from developers has been distributed for Kwort daily or with a two-days delay in worst case scenarios.</p>
+
+<p>Kwort 4.3.4 included some interesting new in-house built tool packaged separately which helped streamlining the packaging architecture and for the first time we shipped PulseAudio; we keep shipping our very simple, flexible and rock-solid package manager (last bug discovered and fixed was like 2 years ago).</p>
+
+<p>Often people ask me why I develop Kwort and I'll be honest with you all: I don't think there are more than 10 people out there using Kwort these days on daily basis. Other major distributions (like Debian/Ubuntu/derivatives, Arch or Fedora) has eaten all user base, and I guess that's fine. One of the main reasons why I keep developing it is because it allows me to trust 100% in what I'm running, meaning that I build the system, I build my own kernel, I choose every software I want to use and carefully pick out all their dependencies based on my regular use case. I use 3 or 4 computers and packaging the software I use allows me to distribute what I use easily among them.
+People asked me also a lot "Why don't you use Ubuntu or Arch?", I don't trust Ubuntu (specially after the whole "Ubuntu Online" sending search details to Amazon) although I think it's a great system with lots of software availability and easy for users; and for Arch, I don't know, it looks like a good distribution, I might try it (don't take this literally :-) ), but I'll keep doing Kwort because that's what I do and how I keep learning and trying new things in the Linux world; that is another main reason why I keep developing it.</p>
+
+<p>So anyways, Kwort needs a new site... As you see the old site is gone (because of an issue) and my good old friend Andreas Schipplock did an incredible job restoring most of the site from the Google cache and web archive and wrapped everything in like a day in the site we currently have. Seriously Andreas, I don't know how you did that in a couple of hours :-) and thank you!
+If no one is jumping in offering to build something, my idea is probably to do rough plain html and see if I can find a template around I could use. I found a really nice template and started to migrate the existing site into it but it just looks way off and weird, I don't know if it's because it looks very professional (Kwort is more a geeky stuff) or if it doesn't represent what Kwort is; heck! I could even use this python site generator to build the new site... So anyways if someone is interested me, please drop me an email (<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;:&#x64;&#x63;&#x6f;r&#x74;&#97;&#114;&#101;&#x6c;&#x6c;&#x6f;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x64;&#x63;&#x6f;r&#x74;&#97;&#114;&#101;&#x6c;&#x6c;&#x6f;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#x6d;</a>).</p>
+
+<p>So, to close this incredible year I want to thank everyone and share best wishes to all, it has been a very nice year.</p>
+
+<p>Happy new year!</p>
+
+<hr width="60%">
+<br><a id="Kwort 4.3.3 released"><br></a><a href="#Kwort 4.3.3 released"><h3>Kwort 4.3.3 released</h3></a><h6>Posted on: Jun 2018</h6><p>Kwort 4.3.3 is out</p>
 
 <p>Final highlights:</p>
 
@@ -241,24 +260,6 @@ You should get the release at <a href="http://code.google.com/p/ktsuss">http://c
 <p>NOTE: 1.4 code has critical bugs and is completely unmaintained, so please update to the latest release. I also removed all extra repositories like the one at berlios, github, etc, so there's now only one at google code avoiding confussions.</p>
 
 <p>The last few months I worked a little on LimShSQL and there's a full new re-write with a pretty shinny curses interface in limshsql-rewrite-1.0 branch, I think I should merge it soon and package a release. Check it out here: <a href="http://code.google.com/p/limshsql">http://code.google.com/p/limshsql</a></p>
-
-<hr width="60%">
-<br><a id="Goodbye lout... Hello troff!"><br></a><a href="#Goodbye lout... Hello troff!"><h3>Goodbye lout... Hello troff!</h3></a><h6>Posted on: Mar 2011</h6><p>Five years ago I went to a dissertation on LaTeX given by Guido Macci, I left that dissertation telling myself "Yes, that's the way to go" and I liked formatting systems, by then I only knew LaTeX, but after seeing that in Slackware it was like 100mb in packages I said like "Ooook, wait a second... Is it that big?", it turned out it really was, and not only big, but a real mess under the hood, so I was kinda disappointed and desisted on the idea of using LaTex. Those who know me knows that I'm pretty minimalist, and having a formatting system of 100mb that was a mess was pretty much out of the table, but I still though it was the way to go.</p>
-
-<p>So I spoke to a friend (Emiliano Gavilan) who always liked that stuff and told my "problem" with LaTeX... So Emiliano recommended me to take a look at lout.</p>
-
-<p>That was in the beginning of 2006, so it's been like 5 years now with lout. Nowadays lout is kinda unmaintained, it has some bugs, the output generated is not as professional as LaTeX, and (I bet this is because I'm too lazy to learn them) there are some things that I never wasn't able to do.</p>
-
-<p>So last week I gave a chance to troff, and I keep myself reading the whole weekend, and I really liked, it's stable, small, well tested (almost 40 years :-D), and it is on every Unix out there (this is a BIG plus). I had some troubles inserting with code, but after digging I found vgrind (which I heard is unmaintained so we'll have to check in the future how it goes) which does
-the job pretty good.</p>
-
-<p>There are tons of books out there written with troff some pretty well known like "Advanced Programming in the UNIX Environment", "The C programming Language" or "The Design and Implementation of the 4.4BSD Operating System", there's a big list <a href="http://troff.org/pubs.html">here</a></p>
-
-<p>If you're interested in learning troff, you can read this book: <a href="http://groff.ffii.org/groff/contrib/documentation/utp/utp-1.0.pdf">Dale Dougherty &amp; Tim O'Reilly - Unix Text Processing</a>.</p>
-
-<p>I hope this turns out good.</p>
-
-<p>Cheers.</p>
 
 <hr width="60%">
 
