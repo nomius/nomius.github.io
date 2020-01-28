@@ -8,7 +8,7 @@ Final highlights:
 * No Firefox and flash support.
 * We are developing a cool set of tools called "kwort-choosers", which as of now provides things like: file chooser, browser's chooser, moc interface, etc, all using dmenu as UI.
 
-Please head to [www.kwort.org](www.kwort.org) for the full announce and downloads.
+Please head to [https://kwort.org](https://kwort.org) for the full announce and downloads.
 
 Happy installing!
 
