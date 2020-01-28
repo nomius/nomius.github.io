@@ -40,7 +40,30 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Goodbye lout... Hello troff!"><br></a><a href="#Goodbye lout... Hello troff!"><h3>Goodbye lout... Hello troff!</h3></a><h6>Posted on: Mar 2011</h6><p>Five years ago I went to a dissertation on LaTeX given by Guido Macci, I left that dissertation telling myself "Yes, that's the way to go" and I liked formatting systems, by then I only knew LaTeX, but after seeing that in Slackware it was like 100mb in packages I said like "Ooook, wait a second... Is it that big?", it turned out it really was, and not only big, but a real mess under the hood, so I was kinda disappointed and desisted on the idea of using LaTex. Those who know me knows that I'm pretty minimalist, and having a formatting system of 100mb that was a mess was pretty much out of the table, but I still though it was the way to go.</p>
+                        <br><br><br><a id="Updates for everybody!"><br></a><a href="#Updates for everybody!"><h3>Updates for everybody!</h3></a><h6>Posted on: Nov 2011</h6><p>I'm a disaster to write a blog, sorry for the delay.
+There have been lot of news in the past few months. Let's enumerate one by one:
+I created a small project called mttools, and this is basically a set of tools to write good technical documentation, with formated code inside and some pretty nice features. The nice thing about this tools is that it forced me to learn Unix flex :-)
+You can check out this project at: <a href="http://code.google.com/p/mttools">http://code.google.com/p/mttools</a></p>
+
+<p>As some of you might have noted, Kwort 3.2 got released, this is a pretty clean and nice release that got some really nice features and improvements. If you like Kwort &gt; 3, please, step by <a href="http://www.kwort.org">http://www.kwort.org</a>, read the announcement and try it.
+There's also some nice new features and bug fixes in kpkg, that were deployed with Kwort 3.2, if you're not using Kwort but you're using kpkg, you should step by <a href="http://code.google.com/p/kpkg">http://code.google.com/p/kpkg</a></p>
+
+<p>One of the cool stuff that came up with Kwort 3.2 are the ports; we are now supporting the crux ports, that you can bring to your system by:</p>
+
+<pre><code>  kpkg install httpup rsync fakeroot rsync ports
+</code></pre>
+
+<p>I'll blog a little on the CRUX ports latter on.</p>
+
+<p>Also there's a new release of ktsuss, just baked. This release has some bug fixes in the su backend and guess what... There's a sudo backend now too!
+You should get the release at <a href="http://code.google.com/p/ktsuss">http://code.google.com/p/ktsuss</a>.</p>
+
+<p>NOTE: 1.4 code has critical bugs and is completely unmaintained, so please update to the latest release. I also removed all extra repositories like the one at berlios, github, etc, so there's now only one at google code avoiding confussions.</p>
+
+<p>The last few months I worked a little on LimShSQL and there's a full new re-write with a pretty shinny curses interface in limshsql-rewrite-1.0 branch, I think I should merge it soon and package a release. Check it out here: <a href="http://code.google.com/p/limshsql">http://code.google.com/p/limshsql</a></p>
+
+<hr width="60%">
+<br><a id="Goodbye lout... Hello troff!"><br></a><a href="#Goodbye lout... Hello troff!"><h3>Goodbye lout... Hello troff!</h3></a><h6>Posted on: Mar 2011</h6><p>Five years ago I went to a dissertation on LaTeX given by Guido Macci, I left that dissertation telling myself "Yes, that's the way to go" and I liked formatting systems, by then I only knew LaTeX, but after seeing that in Slackware it was like 100mb in packages I said like "Ooook, wait a second... Is it that big?", it turned out it really was, and not only big, but a real mess under the hood, so I was kinda disappointed and desisted on the idea of using LaTex. Those who know me knows that I'm pretty minimalist, and having a formatting system of 100mb that was a mess was pretty much out of the table, but I still though it was the way to go.</p>
 
 <p>So I spoke to a friend (Emiliano Gavilan) who always liked that stuff and told my "problem" with LaTeX... So Emiliano recommended me to take a look at lout.</p>
 
@@ -357,21 +380,6 @@ Also the init system has changed and the way it is configured too. Don't worry a
 <p>Sorry for not having you all up to date related to Kwort, but I've been working a lot and in my free time I try to develop Kwort. For example, now, I'm in my lunch time, and I passed out lunch in order to write something for you about the new direction of this project.</p>
 
 <p>Cheers.</p>
-
-<hr width="60%">
-<br><a id="Thunar and hard drive partitions"><br></a><a href="#Thunar and hard drive partitions"><h3>Thunar and hard drive partitions</h3></a><h6>Posted on: Jul 2009</h6><p>Hello everybody, It's been so long since my last post here.
-There's so much to talk about, but today I'm going to talk about Thunar. As some of you might know, thunar is the file manager used in Xfce, written by Benedikt Meurer, and nowadays maintained by Jannis Pohlmann.
-I really like thunar, but the fact that hard drive partitions are left to the distribution itself when hal can manage them and because of that the file manager also can, isn't really nice, as you can browse your partitions in newer versions of GTK's (with Gvfs) GtkFileChooser.
-An ugly workaround would be to mount them and add some gtk bookmarks, but you would like to set an emblem to differentiate them from normal bookmarks, and emblems are not part of the gtk library, so you wouldn't see emblems in a GtkFileChooser. Another issue would be that isn't dynamic, so if someone change partitions that would be a total mess.
-So IMHO the best solution to this is: Hard Drive partitions managed by hal (DeviceKit in the future) and let Thunar show them in the left pane. And this is what I actually did.</p>
-
-<p>So, as everybody loves screenshots and you probably want to see how this looks:</p>
-
-<p><img src="http://1.bp.blogspot.com/_7bn3_3YdSWU/SlohSHN0aCI/AAAAAAAAAPs/uRExbB-PPIk/s400/thunar_hd_partitions.png" alt="Thunar and partitions" /></p>
-
-<p>And finally, the patch: <a href="http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff">http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff</a></p>
-
-<p>Enjoy!</p>
 
 <hr width="60%">
 

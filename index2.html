@@ -40,7 +40,22 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Kwort Linux 2.4.1 released"><br></a><a href="#Kwort Linux 2.4.1 released"><h3>Kwort Linux 2.4.1 released</h3></a><h6>Posted on: Apr 2009</h6><p>I'm happy to announce that Kwort 2.4.1 final is here!</p>
+                        <br><br><br><a id="Thunar and hard drive partitions"><br></a><a href="#Thunar and hard drive partitions"><h3>Thunar and hard drive partitions</h3></a><h6>Posted on: Jul 2009</h6><p>Hello everybody, It's been so long since my last post here.
+There's so much to talk about, but today I'm going to talk about Thunar. As some of you might know, thunar is the file manager used in Xfce, written by Benedikt Meurer, and nowadays maintained by Jannis Pohlmann.
+I really like thunar, but the fact that hard drive partitions are left to the distribution itself when hal can manage them and because of that the file manager also can, isn't really nice, as you can browse your partitions in newer versions of GTK's (with Gvfs) GtkFileChooser.
+An ugly workaround would be to mount them and add some gtk bookmarks, but you would like to set an emblem to differentiate them from normal bookmarks, and emblems are not part of the gtk library, so you wouldn't see emblems in a GtkFileChooser. Another issue would be that isn't dynamic, so if someone change partitions that would be a total mess.
+So IMHO the best solution to this is: Hard Drive partitions managed by hal (DeviceKit in the future) and let Thunar show them in the left pane. And this is what I actually did.</p>
+
+<p>So, as everybody loves screenshots and you probably want to see how this looks:</p>
+
+<p><img src="http://1.bp.blogspot.com/_7bn3_3YdSWU/SlohSHN0aCI/AAAAAAAAAPs/uRExbB-PPIk/s400/thunar_hd_partitions.png" alt="Thunar and partitions" /></p>
+
+<p>And finally, the patch: <a href="http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff">http://nomius.github.io/content/patches/Thunar-1.0.0-hd-partitions.diff</a></p>
+
+<p>Enjoy!</p>
+
+<hr width="60%">
+<br><a id="Kwort Linux 2.4.1 released"><br></a><a href="#Kwort Linux 2.4.1 released"><h3>Kwort Linux 2.4.1 released</h3></a><h6>Posted on: Apr 2009</h6><p>I'm happy to announce that Kwort 2.4.1 final is here!</p>
 
 <p>This version took a year to develop and provides a lot of changes from 2.4 release, including a new, more cleaned up than usual, base system, whole new tool chain, new configuration tools and lots of new things.</p>
 
@@ -335,40 +350,6 @@ See also that I did this 3 years ago with bash, not even C code, so it shows how
 <p><img src="http://4.bp.blogspot.com/_7bn3_3YdSWU/R8zGzB7Bw2I/AAAAAAAAAIc/8_urwRHbh6A/s400/Einstein.jpg" alt="Einstein" /></p>
 
 <p>Sometimes we have to find a reason to laugh, even a little bit... I found this picture very funny. :)</p>
-
-<hr width="60%">
-<br><a id="Kwort 2.4 released"><br></a><a href="#Kwort 2.4 released"><h3>Kwort 2.4 released</h3></a><h6>Posted on: Mar 2008</h6><p>I'm proud to announce that Kwort 2.4 final version has been released after a very long time (more than a year). The system is very stable and very usable.</p>
-
-<p>The core system is based on Slackware and provides a rock solid system, and it's also a great place to start making a full featured and usable desktop environment using Xfce.
-This version includes several changes from 2.2 from a new toolchain to a completely new base system. The inclusion of hal provides a great way to communicate the hardware with the desktop making the system a lot more user friendly.</p>
-
-<p>Good things in this new version:
-* Hal: As I said before provides a lot of new features giving the desktop some kind of control of the hardware.
-* New init system: Kwort 2.4 includes a new init system written mostly from scratch. Also it puts all the work together with the new service command.
-* Linux 2.6.24.3: The latest stable version of the linux kernel.
-* Kpkg: The new version of kpkg was re-written from scratch.
-* Kwort User Manager: Provides a simple way to create and remove users with default Kwort templates.
-* Xfce: This new version integrate great with hal.
-* Ristretto: The image viewer of the Xfce project.
-* Mplayer: The most famous video player on Linux is now included in the iso.
-* Pidgin: The latest version of the best multiprotocol IM.
-* Mpd+Gmpc: This is the new combo to play media files in Kwort. Just put your media files in ~/Music, go to gmpc, give update and play.</p>
-
-<p>As in every old version now comes the things that I look forward to improving:
-* Better support for wireless devices: This is not part of Kwort itself, but the kernel, but finally affects Kwort users.
-* Amule: Once again amule is giving the hebbe-jeebes. There is no stable version of amule that works well enough with Kwort. The latest version is dated from middle of 2006 wich is very old and buggy with newer versions of wxGTK.</p>
-
-<p>Screenshots available here: <a href="http://kwort.org/?n=Main.Screenshots">http://kwort.org/?n=Main.Screenshots</a></p>
-
-<p>People who I would like to thank:
-Andreas Schipplock for making and maintaining the website, mirroring the iso, working in Kwort core (he made most part of the job with Core) and bring lzma support to Kwort.
-Stijn Seger for working in some packages like openntpd and the pm support. And writing the Kwort user manager.
-I would like to give a special thanks to the users who ran tests specially to David Luskovec and Juan Martin Villanueva, if it wasn't for you guys, this iso would take even longer to come out.
-Manuel Naranjo for reporting bugs, submiting patches for the new init system, hosting the iso and run test all along Kwort core.
-Also, I would like to thank all the mirror providers: Ricardo Brisighelli for the development mirror in the UNR, Alberto Ferrer for the mirror in Emanon Linux and the AIRcable people for the mirror at aircable.net.
-Finally, but not less important a very big THANKS to Patrick Volkerding for Slackware Linux, the system kwort is based on. I hope I didn't forget anyone.</p>
-
-<p>As usual, if you need support, help, or you just feel like talking about Kwort (or anything else), or you just want to meet the people who is behind Kwort, you can join us on IRC: irc://irc.oftc.net/Kwort</p>
 
 <hr width="60%">
 

@@ -40,7 +40,17 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Today zenity... Tomorrow who knows... Conquer the world maybe" ;)"><br></a><a href="#Today zenity... Tomorrow who knows... Conquer the world maybe" ;)"><h3>Today zenity... Tomorrow who knows... Conquer the world maybe" ;)</h3></a><h6>Posted on: Oct 2006</h6><p>I was trying to make some visual scripts for Kwort Linux. I tried Xdialog but wasn't very nice. So I give a look at zenity (which I already did 2 years ago).
+                        <br><br><br><a id="Has to be the Brazilian Air (GNU bc readline patch)"><br></a><a href="#Has to be the Brazilian Air (GNU bc readline patch)"><h3>Has to be the Brazilian Air (GNU bc readline patch)</h3></a><h6>Posted on: Nov 2006</h6><p>The same day I wrote the patch for Xdialog's extra button feature (when I was in Rio de Janeiro - Brazil) I found a little bug in the GNU bc using readline.
+The bug actually is very simple, there was a wrong prototype declaration of the extern function readline. The prompt argument, according to readline(3) from GNU, is a const char *, not a char *.
+So bc didn't even compile if you wanted to use readline (which actually is very good). I must think that eveyone uses bc without readline, so nobody saw that error.
+Anyways, I wrote the patch and send it to Phil Nelson (author of GNU bc), and he thank me for it.</p>
+
+<p>I don't know when bc is gonna be updated so I don't know either when the patch will be included. So, for now, you'll have to download it from here and apply it manually.</p>
+
+<p><a href="http://nomius.github.io/content/patches/bc-1.06-readline-const-char.patch">http://nomius.github.io/content/patches/bc-1.06-readline-const-char.patch</a></p>
+
+<hr width="60%">
+<br><a id="Today zenity... Tomorrow who knows... Conquer the world maybe" ;)"><br></a><a href="#Today zenity... Tomorrow who knows... Conquer the world maybe" ;)"><h3>Today zenity... Tomorrow who knows... Conquer the world maybe" ;)</h3></a><h6>Posted on: Oct 2006</h6><p>I was trying to make some visual scripts for Kwort Linux. I tried Xdialog but wasn't very nice. So I give a look at zenity (which I already did 2 years ago).
 So the screenshots and its flexibility was amazing, there was just one thing... It needed gnome-canvas, which requiere half gnome's dependencies.
 Then I started to look into the code to see if there's a way to get rid of canvas package. After few minutes I realised that canvas was only needed in about dialog; this is not a post with criticism to the zenity developers, who I think they made an excelent job with it, but add a new dependency just to draw their's about dialog wasn't the smartest thing.
 I know they use it to fit the gnome's look &amp; feel, but use canvas just for an about dialog was kind of silly, with it you only get gnome users (which unfortunally is the gnome's development idea, but I know that you guys want to do the right thing in the right way :D).</p>

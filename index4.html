@@ -40,7 +40,15 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="My new tool: ktsuss... A simple graphic su"><br></a><a href="#My new tool: ktsuss... A simple graphic su"><h3>My new tool: ktsuss... A simple graphic su</h3></a><h6>Posted on: Apr 2007</h6><p>I know I had to write something about the wake on lan software I was writing. I think it is done, but couldn't test it yet, so I don't wanna rush me and write about it and show it in case it doesn't work, so please stay tunned and wait a bit longer.</p>
+                        <br><br><br><a id="Firefox freshmeat.net search plugin"><br></a><a href="#Firefox freshmeat.net search plugin"><h3>Firefox freshmeat.net search plugin</h3></a><h6>Posted on: Jun 2007</h6><p>A long time since my last post, looks like that was from the caves times. :-P
+Anyways, I was boring in this almost winter afternoon, so I started to see what I could do in a short amount of time. So I wrote a small search plugin for Firefox, so I can search for projects in freshmeat.net, you can get it from here:</p>
+
+<p><a href="http://nomius.github.io/content/patches/freshmeat.xml">http://nomius.github.io/content/patches/freshmeat.xml</a></p>
+
+<p>Cheers! :)</p>
+
+<hr width="60%">
+<br><a id="My new tool: ktsuss... A simple graphic su"><br></a><a href="#My new tool: ktsuss... A simple graphic su"><h3>My new tool: ktsuss... A simple graphic su</h3></a><h6>Posted on: Apr 2007</h6><p>I know I had to write something about the wake on lan software I was writing. I think it is done, but couldn't test it yet, so I don't wanna rush me and write about it and show it in case it doesn't work, so please stay tunned and wait a bit longer.</p>
 
 <p>So, today I will show and talk you about a new thing I was doing these days.
 I started working on a replacement for gksu. gksu is like a graphical su. I was trying to understand it and make it work well enough, but I don't know what was in the mind of the gksu's developers, because what they did was a really wrong approach, I don't know why they wrote first a library and then the application (maybe for plugins, I'm just paraphrasing) , but anyways,
@@ -179,16 +187,6 @@ And please, if someone finds Carl Declerck's email (another than carl[@]miskaton
 <p><a href="http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-no-block-device.patch">http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-no-block-device.patch</a></p>
 
 <p>I mailed Jean Baptiste Dulong to change it, but he's not maintaining the plugin anymore, so who knows who should I send the patch. :P</p>
-
-<hr width="60%">
-<br><a id="Has to be the Brazilian Air (GNU bc readline patch)"><br></a><a href="#Has to be the Brazilian Air (GNU bc readline patch)"><h3>Has to be the Brazilian Air (GNU bc readline patch)</h3></a><h6>Posted on: Nov 2006</h6><p>The same day I wrote the patch for Xdialog's extra button feature (when I was in Rio de Janeiro - Brazil) I found a little bug in the GNU bc using readline.
-The bug actually is very simple, there was a wrong prototype declaration of the extern function readline. The prompt argument, according to readline(3) from GNU, is a const char *, not a char *.
-So bc didn't even compile if you wanted to use readline (which actually is very good). I must think that eveyone uses bc without readline, so nobody saw that error.
-Anyways, I wrote the patch and send it to Phil Nelson (author of GNU bc), and he thank me for it.</p>
-
-<p>I don't know when bc is gonna be updated so I don't know either when the patch will be included. So, for now, you'll have to download it from here and apply it manually.</p>
-
-<p><a href="http://nomius.github.io/content/patches/bc-1.06-readline-const-char.patch">http://nomius.github.io/content/patches/bc-1.06-readline-const-char.patch</a></p>
 
 <hr width="60%">
 
