@@ -40,7 +40,20 @@
 
                     <div class="inner cover">
                         <br>
-                        <br><br><br><a id="Has to be the Brazilian Air (GNU bc readline patch)"><br></a><a href="#Has to be the Brazilian Air (GNU bc readline patch)"><h3>Has to be the Brazilian Air (GNU bc readline patch)</h3></a><h6>Posted on: Nov 2006</h6><p>The same day I wrote the patch for Xdialog's extra button feature (when I was in Rio de Janeiro - Brazil) I found a little bug in the GNU bc using readline.
+                        <br><br><br><a id="Issues in xfce4-mount-plugin"><br></a><a href="#Issues in xfce4-mount-plugin"><h3>Issues in xfce4-mount-plugin</h3></a><h6>Posted on: Dec 2006</h6><p>I planed to add xfce4-mount-plugin to Kwort's panel, but there was some things to fix and to change.</p>
+
+<p>The first patch fixes some issues with some file systems which shouldn't be shown, like tmpfs and root partition. I mean, those shouldn't be displayed, since the users should not mount or umount it.</p>
+
+<p><a href="http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch">http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-noroot-notmpfs.patch</a></p>
+
+<p>This patch is for the same plugin, but is just for behavior. It just make the plugin to not display the device block since the user is not interested on it but where the data will be displayed.</p>
+
+<p><a href="http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-no-block-device.patch">http://nomius.github.io/content/patches/xfce4-mount-plugin-0.4.7-no-block-device.patch</a></p>
+
+<p>I mailed Jean Baptiste Dulong to change it, but he's not maintaining the plugin anymore, so who knows who should I send the patch. :P</p>
+
+<hr width="60%">
+<br><a id="Has to be the Brazilian Air (GNU bc readline patch)"><br></a><a href="#Has to be the Brazilian Air (GNU bc readline patch)"><h3>Has to be the Brazilian Air (GNU bc readline patch)</h3></a><h6>Posted on: Nov 2006</h6><p>The same day I wrote the patch for Xdialog's extra button feature (when I was in Rio de Janeiro - Brazil) I found a little bug in the GNU bc using readline.
 The bug actually is very simple, there was a wrong prototype declaration of the extern function readline. The prompt argument, according to readline(3) from GNU, is a const char *, not a char *.
 So bc didn't even compile if you wanted to use readline (which actually is very good). I must think that eveyone uses bc without readline, so nobody saw that error.
 Anyways, I wrote the patch and send it to Phil Nelson (author of GNU bc), and he thank me for it.</p>
